@@ -157,22 +157,29 @@
                 </button>
             </div>
         </nav>
+    </header>
 
-        {{-- Mobile Menu Overlay --}}
-        <div
-            id="mobile-menu-overlay"
-            class="fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
-            aria-hidden="true"
-        ></div>
+    {{-- ============================================================
+         MOBILE MENU — MUST BE OUTSIDE <header> because the header's
+         backdrop-blur-md creates a containing block that traps
+         position: fixed children (menu becomes invisible/cropped).
+    ============================================================= --}}
 
-        {{-- Mobile Menu Drawer --}}
-        <div
-            id="mobile-menu-drawer"
-            class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Menu de navigation mobile"
-        >
+    {{-- Mobile Menu Overlay --}}
+    <div
+        id="mobile-menu-overlay"
+        class="fixed inset-0 bg-black/50 z-[60] opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+        aria-hidden="true"
+    ></div>
+
+    {{-- Mobile Menu Drawer --}}
+    <div
+        id="mobile-menu-drawer"
+        class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-[70] shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu de navigation mobile"
+    >
             {{-- Drawer Header --}}
             <div class="flex items-center justify-between p-4 border-b border-gray-100">
                 <a href="{{ route('home') }}" class="flex items-center gap-2">
@@ -257,7 +264,6 @@
                 </p>
             </div>
         </div>
-    </header>
 
     {{-- ============================================================
          E. SVG DECORATIVE ELEMENTS (reusable floating shapes)
