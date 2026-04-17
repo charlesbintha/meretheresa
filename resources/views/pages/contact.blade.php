@@ -37,7 +37,7 @@
             <div class="animate-on-scroll">
                 <div class="bg-white rounded-3xl shadow-lg p-8 md:p-10">
                     <h2 class="section-title text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-2">Envoyez-nous un message</h2>
-                    <p class="text-gray-600 font-body mb-8">Remplissez le formulaire ci-dessous et nous vous repondrons dans les plus brefs delais.</p>
+                    <p class="text-gray-600 font-body mb-8">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</p>
 
                     {{-- Success Flash Message --}}
                     @if(session('success'))
@@ -87,7 +87,7 @@
                                 placeholder="Votre nom complet">
                         </div>
 
-                        {{-- Email & Telephone --}}
+                        {{-- Email & Téléphone --}}
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <label for="email" class="block text-sm font-heading font-semibold text-gray-700 mb-2">Email</label>
@@ -96,7 +96,7 @@
                                     placeholder="votre@email.com">
                             </div>
                             <div>
-                                <label for="phone" class="block text-sm font-heading font-semibold text-gray-700 mb-2">Telephone</label>
+                                <label for="phone" class="block text-sm font-heading font-semibold text-gray-700 mb-2">Téléphone</label>
                                 <input type="tel" id="phone" name="phone"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 font-body focus:border-primary-800 focus:ring-2 focus:ring-primary-800/20 transition-all outline-none"
                                     placeholder="77 XXX XX XX">
@@ -109,7 +109,7 @@
                                 <label for="child_age" class="block text-sm font-heading font-semibold text-gray-700 mb-2">Age de l'enfant</label>
                                 <select id="child_age" name="child_age"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 font-body focus:border-primary-800 focus:ring-2 focus:ring-primary-800/20 transition-all outline-none bg-white">
-                                    <option value="">Selectionnez un age</option>
+                                    <option value="">Sélectionnez un age</option>
                                     <option value="2-3">2 - 3 ans</option>
                                     <option value="3-4">3 - 4 ans</option>
                                     <option value="4-5">4 - 5 ans</option>
@@ -122,7 +122,7 @@
                                 <label for="level" class="block text-sm font-heading font-semibold text-gray-700 mb-2">Niveau souhaite</label>
                                 <select id="level" name="level"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 font-body focus:border-primary-800 focus:ring-2 focus:ring-primary-800/20 transition-all outline-none bg-white">
-                                    <option value="">Selectionnez un niveau</option>
+                                    <option value="">Sélectionnez un niveau</option>
                                     <option value="garde">Garde</option>
                                     <option value="ps">Petite Section (PS)</option>
                                     <option value="ms">Moyenne Section (MS)</option>
@@ -167,7 +167,7 @@
                     </div>
                     <div>
                         <h4 class="font-heading font-bold text-gray-900 mb-1">Adresse</h4>
-                        <p class="text-gray-600 font-body text-sm">SHS N&deg; 60 Golf Nord, Guediawaye, Senegal</p>
+                        <p class="text-gray-600 font-body text-sm">SHS N&deg; 60 Golf Nord, Guédiawaye, Sénégal</p>
                     </div>
                 </div>
 
@@ -179,7 +179,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="font-heading font-bold text-gray-900 mb-1">Telephone</h4>
+                        <h4 class="font-heading font-bold text-gray-900 mb-1">Téléphone</h4>
                         <p class="text-gray-600 font-body text-sm"><a href="tel:+221338778162" class="hover:text-primary-800 transition-colors">33-877-81-62</a></p>
                         <p class="text-gray-600 font-body text-sm"><a href="tel:+221771486502" class="hover:text-primary-800 transition-colors">77-148-65-02</a></p>
                     </div>
@@ -217,7 +217,7 @@
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3858.5!2d-17.395!3d14.775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTTCsDQ2JzMwLjAiTiAxN8KwMjMnNDIuMCJX!5e0!3m2!1sfr!2ssn!4v1"
                         width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"
-                        title="Localisation Groupe Scolaire Mere Theresa - Guediawaye"
+                        title="Localisation Groupe Scolaire Mère Thérèsa - Guédiawaye"
                         class="rounded-2xl">
                     </iframe>
                 </div>
@@ -256,7 +256,7 @@
                     </svg>
                 </div>
                 <h3 class="section-title text-lg font-heading font-bold text-gray-900 mb-4">Pour les urgences</h3>
-                <p class="text-gray-600 font-body text-sm mb-4">En cas d'urgence en dehors des heures d'ouverture, veuillez nous contacter par telephone ou WhatsApp.</p>
+                <p class="text-gray-600 font-body text-sm mb-4">En cas d'urgence en dehors des heures d'ouverture, veuillez nous contacter par téléphone ou WhatsApp.</p>
                 <a href="tel:+221771486502" class="inline-flex items-center gap-2 text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/></svg>
                     77-148-65-02
@@ -271,7 +271,7 @@
                     </svg>
                 </div>
                 <h3 class="section-title text-lg font-heading font-bold text-gray-900 mb-4">Suivez-nous</h3>
-                <p class="text-gray-600 font-body text-sm mb-6">Restez connectes et suivez nos actualites sur les reseaux sociaux.</p>
+                <p class="text-gray-600 font-body text-sm mb-6">Restez connectes et suivez nos actualités sur les reseaux sociaux.</p>
                 <div class="flex items-center justify-center gap-4">
                     <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-11 h-11 flex items-center justify-center rounded-full bg-primary-800 text-white hover:bg-primary-900 transition-all duration-300 shadow-md hover:shadow-lg">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>

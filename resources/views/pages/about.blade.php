@@ -30,7 +30,7 @@
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <h1 class="text-4xl md:text-5xl font-heading font-bold text-white mb-4 animate-on-scroll">
-            A Propos de Notre Ecole
+            A Propos de Notre École
         </h1>
         <nav aria-label="Fil d'Ariane" class="animate-on-scroll">
             <ol class="flex items-center justify-center gap-2 text-white/70 font-body text-sm">
@@ -40,7 +40,7 @@
                 <li>
                     <svg class="w-4 h-4 inline-block" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
                 </li>
-                <li class="text-white font-semibold">A propos</li>
+                <li class="text-white font-semibold">À propos</li>
             </ol>
         </nav>
     </div>
@@ -56,7 +56,7 @@
             <div class="animate-on-scroll">
                 <div class="relative">
                     <div class="rounded-3xl overflow-hidden shadow-xl border-4 border-pink-200">
-                        <img src="{{ asset('images/8845.jpg') }}" alt="Salle de classe du Groupe Scolaire Mere Theresa" class="w-full h-[420px] object-cover">
+                        <img src="{{ asset('images/8845.jpg') }}" alt="Salle de classe du Groupe Scolaire Mère Thérèsa" class="w-full h-[420px] object-cover">
                     </div>
                     {{-- Decorative accents --}}
                     <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-yellow-300 rounded-full opacity-60 -z-10"></div>
@@ -64,7 +64,7 @@
                     {{-- Years badge --}}
                     <div class="absolute -bottom-6 -left-6 bg-primary-800 text-white rounded-2xl p-5 shadow-lg">
                         <span class="block text-3xl font-heading font-bold">15+</span>
-                        <span class="text-sm font-body text-white/80">annees<br>d'experience</span>
+                        <span class="text-sm font-body text-white/80">années<br>d'expérience</span>
                     </div>
                 </div>
             </div>
@@ -73,23 +73,23 @@
             <div class="animate-on-scroll">
                 <span class="inline-block bg-pink-100 text-primary-800 font-heading font-semibold text-sm px-4 py-2 rounded-full mb-4">Notre histoire</span>
                 <h2 class="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6">
-                    Une histoire d'<span class="text-primary-800">amour</span> pour l'education
+                    Une histoire d'<span class="text-primary-800">amour</span> pour l'éducation
                 </h2>
                 <p class="text-gray-600 font-body mb-5 leading-relaxed">
-                    Tout a commence au debut des annees 2000, lorsqu'une passionnee de l'education a ouvert une petite garderie dans le quartier Golf Nord de Guediawaye, sous le nom d'<strong class="text-primary-800">Ecole privee Les Bambinos</strong>. L'objectif etait simple : offrir aux tout-petits du quartier un espace securise, chaleureux et stimulant pour leurs premiers pas dans la vie.
+                    Tout a commence au debut des années 2000, lorsqu'une passionnee de l'éducation a ouvert une petite garderie dans le quartier Golf Nord de Guédiawaye, sous le nom d'<strong class="text-primary-800">École privee Les Bambinos</strong>. L'objectif etait simple : offrir aux tout-petits du quartier un espace sécurisé, chaleureux et stimulant pour leurs premiers pas dans la vie.
                 </p>
                 <p class="text-gray-600 font-body mb-5 leading-relaxed">
-                    Face a la confiance grandissante des familles de Guediawaye et des communes environnantes, l'ecole n'a cesse de se developper. De simple garderie, elle est devenue un veritable prescolaire, puis a elargi son offre en ouvrant des classes d'elementaire, du CI au CM2. C'est ainsi qu'est ne le <strong class="text-primary-800">Groupe Scolaire Mere Theresa</strong>, en hommage a l'esprit de devouement et de bienveillance de Mere Teresa.
+                    Face à la confiance grandissante des familles de Guédiawaye et des communes environnantes, l'école n'a cesse de se developper. De simple garderie, elle est devenue un veritable préscolaire, puis a elargi son offre en ouvrant des classes d'élémentaire, du CI au CM2. C'est ainsi qu'est ne le <strong class="text-primary-800">Groupe Scolaire Mère Thérèsa</strong>, en hommage a l'esprit de devouement et de bienveillance de Mere Teresa.
                 </p>
                 <p class="text-gray-600 font-body mb-8 leading-relaxed">
-                    Aujourd'hui, situee au SHS N&deg; 60 Golf Nord, notre ecole accueille plus de 200 eleves de la garde au CM2. Nous restons fideles a notre vision d'origine : accompagner chaque enfant avec amour, rigueur et engagement, pour qu'il devienne un citoyen epanoui et confiant.
+                    Aujourd'hui, située au SHS N&deg; 60 Golf Nord, notre école accueille plus de 200 élèves de la garde au CM2. Nous restons fideles a notre vision d'origine : accompagner chaque enfant avec amour, rigueur et engagement, pour qu'il devienne un citoyen epanoui et confiant.
                 </p>
 
                 {{-- Quick stats --}}
                 <div class="grid grid-cols-3 gap-4">
                     <div class="text-center bg-white rounded-2xl p-4 shadow-sm">
                         <span class="block text-2xl font-heading font-bold text-primary-800">200+</span>
-                        <span class="text-xs text-gray-500 font-body">Eleves</span>
+                        <span class="text-xs text-gray-500 font-body">Élèves</span>
                     </div>
                     <div class="text-center bg-white rounded-2xl p-4 shadow-sm">
                         <span class="block text-2xl font-heading font-bold text-primary-800">20+</span>
@@ -129,7 +129,7 @@
                         <h3 class="text-xl font-heading font-bold text-gray-900">Notre Mission</h3>
                     </div>
                     <p class="text-gray-600 font-body leading-relaxed text-lg">
-                        Offrir a chaque enfant un environnement d'apprentissage bienveillant, stimulant et inclusif, ou il peut developper son plein potentiel intellectuel, social et emotionnel. Nous nous engageons a former des citoyens responsables, curieux et confiants, prets a relever les defis de demain, tout en restant ancres dans les valeurs de solidarite et de respect propres a notre communaute.
+                        Offrir a chaque enfant un environnement d'apprentissage bienveillant, stimulant et inclusif, ou il peut developper son plein potentiel intellectuel, social et emotionnel. Nous nous engageons a former des citoyens responsables, curieux et confiants, prets a relever les defis de demain, tout en restant ancres dans les valeurs de solidarité et de respect propres a notre communaute.
                     </p>
                 </div>
             </div>
@@ -143,7 +143,7 @@
                     <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-3">Excellence academique</h3>
-                <p class="text-gray-600 font-body text-sm">Nous visons les plus hauts standards de qualite dans l'enseignement, en preparant nos eleves a reussir a chaque etape de leur parcours scolaire.</p>
+                <p class="text-gray-600 font-body text-sm">Nous visons les plus hauts standards de qualite dans l'enseignement, en preparant nos élèves a reussir a chaque étape de leur parcours scolaire.</p>
             </div>
 
             {{-- Value 2: Bienveillance --}}
@@ -152,7 +152,7 @@
                     <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-3">Bienveillance</h3>
-                <p class="text-gray-600 font-body text-sm">Chaque enfant est accueilli avec respect et attention. Nous creons un climat de confiance ou chacun se sent valorise et en securite.</p>
+                <p class="text-gray-600 font-body text-sm">Chaque enfant est accueilli avec respect et attention. Nous créons un climat de confiance ou chacun se sent valorise et en sécurité.</p>
             </div>
 
             {{-- Value 3: Epanouissement de l'enfant --}}
@@ -161,7 +161,7 @@
                     <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-3">Epanouissement de l'enfant</h3>
-                <p class="text-gray-600 font-body text-sm">Le developpement global de l'enfant est au coeur de notre projet : intellectuel, physique, artistique, social et emotionnel.</p>
+                <p class="text-gray-600 font-body text-sm">Le développement global de l'enfant est au cœur de notre projet : intellectuel, physique, artistique, social et emotionnel.</p>
             </div>
 
             {{-- Value 4: Engagement communautaire --}}
@@ -170,7 +170,7 @@
                     <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-3">Engagement communautaire</h3>
-                <p class="text-gray-600 font-body text-sm">Nous sommes profondement ancres dans la communaute de Guediawaye et travaillons main dans la main avec les familles pour le bien de chaque enfant.</p>
+                <p class="text-gray-600 font-body text-sm">Nous sommes profondement ancres dans la communaute de Guédiawaye et travaillons main dans la main avec les familles pour le bien de chaque enfant.</p>
             </div>
         </div>
     </div>
@@ -187,7 +187,7 @@
                 Notre <span class="text-primary-800">Pedagogie</span>
             </h2>
             <p class="text-gray-600 font-body max-w-3xl mx-auto">
-                Au Groupe Scolaire Mere Theresa, nous adoptons une pedagogie active et centree sur l'enfant. Notre approche combine les methodes d'enseignement modernes avec un suivi individualise, dans un cadre bilingue (francais et arabe) qui ouvre nos eleves sur le monde. Nous croyons que chaque enfant apprend a son rythme et que notre role est de l'accompagner avec patience et enthousiasme.
+                Au Groupe Scolaire Mère Thérèsa, nous adoptons une pédagogie active et centree sur l'enfant. Notre approche combine les methodes d'enseignement modernes avec un suivi individualise, dans un cadre bilingue (francais et arabe) qui ouvre nos élèves sur le monde. Nous croyons que chaque enfant apprend a son rythme et que notre role est de l'accompagner avec patience et enthousiasme.
             </p>
         </div>
 
@@ -202,7 +202,7 @@
                     </div>
                     <h3 class="text-xl font-heading font-bold text-gray-900 mb-3">Apprendre en s'amusant</h3>
                     <p class="text-gray-600 font-body leading-relaxed">
-                        Le jeu est un levier d'apprentissage puissant. A travers des ateliers ludiques, des projets creatifs et des activites sensorielles, nos eleves decouvrent le plaisir d'apprendre. Chaque journee est une aventure ou la curiosite est encouragee et celebree.
+                        Le jeu est un levier d'apprentissage puissant. A travers des ateliers ludiques, des projets creatifs et des activites sensorielles, nos élèves decouvrent le plaisir d'apprendre. Chaque journée est une aventure ou la curiosite est encouragee et celebree.
                     </p>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                     </div>
                     <h3 class="text-xl font-heading font-bold text-gray-900 mb-3">Accompagnement individualise</h3>
                     <p class="text-gray-600 font-body leading-relaxed">
-                        Grace a des effectifs maitrises, nos enseignants connaissent chaque eleve par son prenom, ses forces et ses besoins. Des evaluations regulieres et des echanges constants avec les parents permettent un suivi personnalise et bienveillant.
+                        Grâce à des effectifs maitrises, nos enseignants connaissent chaque élève par son prenom, ses forces et ses besoins. Des evaluations regulieres et des echanges constants avec les parents permettent un suivi personnalisé et bienveillant.
                     </p>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                     </div>
                     <h3 class="text-xl font-heading font-bold text-gray-900 mb-3">Ouverture sur le monde</h3>
                     <p class="text-gray-600 font-body leading-relaxed">
-                        Notre programme bilingue francais-arabe, l'initiation a l'informatique et les activites culturelles variees preparent nos eleves a evoluer dans un monde globalise, tout en restant fiers de leurs racines et de leur identite.
+                        Notre programme bilingue francais-arabe, l'initiation a l'informatique et les activites culturelles variées preparent nos élèves a evoluer dans un monde globalise, tout en restant fiers de leurs racines et de leur identite.
                     </p>
                 </div>
             </div>
@@ -244,12 +244,12 @@
 <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16 animate-on-scroll">
-            <span class="inline-block bg-purple-100 text-purple-700 font-heading font-semibold text-sm px-4 py-2 rounded-full mb-4">Notre equipe</span>
+            <span class="inline-block bg-purple-100 text-purple-700 font-heading font-semibold text-sm px-4 py-2 rounded-full mb-4">Notre équipe</span>
             <h2 class="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">
-                Notre <span class="text-primary-800">Equipe Complete</span>
+                Notre <span class="text-primary-800">Équipe Complete</span>
             </h2>
             <p class="text-gray-600 font-body max-w-2xl mx-auto">
-                Des professionnels passionnes et devoues qui forment le coeur de notre ecole. Chaque membre contribue au bien-etre et a la reussite de vos enfants.
+                Des professionnels passionnes et devoues qui forment le cœur de notre école. Chaque membre contribue au bien-etre et a la réussite de vos enfants.
             </p>
         </div>
 
@@ -261,7 +261,7 @@
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Aminata Diallo</h3>
                 <span class="inline-block text-primary-800 font-body text-sm font-semibold mb-3">Directrice</span>
-                <p class="text-gray-600 font-body text-sm">Fondatrice de l'ecole, elle porte le projet educatif depuis plus de 15 ans avec passion, devouement et une vision claire pour l'avenir de chaque enfant.</p>
+                <p class="text-gray-600 font-body text-sm">Fondatrice de l'école, elle porte le projet éducatif depuis plus de 15 ans avec passion, devouement et une vision claire pour l'avenir de chaque enfant.</p>
             </div>
 
             {{-- Staff 2: Directrice adjointe --}}
@@ -271,47 +271,47 @@
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Fatou Ndiaye</h3>
                 <span class="inline-block text-sky-600 font-body text-sm font-semibold mb-3">Directrice adjointe</span>
-                <p class="text-gray-600 font-body text-sm">Coordinatrice pedagogique experimentee, elle veille a la coherence des programmes et a la qualite de l'enseignement dans toutes les classes.</p>
+                <p class="text-gray-600 font-body text-sm">Coordinatrice pédagogique experimentee, elle veille a la coherence des programmes et a la qualite de l'enseignement dans toutes les classes.</p>
             </div>
 
-            {{-- Staff 3: Enseignante prescolaire --}}
+            {{-- Staff 3: Enseignante préscolaire --}}
             <div class="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-center group">
                 <div class="w-24 h-24 bg-yellow-200 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
                     <span class="text-2xl font-heading font-bold text-yellow-700">KF</span>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Khady Fall</h3>
-                <span class="inline-block text-yellow-600 font-body text-sm font-semibold mb-3">Educatrice Prescolaire</span>
-                <p class="text-gray-600 font-body text-sm">Specialiste de la petite enfance, elle accompagne avec douceur les tout-petits dans leurs premieres decouvertes et apprentissages.</p>
+                <span class="inline-block text-yellow-600 font-body text-sm font-semibold mb-3">Educatrice Préscolaire</span>
+                <p class="text-gray-600 font-body text-sm">Specialiste de la petite enfance, elle accompagne avec douceur les tout-petits dans leurs premières découvertes et apprentissages.</p>
             </div>
 
-            {{-- Staff 4: Enseignante prescolaire --}}
+            {{-- Staff 4: Enseignante préscolaire --}}
             <div class="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-center group">
                 <div class="w-24 h-24 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
                     <span class="text-2xl font-heading font-bold text-green-700">MS</span>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Mariama Sow</h3>
-                <span class="inline-block text-green-600 font-body text-sm font-semibold mb-3">Educatrice Prescolaire</span>
-                <p class="text-gray-600 font-body text-sm">Passionnee par l'eveil des jeunes enfants, elle utilise des methodes creatives et ludiques pour stimuler la curiosite naturelle de chaque eleve.</p>
+                <span class="inline-block text-green-600 font-body text-sm font-semibold mb-3">Educatrice Préscolaire</span>
+                <p class="text-gray-600 font-body text-sm">Passionnee par l'éveil des jeunes enfants, elle utilise des methodes creatives et ludiques pour stimuler la curiosite naturelle de chaque élève.</p>
             </div>
 
-            {{-- Staff 5: Enseignant elementaire --}}
+            {{-- Staff 5: Enseignant élémentaire --}}
             <div class="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-center group">
                 <div class="w-24 h-24 bg-orange-200 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
                     <span class="text-2xl font-heading font-bold text-orange-700">IB</span>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Ibrahima Ba</h3>
-                <span class="inline-block text-orange-600 font-body text-sm font-semibold mb-3">Enseignant Elementaire</span>
-                <p class="text-gray-600 font-body text-sm">Pedagogue rigoureux et bienveillant, il assure un enseignement de qualite en francais et en mathematiques au cycle elementaire.</p>
+                <span class="inline-block text-orange-600 font-body text-sm font-semibold mb-3">Enseignant Élémentaire</span>
+                <p class="text-gray-600 font-body text-sm">Pedagogue rigoureux et bienveillant, il assure un enseignement de qualite en francais et en mathematiques au cycle élémentaire.</p>
             </div>
 
-            {{-- Staff 6: Enseignante elementaire --}}
+            {{-- Staff 6: Enseignante élémentaire --}}
             <div class="bg-white rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-center group">
                 <div class="w-24 h-24 bg-purple-200 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
                     <span class="text-2xl font-heading font-bold text-purple-700">ND</span>
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Ndeye Diagne</h3>
-                <span class="inline-block text-purple-600 font-body text-sm font-semibold mb-3">Enseignante Elementaire</span>
-                <p class="text-gray-600 font-body text-sm">Enseignante devouee, elle prepare avec methode et enthousiasme les eleves du CM aux examens de fin de cycle et a l'entree au college.</p>
+                <span class="inline-block text-purple-600 font-body text-sm font-semibold mb-3">Enseignante Élémentaire</span>
+                <p class="text-gray-600 font-body text-sm">Enseignante devouee, elle prepare avec methode et enthousiasme les élèves du CM aux examens de fin de cycle et a l'entree au college.</p>
             </div>
 
             {{-- Staff 7: Surveillant --}}
@@ -321,7 +321,7 @@
                 </div>
                 <h3 class="text-lg font-heading font-bold text-gray-900 mb-1">Ousmane Gueye</h3>
                 <span class="inline-block text-teal-600 font-body text-sm font-semibold mb-3">Surveillant General</span>
-                <p class="text-gray-600 font-body text-sm">Garant de la discipline et de la securite, il veille au bon deroulement de la vie scolaire et au respect des regles de vie en communaute.</p>
+                <p class="text-gray-600 font-body text-sm">Garant de la discipline et de la sécurité, il veille au bon deroulement de la vie scolaire et au respect des règles de vie en communaute.</p>
             </div>
 
             {{-- Staff 8: Responsable cantine --}}
@@ -348,7 +348,7 @@
                 Nos <span class="text-primary-800">Infrastructures</span>
             </h2>
             <p class="text-gray-600 font-body max-w-2xl mx-auto">
-                Des espaces modernes et adaptes pour offrir a vos enfants les meilleures conditions d'apprentissage et d'epanouissement.
+                Des espaces modernes et adaptes pour offrir a vos enfants les meilleures conditions d'apprentissage et d'épanouissement.
             </p>
         </div>
 
@@ -361,7 +361,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-gray-900 mb-2">Salles de classe climatisees</h3>
-                        <p class="text-gray-600 font-body text-sm">Des salles spacieuses, lumineuses et climatisees, equipees de mobilier adapte a chaque tranche d'age pour un confort optimal.</p>
+                        <p class="text-gray-600 font-body text-sm">Des salles spacieuses, lumineuses et climatisees, equipees de mobilier adapté a chaque tranche d'age pour un confort optimal.</p>
                     </div>
                 </div>
             </div>
@@ -374,7 +374,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-gray-900 mb-2">Cour de recreation</h3>
-                        <p class="text-gray-600 font-body text-sm">Un large espace exterieur securise avec jeux et equipements adaptes, pour que les enfants se depensent et socialisent en toute securite.</p>
+                        <p class="text-gray-600 font-body text-sm">Un large espace extérieur sécurisé avec jeux et équipements adaptes, pour que les enfants se depensent et socialisent en toute sécurité.</p>
                     </div>
                 </div>
             </div>
@@ -387,7 +387,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-gray-900 mb-2">Cantine scolaire</h3>
-                        <p class="text-gray-600 font-body text-sm">Des repas equilibres et savoureux prepares sur place chaque jour, avec des menus varies adaptes aux besoins nutritionnels des enfants.</p>
+                        <p class="text-gray-600 font-body text-sm">Des repas equilibres et savoureux prepares sur place chaque jour, avec des menus variés adaptes aux besoins nutritionnels des enfants.</p>
                     </div>
                 </div>
             </div>
@@ -413,7 +413,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-gray-900 mb-2">Salle informatique</h3>
-                        <p class="text-gray-600 font-body text-sm">Des ordinateurs mis a disposition des eleves pour une initiation au numerique et aux outils informatiques des le cycle elementaire.</p>
+                        <p class="text-gray-600 font-body text-sm">Des ordinateurs mis a disposition des élèves pour une initiation au numerique et aux outils informatiques des le cycle élémentaire.</p>
                     </div>
                 </div>
             </div>
@@ -426,7 +426,7 @@
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-gray-900 mb-2">Transport scolaire</h3>
-                        <p class="text-gray-600 font-body text-sm">Un service de transport scolaire couvrant plusieurs zones de Guediawaye et environs, pour faciliter les trajets quotidiens des familles.</p>
+                        <p class="text-gray-600 font-body text-sm">Un service de transport scolaire couvrant plusieurs zones de Guédiawaye et environs, pour faciliter les trajets quotidiens des familles.</p>
                     </div>
                 </div>
             </div>
@@ -451,7 +451,7 @@
             Venez nous rendre visite
         </h2>
         <p class="text-white/80 font-body max-w-2xl mx-auto mb-8 text-lg">
-            Nous serions ravis de vous accueillir et de vous faire decouvrir notre ecole. Prenez rendez-vous pour une visite guidee et rencontrez notre equipe pedagogique.
+            Nous serions ravis de vous accueillir et de vous faire découvrir notre école. Prenez rendez-vous pour une visite guidee et rencontrez notre équipe pédagogique.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
             <a href="{{ route('contact') }}" class="inline-flex items-center gap-2 bg-white text-primary-800 font-heading font-bold px-10 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">

@@ -17,11 +17,11 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-on-scroll">
-        <h1 class="text-4xl md:text-5xl font-heading font-bold text-white mb-4">Actualites & Evenements</h1>
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-white mb-4">Actualités & Événements</h1>
         <nav class="flex items-center justify-center gap-2 text-white/70 font-body text-sm" aria-label="Fil d'Ariane">
             <a href="{{ route('home') }}" class="hover:text-white transition-colors">Accueil</a>
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
-            <span class="text-white font-semibold">Actualites</span>
+            <span class="text-white font-semibold">Actualités</span>
         </nav>
     </div>
 </section>
@@ -36,7 +36,7 @@
                 <div class="grid lg:grid-cols-2 gap-0">
                     {{-- Image --}}
                     <div class="relative overflow-hidden h-64 lg:h-auto">
-                        <img src="{{ asset('images/25620.jpg') }}" alt="Rentree scolaire 2025/2026" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/25620.jpg') }}" alt="Rentrée scolaire 2025/2026" class="w-full h-full object-cover">
                         <div class="absolute top-4 left-4">
                             <span class="inline-block bg-primary-800 text-white text-xs font-heading font-bold px-4 py-1.5 rounded-full shadow-md">A la une</span>
                         </div>
@@ -49,14 +49,14 @@
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>
                                 1 Octobre 2025
                             </span>
-                            <span class="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-3 py-1 rounded-full">Rentree</span>
+                            <span class="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-3 py-1 rounded-full">Rentrée</span>
                         </div>
-                        <h2 class="section-title text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-4">Rentree Scolaire 2025/2026</h2>
+                        <h2 class="section-title text-2xl md:text-3xl font-heading font-bold text-gray-900 mb-4">Rentrée Scolaire 2025/2026</h2>
                         <p class="text-gray-600 font-body leading-relaxed mb-4">
-                            Le Groupe Scolaire Mere Theresa est heureux d'annoncer la rentree scolaire 2025/2026. Cette nouvelle annee s'annonce riche en nouveautes avec l'ouverture de nouvelles salles de classe entierement equipees, l'introduction de programmes pedagogiques innovants et le renforcement de notre equipe enseignante.
+                            Le Groupe Scolaire Mère Thérèsa est heureux d'annoncer la rentrée scolaire 2025/2026. Cette nouvelle année s'annonce riche en nouveautes avec l'ouverture de nouvelles salles de classe entièrement equipees, l'introduction de programmes pédagogiques innovants et le renforcement de notre équipe enseignante.
                         </p>
                         <p class="text-gray-600 font-body leading-relaxed mb-6">
-                            Nous accueillons les enfants de la garde au CM2 dans un cadre bienveillant et securise. Les inscriptions sont toujours ouvertes pour les places restantes. N'hesitez pas a nous contacter pour plus d'informations ou a venir visiter nos locaux.
+                            Nous accueillons les enfants de la garde au CM2 dans un cadre bienveillant et sécurisé. Les inscriptions sont toujours ouvertes pour les places restantes. N'hesitez pas a nous contacter pour plus d'informations ou a venir visiter nos locaux.
                         </p>
                         <a href="#" class="btn-primary inline-flex items-center gap-2 bg-primary-800 text-white font-heading font-semibold px-6 py-3 rounded-full hover:bg-primary-900 transition-all duration-300 shadow-md hover:shadow-lg self-start">
                             Lire l'article complet
@@ -76,9 +76,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12 animate-on-scroll">
             <h2 class="section-title text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">
-                Dernieres <span class="text-primary-800">Actualites</span>
+                Dernières <span class="text-primary-800">Actualités</span>
             </h2>
-            <p class="text-gray-600 font-body max-w-2xl mx-auto">Suivez les evenements marquants et la vie quotidienne au sein de notre etablissement.</p>
+            <p class="text-gray-600 font-body max-w-2xl mx-auto">Suivez les événements marquants et la vie quotidienne au sein de notre établissement.</p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 animate-on-scroll">
@@ -86,15 +86,15 @@
             {{-- Article 1 --}}
             <article class="card bg-white rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
                 <div class="relative overflow-hidden h-52">
-                    <img src="{{ asset('images/8845.jpg') }}" alt="Journee portes ouvertes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    <img src="{{ asset('images/8845.jpg') }}" alt="Journée portes ouvertes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                     <div class="absolute top-4 left-4 bg-white rounded-xl px-3 py-1.5 shadow-sm">
                         <span class="text-sm font-heading font-bold text-primary-800">15 Nov 2025</span>
                     </div>
                 </div>
                 <div class="p-6">
-                    <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Evenement</span>
-                    <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Journee Portes Ouvertes</h3>
-                    <p class="text-gray-600 font-body text-sm mb-4">Venez decouvrir notre ecole lors de notre journee portes ouvertes. Visitez nos locaux, rencontrez les enseignants et decouvrez nos programmes pedagogiques.</p>
+                    <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Événement</span>
+                    <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Journée Portes Ouvertes</h3>
+                    <p class="text-gray-600 font-body text-sm mb-4">Venez découvrir notre école lors de notre journée portes ouvertes. Visitez nos locaux, rencontrez les enseignants et découvrez nos programmes pédagogiques.</p>
                     <a href="#" class="inline-flex items-center text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                         Lire la suite
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -113,7 +113,7 @@
                 <div class="p-6">
                     <span class="inline-block bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Pedagogie</span>
                     <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Resultats des Examens du 1er Trimestre</h3>
-                    <p class="text-gray-600 font-body text-sm mb-4">Felicitations a tous nos eleves pour leurs excellents resultats. Un taux de reussite remarquable qui temoigne de l'engagement de nos equipes.</p>
+                    <p class="text-gray-600 font-body text-sm mb-4">Felicitations a tous nos élèves pour leurs excellents resultats. Un taux de réussite remarquable qui temoigne de l'engagement de nos équipes.</p>
                     <a href="#" class="inline-flex items-center text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                         Lire la suite
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -124,15 +124,15 @@
             {{-- Article 3 --}}
             <article class="card bg-white rounded-3xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
                 <div class="relative overflow-hidden h-52">
-                    <img src="{{ asset('images/72276.jpg') }}" alt="Sortie pedagogique" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    <img src="{{ asset('images/72276.jpg') }}" alt="Sortie pédagogique" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                     <div class="absolute top-4 left-4 bg-white rounded-xl px-3 py-1.5 shadow-sm">
                         <span class="text-sm font-heading font-bold text-primary-800">10 Jan 2025</span>
                     </div>
                 </div>
                 <div class="p-6">
                     <span class="inline-block bg-sky-100 text-sky-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Vie scolaire</span>
-                    <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Sortie Pedagogique au Parc de Hann</h3>
-                    <p class="text-gray-600 font-body text-sm mb-4">Nos eleves de CE1 et CE2 ont decouvert la faune et la flore senegalaise lors d'une sortie enrichissante au Parc zoologique de Hann.</p>
+                    <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Sortie Pédagogique au Parc de Hann</h3>
+                    <p class="text-gray-600 font-body text-sm mb-4">Nos élèves de CE1 et CE2 ont decouvert la faune et la flore senegalaise lors d'une sortie enrichissante au Parc zoologique de Hann.</p>
                     <a href="#" class="inline-flex items-center text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                         Lire la suite
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -151,7 +151,7 @@
                 <div class="p-6">
                     <span class="inline-block bg-orange-100 text-orange-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Communaute</span>
                     <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Fete Culturelle et Artistique</h3>
-                    <p class="text-gray-600 font-body text-sm mb-4">Une journee riche en couleurs ou nos eleves ont presente des danses traditionnelles, des chants et des oeuvres d'art realisees en classe.</p>
+                    <p class="text-gray-600 font-body text-sm mb-4">Une journée riche en couleurs ou nos élèves ont presente des danses traditionnelles, des chants et des œuvres d'art realisees en classe.</p>
                     <a href="#" class="inline-flex items-center text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                         Lire la suite
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -170,7 +170,7 @@
                 <div class="p-6">
                     <span class="inline-block bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Pedagogie</span>
                     <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Atelier Parents-Enseignants</h3>
-                    <p class="text-gray-600 font-body text-sm mb-4">Un moment d'echange privilegie entre les parents et notre equipe pedagogique pour discuter du suivi scolaire et du bien-etre des enfants.</p>
+                    <p class="text-gray-600 font-body text-sm mb-4">Un moment d'echange privilegie entre les parents et notre équipe pédagogique pour discuter du suivi scolaire et du bien-etre des enfants.</p>
                     <a href="#" class="inline-flex items-center text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                         Lire la suite
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -187,9 +187,9 @@
                     </div>
                 </div>
                 <div class="p-6">
-                    <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Evenement</span>
-                    <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Competition Sportive Inter-ecoles</h3>
-                    <p class="text-gray-600 font-body text-sm mb-4">Nos eleves ont brillamment represente l'ecole lors de la competition sportive inter-ecoles de Guediawaye. Bravo a tous les participants !</p>
+                    <span class="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-3">Événement</span>
+                    <h3 class="text-lg font-heading font-bold text-gray-900 mb-2 group-hover:text-primary-800 transition-colors">Competition Sportive Inter-écoles</h3>
+                    <p class="text-gray-600 font-body text-sm mb-4">Nos élèves ont brillamment represente l'école lors de la competition sportive inter-écoles de Guédiawaye. Bravo a tous les participants !</p>
                     <a href="#" class="inline-flex items-center text-primary-800 font-heading font-semibold text-sm hover:text-primary-900 transition-colors">
                         Lire la suite
                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -232,7 +232,7 @@
                 </svg>
             </div>
             <h2 class="section-title text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-4">Restez informes</h2>
-            <p class="text-gray-600 font-body mb-8">Inscrivez-vous a notre newsletter pour recevoir les dernieres actualites de l'ecole, les evenements a venir et les informations importantes directement dans votre boite mail.</p>
+            <p class="text-gray-600 font-body mb-8">Inscrivez-vous a notre newsletter pour recevoir les dernières actualités de l'école, les événements a venir et les informations importantes directement dans votre boite mail.</p>
 
             <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 @csrf

@@ -33,6 +33,9 @@
     <meta name="robots" content="index, follow">
     <meta name="author" content="{{ $metaSiteName }}">
 
+    {{-- Google Search Console ownership verification --}}
+    <meta name="google-site-verification" content="6vndauZQEUWy1c0xvmP3r0zFmoV0NEl_zfKEu-MhDF4">
+
     {{-- Open Graph (Facebook, WhatsApp, LinkedIn) --}}
     <meta property="og:type" content="website">
     <meta property="og:locale" content="fr_FR">
@@ -75,7 +78,7 @@
             'url' => url('/'),
             'logo' => asset('images/logo.png'),
             'image' => asset('images/logo.png'),
-            'telephone' => '+221338778162',
+            'téléphone' => '+221338778162',
             'email' => 'contact@lesbambinos.sn',
             'address' => [
                 '@type' => 'PostalAddress',
@@ -96,12 +99,12 @@
             ],
             'contactPoint' => [[
                 '@type' => 'ContactPoint',
-                'telephone' => '+221338778162',
+                'téléphone' => '+221338778162',
                 'contactType' => 'Admissions',
                 'availableLanguage' => ['fr'],
             ], [
                 '@type' => 'ContactPoint',
-                'telephone' => '+221771486502',
+                'téléphone' => '+221771486502',
                 'contactType' => 'customer service',
                 'availableLanguage' => ['fr'],
             ]],
@@ -180,18 +183,18 @@
             <div class="flex items-center justify-between h-16 lg:h-20">
 
                 {{-- Logo --}}
-                <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0" aria-label="Accueil - Groupe Scolaire Mere Theresa">
+                <a href="{{ route('home') }}" class="flex items-center gap-3 shrink-0" aria-label="Accueil - Groupe Scolaire Mère Thérèsa">
                     <img
                         src="/images/logo.png"
-                        alt="Logo Groupe Scolaire Mere Theresa"
+                        alt="Logo Groupe Scolaire Mère Thérèsa"
                         class="h-10 lg:h-14 w-auto"
                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                     >
                     <span class="hidden items-center gap-2 font-heading font-bold text-primary-900 text-lg leading-tight" aria-hidden="true">
-                        <span>Groupe Scolaire<br>Mere Theresa</span>
+                        <span>Groupe Scolaire<br>Mère Thérèsa</span>
                     </span>
                     <span class="font-heading font-bold text-primary-900 text-sm lg:text-base leading-tight hidden sm:block">
-                        Groupe Scolaire<br>Mere Theresa
+                        Groupe Scolaire<br>Mère Thérèsa
                     </span>
                 </a>
 
@@ -203,7 +206,7 @@
                     </a>
                     <a href="{{ route('about') }}"
                        class="px-3 py-2 rounded-lg text-sm font-semibold transition-colors {{ request()->routeIs('about') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
-                        A propos
+                        À propos
                     </a>
                     <a href="{{ route('programmes') }}"
                        class="px-3 py-2 rounded-lg text-sm font-semibold transition-colors {{ request()->routeIs('programmes*') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
@@ -219,7 +222,7 @@
                     </a>
                     <a href="{{ route('news') }}"
                        class="px-3 py-2 rounded-lg text-sm font-semibold transition-colors {{ request()->routeIs('news*') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
-                        Actualites
+                        Actualités
                     </a>
                     <a href="{{ route('contact') }}"
                        class="px-3 py-2 rounded-lg text-sm font-semibold transition-colors {{ request()->routeIs('contact') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
@@ -281,7 +284,7 @@
             <div class="flex items-center justify-between p-4 border-b border-gray-100">
                 <a href="{{ route('home') }}" class="flex items-center gap-2">
                     <img src="/images/logo.png" alt="Logo" class="h-8 w-auto">
-                    <span class="font-heading font-bold text-primary-900 text-sm leading-tight">Mere Theresa</span>
+                    <span class="font-heading font-bold text-primary-900 text-sm leading-tight">Mère Thérèsa</span>
                 </a>
                 <button
                     type="button"
@@ -305,7 +308,7 @@
                 <a href="{{ route('about') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-colors {{ request()->routeIs('about') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
-                    A propos
+                    À propos
                 </a>
                 <a href="{{ route('programmes') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-colors {{ request()->routeIs('programmes*') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
@@ -325,7 +328,7 @@
                 <a href="{{ route('news') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-colors {{ request()->routeIs('news*') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5" /></svg>
-                    Actualites
+                    Actualités
                 </a>
                 <a href="{{ route('contact') }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold transition-colors {{ request()->routeIs('contact') ? 'text-primary-800 bg-primary-50' : 'text-dark/80 hover:text-primary-800 hover:bg-primary-50/50' }}">
@@ -482,13 +485,13 @@
                 {{-- Column 1: Logo, Description, Social --}}
                 <div class="sm:col-span-2 lg:col-span-1">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 mb-4">
-                        <img src="/images/logo.png" alt="Logo Groupe Scolaire Mere Theresa" class="h-12 w-auto brightness-200">
+                        <img src="/images/logo.png" alt="Logo Groupe Scolaire Mère Thérèsa" class="h-12 w-auto brightness-200">
                         <span class="font-heading font-bold text-white text-lg leading-tight">
-                            Groupe Scolaire<br>Mere Theresa
+                            Groupe Scolaire<br>Mère Thérèsa
                         </span>
                     </a>
                     <p class="text-white/60 text-sm leading-relaxed mb-6">
-                        Un environnement chaleureux et stimulant ou chaque enfant s'epanouit, apprend et grandit avec confiance. Ecole privee Les Bambinos au coeur de Guediawaye.
+                        Un environnement chaleureux et stimulant où chaque enfant s'épanouit, apprend et grandit avec confiance. École privee Les Bambinos au cœur de Guédiawaye.
                     </p>
                     {{-- Social Links --}}
                     <div class="flex items-center gap-3">
@@ -518,7 +521,7 @@
                             <a href="{{ route('home') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">Accueil</a>
                         </li>
                         <li>
-                            <a href="{{ route('about') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">A propos de nous</a>
+                            <a href="{{ route('about') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">À propos de nous</a>
                         </li>
                         <li>
                             <a href="{{ route('admissions') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">Admissions</a>
@@ -527,7 +530,7 @@
                             <a href="{{ route('gallery') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">Galerie photos</a>
                         </li>
                         <li>
-                            <a href="{{ route('news') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">Actualites</a>
+                            <a href="{{ route('news') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">Actualités</a>
                         </li>
                         <li>
                             <a href="{{ route('contact') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200">Contact</a>
@@ -548,13 +551,13 @@
                         <li>
                             <a href="{{ route('programmes') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-accent-mint shrink-0"></span>
-                                Prescolaire (3 - 5 ans)
+                                Préscolaire (3 - 5 ans)
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('programmes') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-accent-blue shrink-0"></span>
-                                Elementaire (6 - 12 ans)
+                                Élémentaire (6 - 12 ans)
                             </a>
                         </li>
                     </ul>
@@ -576,7 +579,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                             </svg>
-                            <span>SHS N&deg; 60 Golf Nord,<br>Guediawaye, Senegal</span>
+                            <span>SHS N&deg; 60 Golf Nord,<br>Guédiawaye, Sénégal</span>
                         </li>
                         <li>
                             <a href="tel:+221338778162" class="flex items-start gap-2.5 text-sm hover:text-white transition-colors">
@@ -647,7 +650,7 @@
         <div class="border-t border-white/10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <p class="text-center text-xs text-white/50">
-                    &copy; 2025 Groupe Scolaire Mere Theresa - Ecole privee Les Bambinos. Tous droits reserves.
+                    &copy; 2025 Groupe Scolaire Mère Thérèsa - École privee Les Bambinos. Tous droits réservés.
                 </p>
             </div>
         </div>

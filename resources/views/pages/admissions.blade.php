@@ -105,7 +105,7 @@
                 Admissions & Inscriptions
             </h1>
             <p class="text-xl md:text-2xl text-white/80 font-body">
-                Annee Scolaire 2025/2026
+                Année Scolaire 2025/2026
             </p>
         </div>
     </div>
@@ -121,7 +121,7 @@
                 Processus d'inscription
             </h2>
             <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto">
-                Suivez ces etapes simples pour inscrire votre enfant au Groupe Scolaire Mere Theresa.
+                Suivez ces étapes simples pour inscrire votre enfant au Groupe Scolaire Mère Thérèsa.
             </p>
         </div>
 
@@ -142,7 +142,7 @@
                         </div>
                         <h3 class="font-heading font-semibold text-lg text-gray-900 mb-2">Prise de contact</h3>
                         <p class="text-sm text-gray-600 font-body leading-relaxed">
-                            Rendez-nous visite a l'ecole ou appelez-nous pour decouvrir notre etablissement et poser vos questions.
+                            Rendez-nous visite a l'école ou appelez-nous pour découvrir notre établissement et poser vos questions.
                         </p>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                         </div>
                         <h3 class="font-heading font-semibold text-lg text-gray-900 mb-2">Test d'admissibilite</h3>
                         <p class="text-sm text-gray-600 font-body leading-relaxed">
-                            Obligatoire pour les nouveaux eleves de l'elementaire. Le test a lieu apres les cours de vacances.
+                            Obligatoire pour les nouveaux élèves de l'élémentaire. Le test a lieu après les cours de vacances.
                         </p>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
                         </div>
                         <h3 class="font-heading font-semibold text-lg text-gray-900 mb-2">Confirmation d'inscription</h3>
                         <p class="text-sm text-gray-600 font-body leading-relaxed">
-                            Finalisez l'inscription en reglant les frais et en deposant le dossier complet au secretariat.
+                            Finalisez l'inscription en reglant les frais et en deposant le dossier complet au secrétariat.
                         </p>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
                 Calendrier d'inscription
             </h2>
             <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto">
-                Les dates importantes a retenir pour l'annee scolaire 2025/2026.
+                Les dates importantes a retenir pour l'année scolaire 2025/2026.
             </p>
         </div>
 
@@ -218,7 +218,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-heading font-semibold text-gray-900 mb-1">Reinscriptions anciens eleves</h3>
+                        <h3 class="font-heading font-semibold text-gray-900 mb-1">Reinscriptions anciens élèves</h3>
                         <p class="text-sm text-gray-600 font-body">
                             <span class="font-semibold text-primary-800">18 juin - 31 juillet 2025</span><br>
                             puis <span class="font-semibold text-primary-800">25 aout - 30 septembre 2025</span>
@@ -238,7 +238,7 @@
                     <div>
                         <h3 class="font-heading font-semibold text-gray-900 mb-1">Cours de vacances</h3>
                         <p class="text-sm text-gray-600 font-body">
-                            <span class="font-semibold">Obligatoires pour les nouveaux de l'elementaire</span><br>
+                            <span class="font-semibold">Obligatoires pour les nouveaux de l'élémentaire</span><br>
                             <span class="font-semibold text-primary-800">25 aout - 19 septembre 2025</span><br>
                             Frais : <span class="font-semibold">10 000 FCFA</span><br>
                             Cloture inscription : <span class="font-semibold">29 aout 2025</span>
@@ -247,7 +247,7 @@
                 </div>
             </div>
 
-            {{-- Card: Fermeture ecole --}}
+            {{-- Card: Fermeture école --}}
             <div class="card bg-white rounded-2xl shadow-md p-6 border-l-4 border-red-400 animate-on-scroll">
                 <div class="flex items-start gap-4">
                     <div class="shrink-0 w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
@@ -256,7 +256,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-heading font-semibold text-gray-900 mb-1">Fermeture de l'ecole</h3>
+                        <h3 class="font-heading font-semibold text-gray-900 mb-1">Fermeture de l'école</h3>
                         <p class="text-sm text-gray-600 font-body">
                             <span class="font-semibold text-red-600">01 - 25 aout 2025</span><br>
                             Pas de permanence durant cette periode.
@@ -290,7 +290,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                 </svg>
                 <p class="text-sm text-amber-800 font-body font-semibold">
-                    Passe le delai, aucune place ne sera consideree comme reservee.
+                    Passe le délai, aucune place ne sera consideree comme réservée.
                 </p>
             </div>
             <div class="bg-primary-50 border border-primary-200 rounded-xl p-4 flex items-start gap-3">
@@ -298,7 +298,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                 </svg>
                 <p class="text-sm text-primary-900 font-body">
-                    L'inscription effective d'un nouveau a l'elementaire n'est possible qu'apres les cours de vacances avec le test d'admissibilite.
+                    L'inscription effective d'un nouveau a l'élémentaire n'est possible qu'après les cours de vacances avec le test d'admissibilite.
                 </p>
             </div>
         </div>
@@ -315,19 +315,19 @@
                 Pieces a fournir
             </h2>
             <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto">
-                Documents necessaires selon le statut de l'eleve.
+                Documents necessaires selon le statut de l'élève.
             </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {{-- Nouveaux eleves --}}
+            {{-- Nouveaux élèves --}}
             <div class="card bg-white rounded-2xl shadow-md overflow-hidden animate-on-scroll">
                 <div class="bg-primary-800 px-6 py-4">
                     <h3 class="font-heading font-bold text-xl text-white flex items-center gap-3">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                         </svg>
-                        Nouveaux eleves
+                        Nouveaux élèves
                     </h3>
                 </div>
                 <div class="p-6">
@@ -336,7 +336,7 @@
                             <svg class="w-5 h-5 text-primary-800 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
-                            01 copie du carnet de vaccination mis a jour
+                            01 copie du carnet de vaccination mis à jour
                         </li>
                         <li class="flex items-start gap-3 text-sm text-gray-700 font-body">
                             <svg class="w-5 h-5 text-primary-800 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -366,20 +366,20 @@
                             <svg class="w-5 h-5 text-primary-800 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
-                            Dispense d'age pour les enfants de moins de 6 ans sans prescolaire
+                            Dispense d'age pour les enfants de moins de 6 ans sans préscolaire
                         </li>
                     </ul>
                 </div>
             </div>
 
-            {{-- Anciens eleves --}}
+            {{-- Anciens élèves --}}
             <div class="card bg-white rounded-2xl shadow-md overflow-hidden animate-on-scroll">
                 <div class="bg-gray-800 px-6 py-4">
                     <h3 class="font-heading font-bold text-xl text-white flex items-center gap-3">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
-                        Anciens eleves
+                        Anciens élèves
                     </h3>
                 </div>
                 <div class="p-6">
@@ -388,13 +388,13 @@
                             <svg class="w-5 h-5 text-gray-800 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
-                            Etre en regle avec la comptabilite
+                            Etre en règle avec la comptabilite
                         </li>
                         <li class="flex items-start gap-3 text-sm text-gray-700 font-body">
                             <svg class="w-5 h-5 text-gray-800 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                             </svg>
-                            01 copie du carnet de vaccination mis a jour
+                            01 copie du carnet de vaccination mis à jour
                         </li>
                         <li class="flex items-start gap-3 text-sm text-gray-700 font-body">
                             <svg class="w-5 h-5 text-gray-800 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
@@ -410,7 +410,7 @@
                             <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                             </svg>
-                            Le dossier complet est a deposer au secretariat de l'ecole.
+                            Le dossier complet est a deposer au secrétariat de l'école.
                         </p>
                     </div>
                 </div>
@@ -453,7 +453,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                 </svg>
                 <p class="text-sm text-gray-700 font-body">
-                    Etudes dirigees obligatoires a partir de novembre a l'elementaire : <span class="font-semibold text-primary-800">2 500 FCFA/mois</span>.
+                    Etudes dirigees obligatoires à partir de novembre a l'élémentaire : <span class="font-semibold text-primary-800">2 500 FCFA/mois</span>.
                 </p>
             </div>
         </div>
@@ -609,15 +609,15 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-sky-50 rounded-xl p-4 text-center">
                         <p class="font-heading font-bold text-2xl text-sky-700 mb-1">8h</p>
-                        <p class="text-sm text-gray-600 font-body">Aller pour tous les eleves</p>
+                        <p class="text-sm text-gray-600 font-body">Aller pour tous les élèves</p>
                     </div>
                     <div class="bg-sky-50 rounded-xl p-4 text-center">
                         <p class="font-heading font-bold text-2xl text-sky-700 mb-1">13h</p>
-                        <p class="text-sm text-gray-600 font-body">Prescolaire + elementaire le mercredi</p>
+                        <p class="text-sm text-gray-600 font-body">Préscolaire + élémentaire le mercredi</p>
                     </div>
                     <div class="bg-sky-50 rounded-xl p-4 text-center">
                         <p class="font-heading font-bold text-2xl text-sky-700 mb-1">17h</p>
-                        <p class="text-sm text-gray-600 font-body">Retour elementaire + prescolaire inscrits cantine</p>
+                        <p class="text-sm text-gray-600 font-body">Retour élémentaire + préscolaire inscrits cantine</p>
                     </div>
                 </div>
                 <div class="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
@@ -625,7 +625,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                     </svg>
                     <p class="text-sm text-amber-800 font-body">
-                        Les eleves du prescolaire inscrits a la cantine et au transport prennent le car de 17h.
+                        Les élèves du préscolaire inscrits a la cantine et au transport prennent le car de 17h.
                     </p>
                 </div>
             </div>
@@ -643,7 +643,7 @@
                 Questions frequentes
             </h2>
             <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto">
-                Retrouvez les reponses aux questions les plus posees par les parents.
+                Retrouvez les réponses aux questions les plus posees par les parents.
             </p>
         </div>
 
@@ -657,20 +657,20 @@
                     </svg>
                 </summary>
                 <div class="px-6 pb-5 text-sm text-gray-600 font-body leading-relaxed">
-                    La garde accueille les enfants a partir de 2 ans. Le prescolaire (Petite Section) accueille les enfants a partir de 3 ans. Pour l'elementaire, les enfants de moins de 6 ans sans prescolaire doivent fournir une dispense d'age.
+                    La garde accueille les enfants à partir de 2 ans. Le préscolaire (Petite Section) accueille les enfants à partir de 3 ans. Pour l'élémentaire, les enfants de moins de 6 ans sans préscolaire doivent fournir une dispense d'age.
                 </div>
             </details>
 
             {{-- FAQ 2 --}}
             <details class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-heading font-semibold text-gray-900 hover:text-primary-800 transition-colors list-none">
-                    <span>Le test d'admissibilite est-il obligatoire pour tous les nouveaux eleves ?</span>
+                    <span>Le test d'admissibilite est-il obligatoire pour tous les nouveaux élèves ?</span>
                     <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform duration-300 shrink-0 ml-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                     </svg>
                 </summary>
                 <div class="px-6 pb-5 text-sm text-gray-600 font-body leading-relaxed">
-                    Le test d'admissibilite est obligatoire uniquement pour les nouveaux eleves de l'elementaire. Il a lieu apres les cours de vacances (25 aout - 19 septembre 2025). Les inscriptions a la garde et au prescolaire ne necessitent pas de test.
+                    Le test d'admissibilite est obligatoire uniquement pour les nouveaux élèves de l'élémentaire. Il a lieu après les cours de vacances (25 aout - 19 septembre 2025). Les inscriptions a la garde et au préscolaire ne nécessitent pas de test.
                 </div>
             </details>
 
@@ -696,7 +696,7 @@
                     </svg>
                 </summary>
                 <div class="px-6 pb-5 text-sm text-gray-600 font-body leading-relaxed">
-                    Oui, les cours de vacances sont obligatoires pour les nouveaux eleves de l'elementaire. Ils se deroulent du 25 aout au 19 septembre 2025. Les frais s'elevent a 10 000 FCFA et la cloture des inscriptions est fixee au 29 aout 2025.
+                    Oui, les cours de vacances sont obligatoires pour les nouveaux élèves de l'élémentaire. Ils se deroulent du 25 aout au 19 septembre 2025. Les frais s'elevent a 10 000 FCFA et la cloture des inscriptions est fixee au 29 aout 2025.
                 </div>
             </details>
 
@@ -709,7 +709,7 @@
                     </svg>
                 </summary>
                 <div class="px-6 pb-5 text-sm text-gray-600 font-body leading-relaxed">
-                    Le transport est organise en 3 zones avec une option hors zone. Le car de 8h assure l'aller pour tous les eleves. Le car de 13h est pour le prescolaire et l'elementaire le mercredi. Le car de 17h assure le retour de l'elementaire et des prescolaires inscrits a la cantine. L'inscription au service de transport doit etre faite avant le 14 novembre 2025.
+                    Le transport est organise en 3 zones avec une option hors zone. Le car de 8h assure l'aller pour tous les élèves. Le car de 13h est pour le préscolaire et l'élémentaire le mercredi. Le car de 17h assure le retour de l'élémentaire et des préscolaires inscrits a la cantine. L'inscription au service de transport doit etre faite avant le 14 novembre 2025.
                 </div>
             </details>
 
@@ -722,7 +722,7 @@
                     </svg>
                 </summary>
                 <div class="px-6 pb-5 text-sm text-gray-600 font-body leading-relaxed">
-                    Passe le delai, aucune place ne sera consideree comme reservee. Nous vous encourageons a respecter les dates limites pour garantir une place a votre enfant. Contactez-nous au plus vite si vous avez un empechement.
+                    Passe le délai, aucune place ne sera consideree comme réservée. Nous vous encourageons a respecter les dates limites pour garantir une place a votre enfant. Contactez-nous au plus vite si vous avez un empechement.
                 </div>
             </details>
         </div>
@@ -751,7 +751,7 @@
             Des questions ? Contactez-nous !
         </h2>
         <p class="text-lg text-white/80 font-body mb-6 max-w-2xl mx-auto">
-            Notre equipe est a votre disposition pour vous accompagner dans le processus d'inscription de votre enfant.
+            Notre équipe est a votre disposition pour vous accompagner dans le processus d'inscription de votre enfant.
         </p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="tel:+221338778162"

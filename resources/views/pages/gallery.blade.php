@@ -41,8 +41,8 @@
             <button type="button" class="gallery-filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 bg-white text-gray-700 hover:bg-primary-800 hover:text-white shadow-sm" data-filter="activites">
                 Activites
             </button>
-            <button type="button" class="gallery-filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 bg-white text-gray-700 hover:bg-primary-800 hover:text-white shadow-sm" data-filter="evenements">
-                Evenements
+            <button type="button" class="gallery-filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 bg-white text-gray-700 hover:bg-primary-800 hover:text-white shadow-sm" data-filter="événements">
+                Événements
             </button>
         </div>
     </div>
@@ -58,13 +58,13 @@
             {{-- Image 1 --}}
             <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="classes" data-lightbox="{{ asset('images/7.jpg') }}">
                 <div class="relative overflow-hidden">
-                    <img src="{{ asset('images/7.jpg') }}" alt="Eleve souriant en classe" class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                    <img src="{{ asset('images/7.jpg') }}" alt="Élève souriant en classe" class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     <div class="absolute inset-0 bg-primary-800/0 group-hover:bg-primary-800/30 transition-all duration-300 flex items-center justify-center">
                         <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6"/></svg>
                     </div>
                 </div>
                 <div class="p-3 bg-white">
-                    <p class="text-sm font-body text-gray-700 text-center">Nos eleves en classe</p>
+                    <p class="text-sm font-body text-gray-700 text-center">Nos élèves en classe</p>
                 </div>
             </div>
 
@@ -116,25 +116,25 @@
                     </div>
                 </div>
                 <div class="p-3 bg-white">
-                    <p class="text-sm font-body text-gray-700 text-center">Lecture et decouverte</p>
+                    <p class="text-sm font-body text-gray-700 text-center">Lecture et découverte</p>
                 </div>
             </div>
 
             {{-- Image 6 --}}
-            <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="evenements" data-lightbox="{{ asset('images/72276.jpg') }}">
+            <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="événements" data-lightbox="{{ asset('images/72276.jpg') }}">
                 <div class="relative overflow-hidden">
-                    <img src="{{ asset('images/72276.jpg') }}" alt="Eleve souriante avec livres" class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                    <img src="{{ asset('images/72276.jpg') }}" alt="Élève souriante avec livres" class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     <div class="absolute inset-0 bg-primary-800/0 group-hover:bg-primary-800/30 transition-all duration-300 flex items-center justify-center">
                         <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6"/></svg>
                     </div>
                 </div>
                 <div class="p-3 bg-white">
-                    <p class="text-sm font-body text-gray-700 text-center">Journee portes ouvertes</p>
+                    <p class="text-sm font-body text-gray-700 text-center">Journée portes ouvertes</p>
                 </div>
             </div>
 
             {{-- Image 7 --}}
-            <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="evenements" data-lightbox="{{ asset('images/275099.jpg') }}">
+            <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="événements" data-lightbox="{{ asset('images/275099.jpg') }}">
                 <div class="relative overflow-hidden">
                     <img src="{{ asset('images/275099.jpg') }}" alt="Garcon en uniforme" class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     <div class="absolute inset-0 bg-primary-800/0 group-hover:bg-primary-800/30 transition-all duration-300 flex items-center justify-center">
@@ -142,7 +142,7 @@
                     </div>
                 </div>
                 <div class="p-3 bg-white">
-                    <p class="text-sm font-body text-gray-700 text-center">Ceremonie de rentree</p>
+                    <p class="text-sm font-body text-gray-700 text-center">Ceremonie de rentrée</p>
                 </div>
             </div>
 
@@ -155,12 +155,12 @@
                     </div>
                 </div>
                 <div class="p-3 bg-white">
-                    <p class="text-sm font-body text-gray-700 text-center">Sortie pedagogique</p>
+                    <p class="text-sm font-body text-gray-700 text-center">Sortie pédagogique</p>
                 </div>
             </div>
 
             {{-- Image 9 --}}
-            <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="evenements" data-lightbox="{{ asset('images/8845.jpg') }}">
+            <div class="gallery-item card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group" data-category="événements" data-lightbox="{{ asset('images/8845.jpg') }}">
                 <div class="relative overflow-hidden">
                     <img src="{{ asset('images/8845.jpg') }}" alt="Salle de classe" class="w-full h-48 md:h-56 object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     <div class="absolute inset-0 bg-primary-800/0 group-hover:bg-primary-800/30 transition-all duration-300 flex items-center justify-center">

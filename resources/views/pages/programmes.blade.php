@@ -39,10 +39,10 @@
                 De la garde au CM2
             </span>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6">
-                Nos Programmes Educatifs
+                Nos Programmes Éducatifs
             </h1>
             <p class="text-lg text-white/80 font-body max-w-2xl mx-auto">
-                Un parcours pedagogique complet et adapte a chaque etape du developpement de votre enfant, de 2 ans a 11 ans.
+                Un parcours pédagogique complet et adapté a chaque étape du développement de votre enfant, de 2 ans a 11 ans.
             </p>
         </div>
     </div>
@@ -55,10 +55,10 @@
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center mb-12 animate-on-scroll">
             <h2 class="section-title text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-6">
-                Une offre educative <span class="text-primary-800">complete</span>
+                Une offre éducative <span class="text-primary-800">complète</span>
             </h2>
             <p class="text-gray-600 font-body text-lg leading-relaxed">
-                Le Groupe Scolaire Mere Theresa propose un parcours educatif complet allant de la garde des tout-petits jusqu'a la fin du cycle elementaire. Chaque programme est concu pour repondre aux besoins specifiques de chaque tranche d'age, avec une pedagogie bienveillante et des enseignants qualifies.
+                Le Groupe Scolaire Mère Thérèsa propose un parcours éducatif complet allant de la garde des tout-petits jusqu'à la fin du cycle élémentaire. Chaque programme est conçu pour repondre aux besoins specifiques de chaque tranche d'age, avec une pédagogie bienveillante et des enseignants qualifiés.
             </p>
         </div>
 
@@ -78,7 +78,7 @@
                     <svg class="w-8 h-8 text-primary-800" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/></svg>
                 </div>
                 <span class="block text-4xl font-heading font-bold text-primary-800 mb-2">+200</span>
-                <span class="text-gray-600 font-body font-semibold">Eleves inscrits</span>
+                <span class="text-gray-600 font-body font-semibold">Élèves inscrits</span>
             </div>
 
             {{-- Stat 3 --}}
@@ -87,7 +87,7 @@
                     <svg class="w-8 h-8 text-primary-800" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342"/></svg>
                 </div>
                 <span class="block text-4xl font-heading font-bold text-primary-800 mb-2">95%</span>
-                <span class="text-gray-600 font-body font-semibold">Taux de reussite</span>
+                <span class="text-gray-600 font-body font-semibold">Taux de réussite</span>
             </div>
         </div>
     </div>
@@ -120,29 +120,29 @@
                     Garde
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
-                    Notre programme de garde offre un environnement securise et chaleureux pour les tout-petits. Les enfants beneficient d'une stimulation precoce adaptee a leur age, dans un cadre bienveillant ou ils peuvent s'epanouir en toute confiance.
+                    Notre programme de garde offre un environnement sécurisé et chaleureux pour les tout-petits. Les enfants bénéficient d'une stimulation précoce adaptée a leur age, dans un cadre bienveillant ou ils peuvent s'épanouir en toute confiance.
                 </p>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
-                    Nos educatrices specialisees accompagnent chaque enfant dans ses premiers pas de decouverte et de socialisation, avec des activites sensorielles et motrices variees.
+                    Nos educatrices spécialisées accompagnent chaque enfant dans ses premiers pas de découverte et de socialisation, avec des activites sensorielles et motrices variées.
                 </p>
 
                 {{-- Skills list --}}
                 <ul class="space-y-2 mb-6">
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-yellow-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Eveil sensoriel et moteur
+                        Éveil sensoriel et moteur
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-yellow-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Stimulation precoce et jeux educatifs
+                        Stimulation précoce et jeux éducatifs
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-yellow-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Accompagnement personnalise et bienveillant
+                        Accompagnement personnalisé et bienveillant
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-yellow-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Premieres interactions sociales
+                        Premières interactions sociales
                     </li>
                 </ul>
 
@@ -195,16 +195,16 @@
                     Petite Section
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
-                    La Petite Section marque les premiers pas de la socialisation de l'enfant en milieu scolaire. Dans un cadre ludique et securisant, les enfants decouvrent la vie en collectivite et developpent leur motricite, leur langage et leur creativite.
+                    La Petite Section marque les premiers pas de la socialisation de l'enfant en milieu scolaire. Dans un cadre ludique et securisant, les enfants decouvrent la vie en collectivite et développent leur motricite, leur langage et leur creativite.
                 </p>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
-                    Les activites creatives et les jeux structures favorisent le developpement du langage oral et de la motricite fine, preparant ainsi les enfants aux apprentissages futurs.
+                    Les activites creatives et les jeux structures favorisent le développement du langage oral et de la motricite fine, preparant ainsi les enfants aux apprentissages futurs.
                 </p>
 
                 <ul class="space-y-2 mb-6">
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-pink-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Premiere socialisation en groupe
+                        Première socialisation en groupe
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-pink-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
@@ -280,7 +280,7 @@
                     Moyenne Section
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
-                    La Moyenne Section constitue une etape cle dans la preparation aux apprentissages fondamentaux. Les enfants decouvrent les bases de la pre-lecture, de la pre-ecriture et de la numeratie, tout en developpant leur autonomie.
+                    La Moyenne Section constitue une étape cle dans la preparation aux apprentissages fondamentaux. Les enfants decouvrent les bases de la pre-lecture, de la pre-ecriture et de la numeratie, tout en developpant leur autonomie.
                 </p>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
                     A travers des activites structurees et ludiques, chaque enfant progresse a son rythme vers une meilleure maitrise du langage et des premiers concepts mathematiques.
@@ -347,10 +347,10 @@
                     Grande Section
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
-                    La Grande Section est l'annee charniere qui prepare l'enfant a l'entree en elementaire. Le programme met l'accent sur la preparation a la lecture, le developpement de la logique et le travail en equipe a travers des projets collaboratifs.
+                    La Grande Section est l'année charniere qui prepare l'enfant a l'entree en élémentaire. Le programme met l'accent sur la preparation a la lecture, le développement de la logique et le travail en équipe à travers des projets collaboratifs.
                 </p>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
-                    Les enfants acquierent les competences essentielles pour reussir leur transition vers le cycle elementaire, avec une attention particuliere portee a la confiance en soi et a l'autonomie.
+                    Les enfants acquierent les competences essentielles pour reussir leur transition vers le cycle élémentaire, avec une attention particuliere portee a la confiance en soi et a l'autonomie.
                 </p>
 
                 <ul class="space-y-2 mb-6">
@@ -364,11 +364,11 @@
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Projets d'equipe et travail collaboratif
+                        Projets d'équipe et travail collaboratif
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Preparation a la transition vers l'elementaire
+                        Preparation a la transition vers l'élémentaire
                     </li>
                 </ul>
 
@@ -409,14 +409,14 @@
     </div>
 </section>
 
-{{-- ===================== e. CI - CE2 / Elementaire 1 ===================== --}}
-<section id="elementaire-1" class="py-16 bg-white">
+{{-- ===================== e. CI - CE2 / Élémentaire 1 ===================== --}}
+<section id="élémentaire-1" class="py-16 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-center animate-on-scroll">
             {{-- Image --}}
             <div class="relative">
                 <div class="rounded-3xl overflow-hidden shadow-xl">
-                    <img src="{{ asset('images/7.jpg') }}" alt="Eleves en classe elementaire CI-CE2" class="w-full h-80 lg:h-96 object-cover">
+                    <img src="{{ asset('images/7.jpg') }}" alt="Élèves en classe élémentaire CI-CE2" class="w-full h-80 lg:h-96 object-cover">
                 </div>
                 <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-orange-200 rounded-full -z-10"></div>
                 <div class="absolute -top-4 -left-4 w-14 h-14 bg-orange-100 rounded-full -z-10"></div>
@@ -429,13 +429,13 @@
                     6 - 9 ans
                 </span>
                 <h2 class="text-3xl font-heading font-bold text-gray-900 mb-4">
-                    CI - CE2 / Elementaire 1
+                    CI - CE2 / Élémentaire 1
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
-                    Le cycle Elementaire 1 (CI, CP, CE1, CE2) est consacre a l'acquisition des competences fondamentales : la lecture, l'ecriture, les mathematiques, les sciences et l'histoire-geographie. Les eleves construisent des bases solides pour la suite de leur parcours scolaire.
+                    Le cycle Élémentaire 1 (CI, CP, CE1, CE2) est consacre a l'acquisition des competences fondamentales : la lecture, l'ecriture, les mathematiques, les sciences et l'histoire-geographie. Les élèves construisent des bases solides pour la suite de leur parcours scolaire.
                 </p>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
-                    Les etudes dirigees sont obligatoires a partir de novembre afin de renforcer les acquis et accompagner chaque eleve dans sa progression.
+                    Les etudes dirigees sont obligatoires à partir de novembre afin de renforcer les acquis et accompagner chaque élève dans sa progression.
                 </p>
 
                 <ul class="space-y-2 mb-6">
@@ -453,7 +453,7 @@
                     </li>
                     <li class="flex items-center gap-3 text-gray-700 font-body">
                         <svg class="w-5 h-5 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                        Etudes dirigees obligatoires (a partir de novembre)
+                        Etudes dirigees obligatoires (à partir de novembre)
                     </li>
                 </ul>
 
@@ -489,8 +489,8 @@
     </div>
 </section>
 
-{{-- ===================== f. CM1 - CM2 / Elementaire 2 ===================== --}}
-<section id="elementaire-2" class="py-16 bg-gray-50">
+{{-- ===================== f. CM1 - CM2 / Élémentaire 2 ===================== --}}
+<section id="élémentaire-2" class="py-16 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-center animate-on-scroll">
             {{-- Details --}}
@@ -500,13 +500,13 @@
                     9 - 11 ans
                 </span>
                 <h2 class="text-3xl font-heading font-bold text-gray-900 mb-4">
-                    CM1 - CM2 / Elementaire 2
+                    CM1 - CM2 / Élémentaire 2
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
-                    Le cycle Elementaire 2 (CM1 et CM2) est consacre a l'approfondissement des connaissances et a la preparation aux examens. Les eleves de CM2 sont specifiquement prepares au CFEE (Certificat de Fin d'Etudes Elementaires) et a l'entree au college.
+                    Le cycle Élémentaire 2 (CM1 et CM2) est consacre a l'approfondissement des connaissances et a la preparation aux examens. Les élèves de CM2 sont specifiquement prepares au CFEE (Certificat de Fin d'Etudes Elementaires) et a l'entree au college.
                 </p>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
-                    Des sessions d'etudes renforcees sont mises en place pour assurer la reussite de chaque eleve aux examens et leur donner toutes les cles pour une transition reussie vers le secondaire.
+                    Des sessions d'etudes renforcees sont mises en place pour assurer la réussite de chaque élève aux examens et leur donner toutes les cles pour une transition reussie vers le secondaire.
                 </p>
 
                 <ul class="space-y-2 mb-6">
@@ -570,7 +570,7 @@
             {{-- Image --}}
             <div class="relative order-1 lg:order-2">
                 <div class="rounded-3xl overflow-hidden shadow-xl">
-                    <img src="{{ asset('images/10211.jpg') }}" alt="Eleves en CM1-CM2" class="w-full h-80 lg:h-96 object-cover">
+                    <img src="{{ asset('images/10211.jpg') }}" alt="Élèves en CM1-CM2" class="w-full h-80 lg:h-96 object-cover">
                 </div>
                 <div class="absolute -bottom-4 -left-4 w-20 h-20 bg-purple-200 rounded-full -z-10"></div>
                 <div class="absolute -top-4 -right-4 w-14 h-14 bg-purple-100 rounded-full -z-10"></div>
@@ -590,17 +590,17 @@
                 Emploi du Temps <span class="text-primary-800">Type</span>
             </h2>
             <p class="text-gray-600 font-body max-w-2xl mx-auto">
-                Decouvrez comment se deroule une journee typique pour nos eleves selon leur niveau.
+                Découvrez comment se deroule une journée typique pour nos élèves selon leur niveau.
             </p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-8 animate-on-scroll">
-            {{-- Prescolaire --}}
+            {{-- Préscolaire --}}
             <div class="card bg-white rounded-3xl shadow-md overflow-hidden">
                 <div class="bg-pink-500 px-6 py-4">
                     <h3 class="text-xl font-heading font-bold text-white flex items-center gap-2">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 0 0 0 6.364L12 20.364l7.682-7.682a4.5 4.5 0 0 0-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 0 0-6.364 0Z"/></svg>
-                        Prescolaire (Garde - GS)
+                        Préscolaire (Garde - GS)
                     </h3>
                 </div>
                 <div class="p-6">
@@ -638,7 +638,7 @@
                             </tr>
                             <tr class="border-b border-gray-100">
                                 <td class="py-3 text-primary-800 font-semibold whitespace-nowrap">14h30 - 16h00</td>
-                                <td class="py-3 text-gray-600">Activites d'eveil / Jeux</td>
+                                <td class="py-3 text-gray-600">Activites d'éveil / Jeux</td>
                             </tr>
                             <tr>
                                 <td class="py-3 text-primary-800 font-semibold whitespace-nowrap">16h00 - 17h30</td>
@@ -649,12 +649,12 @@
                 </div>
             </div>
 
-            {{-- Elementaire --}}
+            {{-- Élémentaire --}}
             <div class="card bg-white rounded-3xl shadow-md overflow-hidden">
                 <div class="bg-orange-500 px-6 py-4">
                     <h3 class="text-xl font-heading font-bold text-white flex items-center gap-2">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg>
-                        Elementaire (CI - CM2)
+                        Élémentaire (CI - CM2)
                     </h3>
                 </div>
                 <div class="p-6">
@@ -723,7 +723,7 @@
             Inscrivez votre enfant des maintenant
         </h2>
         <p class="text-white/80 font-body max-w-2xl mx-auto mb-8 text-lg">
-            Les inscriptions sont ouvertes pour l'annee scolaire 2026-2027. Offrez a votre enfant le meilleur depart dans la vie avec un cadre d'apprentissage bienveillant et stimulant.
+            Les inscriptions sont ouvertes pour l'année scolaire 2026-2027. Offrez a votre enfant le meilleur depart dans la vie avec un cadre d'apprentissage bienveillant et stimulant.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
             <a href="{{ route('admissions') }}" class="btn-primary inline-flex items-center gap-2 bg-white text-primary-800 font-heading font-bold px-10 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
