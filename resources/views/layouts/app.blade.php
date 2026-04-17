@@ -168,7 +168,7 @@
         {{-- Mobile Menu Drawer --}}
         <div
             id="mobile-menu-drawer"
-            class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto"
+            class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto"
             role="dialog"
             aria-modal="true"
             aria-label="Menu de navigation mobile"

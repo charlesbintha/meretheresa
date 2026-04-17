@@ -7,7 +7,7 @@
 {{-- ============================================================== --}}
 {{-- HERO SECTION --}}
 {{-- ============================================================== --}}
-<section class="relative min-h-[85vh] flex items-center overflow-hidden" style="background: linear-gradient(135deg, #FFFDF8 0%, #EFF2FB 100%);">
+<section class="relative lg:min-h-[85vh] lg:flex lg:items-center overflow-hidden" style="background: linear-gradient(135deg, #FFFDF8 0%, #EFF2FB 100%);">
     {{-- Floating decorative elements --}}
     <div class="absolute inset-0 pointer-events-none overflow-hidden">
         {{-- Star top-left --}}
@@ -36,25 +36,25 @@
         </svg>
     </div>
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 lg:py-12 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             {{-- Left: Text Content --}}
-            <div class="animate-on-scroll">
-                <span class="inline-block bg-pink-100 text-primary-800 font-heading font-semibold text-sm px-4 py-2 rounded-full mb-6">
+            <div class="animate-on-scroll text-center lg:text-left">
+                <span class="inline-block bg-pink-100 text-primary-800 font-heading font-semibold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-full mb-4 sm:mb-6">
                     Groupe Scolaire Mere Theresa
                 </span>
-                <h1 class="text-5xl md:text-6xl font-heading font-bold text-gray-900 leading-tight mb-6">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 leading-tight mb-4 sm:mb-6">
                     Un monde de <span class="text-primary-800">decouvertes</span> pour votre enfant
                 </h1>
-                <p class="text-lg text-gray-600 font-body mb-8 max-w-lg">
+                <p class="text-base sm:text-lg text-gray-600 font-body mb-6 sm:mb-8 max-w-lg mx-auto lg:mx-0">
                     Dans un environnement chaleureux et bienveillant, nous accompagnons chaque enfant dans son epanouissement et ses premiers apprentissages, de la garderie au CM2.
                 </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="{{ route('programmes') }}" class="btn-primary inline-flex items-center gap-2 bg-primary-800 text-white font-heading font-semibold px-8 py-4 rounded-full hover:bg-opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                <div class="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+                    <a href="{{ route('programmes') }}" class="btn-primary inline-flex items-center gap-2 bg-primary-800 text-white font-heading font-semibold px-5 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base">
                         Decouvrir nos programmes
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
-                    <a href="{{ route('contact') }}" class="btn-secondary inline-flex items-center gap-2 border-2 border-primary-800 text-primary-800 font-heading font-semibold px-8 py-4 rounded-full hover:bg-primary-800 hover:text-white transition-all duration-300">
+                    <a href="{{ route('contact') }}" class="btn-secondary inline-flex items-center gap-2 border-2 border-primary-800 text-primary-800 font-heading font-semibold px-5 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-primary-800 hover:text-white transition-all duration-300 text-sm sm:text-base">
                         Nous contacter
                     </a>
                 </div>
@@ -62,7 +62,7 @@
 
             {{-- Right: Image in blob shape --}}
             <div class="relative flex justify-center animate-on-scroll">
-                <div class="relative w-[400px] h-[400px] md:w-[480px] md:h-[480px]">
+                <div class="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[480px] lg:h-[480px] max-w-full">
                     <svg class="absolute inset-0 w-full h-full" viewBox="0 0 480 480">
                         <defs>
                             <clipPath id="heroBlob">
@@ -73,29 +73,29 @@
                     <div class="absolute inset-0 rounded-full" style="clip-path: url(#heroBlob); -webkit-clip-path: url(#heroBlob);">
                         <img src="{{ asset('images/72276.jpg') }}" alt="Eleve souriante avec livres" class="w-full h-full object-cover">
                     </div>
-                    {{-- Decorative ring --}}
-                    <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-yellow-300 rounded-full opacity-60 animate-float" style="animation-delay: 0.8s;"></div>
-                    <div class="absolute -top-4 -left-4 w-16 h-16 bg-sky-300 rounded-full opacity-50 animate-float" style="animation-delay: 1.2s;"></div>
+                    {{-- Decorative rings --}}
+                    <div class="absolute -bottom-3 -right-3 w-16 h-16 sm:-bottom-4 sm:-right-4 sm:w-24 sm:h-24 bg-yellow-300 rounded-full opacity-60 animate-float" style="animation-delay: 0.8s;"></div>
+                    <div class="absolute -top-3 -left-3 w-10 h-10 sm:-top-4 sm:-left-4 sm:w-16 sm:h-16 bg-sky-300 rounded-full opacity-50 animate-float" style="animation-delay: 1.2s;"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- Stats bar --}}
-    <div class="absolute bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-pink-100">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="grid grid-cols-3 gap-8 text-center animate-on-scroll">
+    {{-- Stats bar (relative flow on mobile, absolute bottom on desktop) --}}
+    <div class="relative lg:absolute lg:bottom-0 lg:left-0 lg:right-0 bg-white/80 backdrop-blur-sm border-t border-primary-100">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-5 lg:py-6">
+            <div class="grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 text-center animate-on-scroll">
                 <div>
-                    <span class="block text-3xl md:text-4xl font-heading font-bold text-primary-800" data-counter="200">+200</span>
-                    <span class="text-sm md:text-base text-gray-600 font-body">Eleves</span>
+                    <span class="block text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-primary-800" data-counter="200">+200</span>
+                    <span class="text-xs sm:text-sm md:text-base text-gray-600 font-body">Eleves</span>
                 </div>
                 <div>
-                    <span class="block text-3xl md:text-4xl font-heading font-bold text-primary-800" data-counter="15">15+</span>
-                    <span class="text-sm md:text-base text-gray-600 font-body">Ans d'experience</span>
+                    <span class="block text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-primary-800" data-counter="15">15+</span>
+                    <span class="text-xs sm:text-sm md:text-base text-gray-600 font-body">Ans d'experience</span>
                 </div>
                 <div>
-                    <span class="block text-3xl md:text-4xl font-heading font-bold text-primary-800" data-counter="20">20+</span>
-                    <span class="text-sm md:text-base text-gray-600 font-body">Enseignants qualifies</span>
+                    <span class="block text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-primary-800" data-counter="20">20+</span>
+                    <span class="text-xs sm:text-sm md:text-base text-gray-600 font-body">Enseignants qualifies</span>
                 </div>
             </div>
         </div>
