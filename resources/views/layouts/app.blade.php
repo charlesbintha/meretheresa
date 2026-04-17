@@ -439,7 +439,7 @@
                         <li>
                             <a href="{{ route('programmes') }}" class="text-sm hover:text-white hover:pl-1 transition-all duration-200 flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full bg-accent-peach shrink-0"></span>
-                                Garde (6 mois - 2 ans)
+                                Garde (2 ans - 3 ans)
                             </a>
                         </li>
                         <li>

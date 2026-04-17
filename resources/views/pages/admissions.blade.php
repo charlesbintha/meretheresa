@@ -594,7 +594,7 @@
                     </svg>
                 </summary>
                 <div class="px-6 pb-5 text-sm text-gray-600 font-body leading-relaxed">
-                    La garde accueille les enfants a partir de 6 mois. Le prescolaire (Petite Section) accueille les enfants a partir de 3 ans. Pour l'elementaire, les enfants de moins de 6 ans sans prescolaire doivent fournir une dispense d'age.
+                    La garde accueille les enfants a partir de 2 ans. Le prescolaire (Petite Section) accueille les enfants a partir de 3 ans. Pour l'elementaire, les enfants de moins de 6 ans sans prescolaire doivent fournir une dispense d'age.
                 </div>
             </details>
 

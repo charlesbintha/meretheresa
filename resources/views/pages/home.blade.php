@@ -128,7 +128,7 @@
                     Bienvenue au <span class="text-primary-800">Groupe Scolaire Mere Theresa</span>
                 </h2>
                 <p class="text-gray-600 font-body mb-6 leading-relaxed">
-                    Situe au coeur de Guediawaye, notre etablissement offre un cadre d'apprentissage stimulant et securise pour les enfants de 3 mois a 11 ans. Notre mission est de favoriser l'epanouissement global de chaque enfant a travers une pedagogie bienveillante et adaptee.
+                    Situe au coeur de Guediawaye, notre etablissement offre un cadre d'apprentissage stimulant et securise pour les enfants de 2 ans a 11 ans. Notre mission est de favoriser l'epanouissement global de chaque enfant a travers une pedagogie bienveillante et adaptee.
                 </p>
                 <p class="text-gray-600 font-body mb-8 leading-relaxed">
                     Depuis plus de 15 ans, nous accompagnons les familles de la region dans l'education de leurs enfants, en alliant excellence academique et developpement personnel.
@@ -199,7 +199,7 @@
                         <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                     </div>
                     <h3 class="text-xl font-heading font-bold text-gray-900 mb-2">Garde</h3>
-                    <span class="inline-block bg-yellow-50 text-yellow-700 text-sm font-semibold px-3 py-1 rounded-full mb-4">3 mois - 3 ans</span>
+                    <span class="inline-block bg-yellow-50 text-yellow-700 text-sm font-semibold px-3 py-1 rounded-full mb-4">2 ans - 3 ans</span>
                     <p class="text-gray-600 font-body mb-6">Eveil et garde securisee dans un espace chaleureux adapte aux tout-petits. Activites sensorielles et premieres decouvertes.</p>
                     <a href="{{ route('programmes') }}" class="inline-flex items-center text-yellow-600 font-heading font-semibold hover:text-yellow-700 transition-colors">
                         En savoir plus
@@ -742,7 +742,7 @@
                         <select id="level" name="level"
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 font-body focus:border-primary-800 focus:ring-2 focus:ring-primary-800/20 transition-all outline-none bg-white">
                             <option value="">Selectionnez un niveau</option>
-                            <option value="garde">Garde (3 mois - 3 ans)</option>
+                            <option value="garde">Garde (2 ans - 3 ans)</option>
                             <option value="ps">Petite Section (3-4 ans)</option>
                             <option value="ms">Moyenne Section (4-5 ans)</option>
                             <option value="gs">Grande Section (5-6 ans)</option>

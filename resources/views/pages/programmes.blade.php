@@ -35,13 +35,13 @@
 
         <div class="text-center max-w-3xl mx-auto animate-on-scroll">
             <span class="inline-block bg-white/10 text-white font-heading font-semibold text-sm px-4 py-2 rounded-full mb-6">
-                De la creche au CM2
+                De la garde au CM2
             </span>
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6">
                 Nos Programmes Educatifs
             </h1>
             <p class="text-lg text-white/80 font-body max-w-2xl mx-auto">
-                Un parcours pedagogique complet et adapte a chaque etape du developpement de votre enfant, de 3 mois a 11 ans.
+                Un parcours pedagogique complet et adapte a chaque etape du developpement de votre enfant, de 2 ans a 11 ans.
             </p>
         </div>
     </div>
@@ -96,14 +96,14 @@
 {{-- 3. DETAILED PROGRAMMES --}}
 {{-- ============================================================== --}}
 
-{{-- ===================== a. Garde / Creche ===================== --}}
+{{-- ===================== a. Garde ===================== --}}
 <section id="garde" class="py-16 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-12 items-center animate-on-scroll">
             {{-- Image --}}
             <div class="relative">
                 <div class="rounded-3xl overflow-hidden shadow-xl">
-                    <img src="{{ asset('images/72276.jpg') }}" alt="Enfants en creche - programme Garde" class="w-full h-80 lg:h-96 object-cover">
+                    <img src="{{ asset('images/72276.jpg') }}" alt="Enfants en garde - programme Garde" class="w-full h-80 lg:h-96 object-cover">
                 </div>
                 <div class="absolute -bottom-4 -right-4 w-20 h-20 bg-yellow-200 rounded-full -z-10"></div>
                 <div class="absolute -top-4 -left-4 w-14 h-14 bg-yellow-100 rounded-full -z-10"></div>
@@ -113,10 +113,10 @@
             <div>
                 <span class="inline-flex items-center gap-2 bg-yellow-100 border border-yellow-400 text-yellow-800 font-heading font-semibold text-sm px-4 py-2 rounded-full mb-4">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-                    3 mois - 3 ans
+                    2 ans - 3 ans
                 </span>
                 <h2 class="text-3xl font-heading font-bold text-gray-900 mb-4">
-                    Garde / Creche
+                    Garde
                 </h2>
                 <p class="text-gray-600 font-body mb-4 leading-relaxed">
                     Notre programme de garde offre un environnement securise et chaleureux pour les tout-petits. Les enfants beneficient d'une stimulation precoce adaptee a leur age, dans un cadre bienveillant ou ils peuvent s'epanouir en toute confiance.

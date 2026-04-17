@@ -109,7 +109,7 @@
                                 <select id="child_age" name="child_age"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 font-body focus:border-primary-800 focus:ring-2 focus:ring-primary-800/20 transition-all outline-none bg-white">
                                     <option value="">Selectionnez un age</option>
-                                    <option value="0-3">0 - 3 ans</option>
+                                    <option value="2-3">2 - 3 ans</option>
                                     <option value="3-4">3 - 4 ans</option>
                                     <option value="4-5">4 - 5 ans</option>
                                     <option value="5-6">5 - 6 ans</option>
