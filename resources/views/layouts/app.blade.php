@@ -61,6 +61,58 @@
     <link rel="icon" href="/images/logo.png" type="image/png">
     <link rel="apple-touch-icon" href="/images/logo.png">
 
+    {{-- ==========================================================
+         Schema.org JSON-LD — School + LocalBusiness (sur chaque page)
+    ========================================================== --}}
+    @php
+        $schoolSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => ['School', 'LocalBusiness'],
+            '@id' => url('/') . '/#school',
+            'name' => 'Groupe Scolaire Mère Thérèsa',
+            'alternateName' => 'École Les Bambinos',
+            'description' => "École privée à Guédiawaye, Sénégal — Garde (2-3 ans), Préscolaire (PS/MS/GS) et Élémentaire (CI au CM2). Inscriptions 2025-2026 ouvertes.",
+            'url' => url('/'),
+            'logo' => asset('images/logo.png'),
+            'image' => asset('images/logo.png'),
+            'telephone' => '+221338778162',
+            'email' => 'contact@lesbambinos.sn',
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'SHS N° 60 Golf Nord',
+                'addressLocality' => 'Guédiawaye',
+                'addressRegion' => 'Dakar',
+                'addressCountry' => 'SN',
+            ],
+            'openingHoursSpecification' => [[
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                'opens' => '07:30',
+                'closes' => '17:30',
+            ]],
+            'areaServed' => [
+                '@type' => 'AdministrativeArea',
+                'name' => 'Guédiawaye, Dakar, Sénégal',
+            ],
+            'contactPoint' => [[
+                '@type' => 'ContactPoint',
+                'telephone' => '+221338778162',
+                'contactType' => 'Admissions',
+                'availableLanguage' => ['fr'],
+            ], [
+                '@type' => 'ContactPoint',
+                'telephone' => '+221771486502',
+                'contactType' => 'customer service',
+                'availableLanguage' => ['fr'],
+            ]],
+        ];
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($schoolSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
+    @stack('schema')
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')

@@ -3,6 +3,68 @@
 @section('title', "Admissions 2025-2026 — Tarifs et dossier d'inscription")
 @section('description', "Inscriptions 2025-2026 ouvertes à l'École Les Bambinos, Guédiawaye. Tarifs par niveau (Garde, Préscolaire, Élémentaire), liste des documents, test d'admissibilité et calendrier.")
 
+@push('schema')
+@php
+    $faqSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'FAQPage',
+        'mainEntity' => [
+            [
+                '@type' => 'Question',
+                'name' => 'À partir de quel âge puis-je inscrire mon enfant ?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => "La garde accueille les enfants à partir de 2 ans. Le préscolaire (Petite Section) accueille les enfants à partir de 3 ans. Pour l'élémentaire, les enfants de moins de 6 ans sans préscolaire doivent fournir une dispense d'âge.",
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => "Le test d'admissibilité est-il obligatoire pour tous les nouveaux élèves ?",
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => "Le test d'admissibilité est obligatoire uniquement pour les nouveaux élèves de l'élémentaire. Il a lieu après les cours de vacances (25 août - 19 septembre 2025). Les inscriptions à la garde et au préscolaire ne nécessitent pas de test.",
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => "Les frais d'inscription sont-ils remboursables ?",
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => "Non, les frais de réinscription et d'inscription ne sont pas remboursables. Ils prennent en compte les frais généraux, les tenues et le mois d'octobre 2025. Les frais de scolarité sont annuels et dus en entier quelle que soit la date d'inscription.",
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Les cours de vacances sont-ils obligatoires ?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => "Oui, les cours de vacances sont obligatoires pour les nouveaux élèves de l'élémentaire. Ils se déroulent du 25 août au 19 septembre 2025. Les frais s'élèvent à 10 000 FCFA et la clôture des inscriptions est fixée au 29 août 2025.",
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => 'Comment fonctionne le service de transport scolaire ?',
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => "Le transport est organisé en 3 zones avec une option hors zone. Le car de 8h assure l'aller pour tous les élèves. Le car de 13h est pour le préscolaire et l'élémentaire le mercredi. Le car de 17h assure le retour de l'élémentaire et des préscolaires inscrits à la cantine. L'inscription au service de transport doit être faite avant le 14 novembre 2025.",
+                ],
+            ],
+            [
+                '@type' => 'Question',
+                'name' => "Que se passe-t-il si je dépasse la date limite d'inscription ?",
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => "Passé le délai, aucune place ne sera considérée comme réservée. Nous vous encourageons à respecter les dates limites pour garantir une place à votre enfant. Contactez-nous au plus vite si vous avez un empêchement.",
+                ],
+            ],
+        ],
+    ];
+@endphp
+<script type="application/ld+json">
+{!! json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
+
 @section('content')
 
 {{-- ============================================================== --}}

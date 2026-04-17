@@ -3,6 +3,24 @@
 @section('title', 'École privée à Guédiawaye — Garde, Préscolaire & Élémentaire')
 @section('description', "École Les Bambinos à Guédiawaye : accueil des enfants de 2 à 11 ans. Garde, Préscolaire (PS/MS/GS) et Élémentaire (CI au CM2) dans un cadre bienveillant et stimulant. Inscriptions 2025-2026 ouvertes.")
 
+@push('schema')
+@php
+    $websiteSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'WebSite',
+        '@id' => url('/') . '/#website',
+        'url' => url('/'),
+        'name' => 'Groupe Scolaire Mère Thérèsa',
+        'alternateName' => 'École Les Bambinos',
+        'inLanguage' => 'fr-FR',
+        'publisher' => ['@id' => url('/') . '/#school'],
+    ];
+@endphp
+<script type="application/ld+json">
+{!! json_encode($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+</script>
+@endpush
+
 @section('content')
 
 {{-- ============================================================== --}}
