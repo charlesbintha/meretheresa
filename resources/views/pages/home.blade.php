@@ -63,14 +63,10 @@
             {{-- Right: Image in blob shape --}}
             <div class="relative flex justify-center animate-on-scroll">
                 <div class="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[480px] lg:h-[480px] max-w-full">
-                    <svg class="absolute inset-0 w-full h-full" viewBox="0 0 480 480">
-                        <defs>
-                            <clipPath id="heroBlob">
-                                <path d="M400,240Q380,340,280,380Q180,420,100,340Q20,260,80,160Q140,60,240,60Q340,60,400,150Z"/>
-                            </clipPath>
-                        </defs>
-                    </svg>
-                    <div class="absolute inset-0 rounded-full" style="clip-path: url(#heroBlob); -webkit-clip-path: url(#heroBlob);">
+                    {{-- Soft tinted backdrop (visible during image load) --}}
+                    <div class="absolute inset-0 bg-primary-100" style="border-radius: 58% 42% 62% 38% / 45% 55% 45% 55%;"></div>
+                    {{-- Main image in organic blob shape (scales with any container size) --}}
+                    <div class="absolute inset-0 overflow-hidden shadow-2xl" style="border-radius: 58% 42% 62% 38% / 45% 55% 45% 55%;">
                         <img src="{{ asset('images/72276.jpg') }}" alt="Eleve souriante avec livres" class="w-full h-full object-cover">
                     </div>
                     {{-- Decorative rings --}}
