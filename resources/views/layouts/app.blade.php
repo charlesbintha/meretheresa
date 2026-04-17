@@ -3,10 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Groupe Scolaire Mere Theresa - Ecole privee Les Bambinos. Garde, Prescolaire et Elementaire a Guediawaye, Senegal.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Groupe Scolaire Mere Theresa') - Ecole Les Bambinos</title>
+    {{-- ==========================================================
+         SEO META
+         Pages définissent @section('title') et @section('description').
+         Les balises OG / Twitter / canonical en dérivent automatiquement.
+    ========================================================== --}}
+    @php
+        // Laravel's short-form @section('name', 'value') escapes the value once via e().
+        // We decode so {{ }} re-escapes exactly once — avoids &amp;amp; and similar.
+        $decode = fn ($v) => html_entity_decode(trim((string) $v), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $metaSiteName = 'Groupe Scolaire Mère Thérèsa';
+        $metaTagline = 'École Les Bambinos · Guédiawaye';
+        $metaTitlePage = $decode($__env->yieldContent('title'));
+        $metaFullTitle = $metaTitlePage !== ''
+            ? $metaTitlePage . ' — ' . $metaSiteName
+            : $metaSiteName . ' — ' . $metaTagline;
+        $metaDescription = $decode($__env->yieldContent('description'))
+            ?: "École privée à Guédiawaye, Sénégal. Accueil des enfants de 2 à 11 ans : Garde, Préscolaire et Élémentaire. Inscriptions 2025-2026 ouvertes.";
+        $metaImage = $decode($__env->yieldContent('og_image')) ?: asset('images/logo.png');
+        $metaUrl = url()->current();
+    @endphp
+
+    <title>{{ $metaFullTitle }}</title>
+    <meta name="description" content="{{ $metaDescription }}">
+    <link rel="canonical" href="{{ $metaUrl }}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="{{ $metaSiteName }}">
+
+    {{-- Open Graph (Facebook, WhatsApp, LinkedIn) --}}
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="{{ $metaSiteName }}">
+    <meta property="og:url" content="{{ $metaUrl }}">
+    <meta property="og:title" content="{{ $metaFullTitle }}">
+    <meta property="og:description" content="{{ $metaDescription }}">
+    <meta property="og:image" content="{{ $metaImage }}">
+    <meta property="og:image:alt" content="Logo {{ $metaSiteName }}">
+
+    {{-- Twitter Cards --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $metaFullTitle }}">
+    <meta name="twitter:description" content="{{ $metaDescription }}">
+    <meta name="twitter:image" content="{{ $metaImage }}">
+
+    {{-- Theme color (mobile browser chrome) --}}
+    <meta name="theme-color" content="#1F2A5E">
 
     {{-- Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +59,7 @@
 
     {{-- Favicon --}}
     <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="/images/logo.png">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

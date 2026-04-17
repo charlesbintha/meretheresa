@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Galerie')
+@section('title', 'Galerie photos — Vie scolaire, activités et événements')
+@section('description', "Découvrez en images la vie à l'École Les Bambinos : classes, activités pédagogiques, sorties, kermesses et temps forts du Groupe Scolaire Mère Thérèsa à Guédiawaye.")
 
 @section('content')
 

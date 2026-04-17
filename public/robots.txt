@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Pages privées à ne pas indexer
+Disallow: /laravel/
+
+Sitemap: https://lesbambinos.sn/sitemap.xml

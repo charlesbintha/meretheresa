@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Nos Programmes')
+@section('title', 'Nos programmes pédagogiques — De la Garde au CM2')
+@section('description', "Un parcours pédagogique complet adapté à chaque âge : Garde (2-3 ans), Préscolaire (PS, MS, GS) et Élémentaire (CI au CM2). Programme officiel sénégalais enrichi d'activités créatives et d'éveil.")
 
 @section('content')
 

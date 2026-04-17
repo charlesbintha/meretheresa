@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'A propos')
+@section('title', "À propos — Histoire, mission et équipe de l'école")
+@section('description', "Découvrez l'histoire, la mission éducative et l'équipe pédagogique du Groupe Scolaire Mère Thérèsa, école privée au cœur de Guédiawaye depuis plus de 15 ans.")
 
 @section('content')
 

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Actualites')
+@section('title', "Actualités & événements de l'école")
+@section('description', "Suivez l'actualité du Groupe Scolaire Mère Thérèsa à Guédiawaye : événements, sorties scolaires, nouveautés pédagogiques et temps forts de la vie de l'école.")
 
 @section('content')
 

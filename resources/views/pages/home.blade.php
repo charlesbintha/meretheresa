@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Accueil')
+@section('title', 'École privée à Guédiawaye — Garde, Préscolaire & Élémentaire')
+@section('description', "École Les Bambinos à Guédiawaye : accueil des enfants de 2 à 11 ans. Garde, Préscolaire (PS/MS/GS) et Élémentaire (CI au CM2) dans un cadre bienveillant et stimulant. Inscriptions 2025-2026 ouvertes.")
 
 @section('content')
 

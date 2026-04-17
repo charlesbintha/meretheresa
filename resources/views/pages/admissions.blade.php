@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Admissions')
+@section('title', "Admissions 2025-2026 — Tarifs et dossier d'inscription")
+@section('description', "Inscriptions 2025-2026 ouvertes à l'École Les Bambinos, Guédiawaye. Tarifs par niveau (Garde, Préscolaire, Élémentaire), liste des documents, test d'admissibilité et calendrier.")
 
 @section('content')
 

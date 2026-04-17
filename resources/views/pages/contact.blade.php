@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Contact')
+@section('title', 'Nous contacter — Téléphone, email et adresse')
+@section('description', "Contactez l'École Les Bambinos : 33 877 81 62 / 77 148 65 02 · contact@lesbambinos.sn · SHS N° 60 Golf Nord, Guédiawaye, Sénégal. Ouvert du lundi au vendredi de 7h30 à 17h30.")
 
 @section('content')
 
