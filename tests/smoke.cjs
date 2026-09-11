@@ -1,0 +1,27 @@
+// Tests des parcours métier de démonstration, sans navigateur ni Laravel.
+const vm = require('node:vm');
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const storage = new Map();
+const context = {console, Intl, Date, Set, Map, URL, Blob, setTimeout, clearTimeout, document:{addEventListener(){},querySelector(){return null;}}, localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)}};
+context.window=context;
+vm.createContext(context);
+for(const name of ['icons.js','data.js','ui.js','views.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',name),'utf8'),context);
+context.MT.actions={};
+vm.runInContext(fs.readFileSync(path.join(__dirname,'..','interactions.js'),'utf8'),context);
+const M=context.MT;
+let checks=0;
+const test=(name,fn)=>{fn();checks++;console.log('✓ '+name);};
+test('Toutes les pages produisent un contenu complet',()=>{for(const [route,view] of Object.entries(M.views)){M.view.route=route;const html=view();assert.ok(html.includes('<h1>'),route);assert.ok(!html.includes('undefined'),route);}});
+test('Inscription et dossier élève restent cohérents',()=>{M.forms.student({firstName:'Test',lastName:'Élève',gender:'F',classId:'1',birth:'2018-01-01',status:'En attente',parent:'Parent test',phone:'770000000',email:'test@example.test',address:'Dakar'});const s=M.db.students.at(-1);assert.equal(s.id,289);assert.equal(M.db.enrollments.at(-1).studentId,s.id);M.forms.student({...s,status:'Actif'},s.id);assert.equal(M.db.enrollments.at(-1).status,'Validée');});
+test('Un paiement diminue exactement le solde',()=>{const before=M.balance(M.student(289));M.forms.payment({studentId:'289',type:'Scolarité',amount:'40000',method:'Wave',date:'2026-03-16'});assert.equal(M.balance(M.student(289)),before-40000);assert.equal(M.db.payments.at(-1).reference,'REC-2026-0085');assert.ok(M.receiptHTML(M.db.payments.at(-1)).includes('40'));});
+test('Le trop-perçu est refusé sans créer de paiement',()=>{const n=M.db.payments.length;assert.throws(()=>M.forms.payment({studentId:'289',type:'Scolarité',amount:'999999',method:'Wave',date:'2026-03-16'}));assert.equal(M.db.payments.length,n);});
+test('Les notes alimentent le bulletin pondéré',()=>{M.view.term='2';M.db.grades['289-1-2-test']=18;M.db.grades['289-1-2-exam']=15;assert.equal(M.average(289,1),16);assert.ok(M.reportHTML(M.student(289)).includes('16.00'));});
+test('Les doublons de matières et abonnements sont refusés',()=>{assert.throws(()=>M.forms.subject({name:'Français',coefficient:'4',teacher:'1'}));assert.throws(()=>M.forms.subscription({studentId:'1',service:'Cantine',plan:'Déjeuner',amount:'25000'}));});
+test('La capacité d’une classe est respectée',()=>{assert.throws(()=>M.forms.class({name:'Petite section',capacity:'5',teacher:'1',cycle:'Maternelle',room:'Salle 01'},1));});
+test('Les dates de l’année sont validées',()=>{assert.throws(()=>M.forms.year({name:'Test',start:'2027-07-31',end:'2026-10-01'}));});
+test('Le planning initial ne contient pas de chevauchements',()=>{const seen=new Set();for(const l of M.db.timetable){for(const key of [`c${l.classId}-${l.day}-${l.start}`,`t${l.teacherId}-${l.day}-${l.start}`,`r${l.room}-${l.day}-${l.start}`]){assert.ok(!seen.has(key),key);seen.add(key);}}});
+test('Un cours ne peut pas occuper une classe, salle ou enseignant déjà pris',()=>{assert.throws(()=>M.forms.lesson({classId:'8',subjectId:'1',teacherId:'8',day:'0',start:'8',room:'Salle 08'}));assert.throws(()=>M.forms.lesson({classId:'8',subjectId:'1',teacherId:'1',day:'0',start:'8',room:'Salle libre'},M.db.timetable.find(l=>l.classId===8).id));});
+test('Les données sont sauvegardées et relisibles',()=>{assert.equal(M.save(),true);const parsed=JSON.parse(storage.get('mere-teresa-template-v1'));assert.equal(parsed.students.length,289);assert.equal(parsed.payments.length,85);});
+console.log(`${checks} vérifications réussies.`);
