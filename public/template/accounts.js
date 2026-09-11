@@ -23,7 +23,7 @@ M.guard=()=>{
  if(!M.can('grades.manage'))document.querySelectorAll('[data-grade]').forEach(el=>{el.readOnly=true;});
  if(!M.can('academics.manage'))document.querySelectorAll('[data-drag-lesson]').forEach(el=>{el.draggable=false;});
  if(!M.can('finance.view'))document.querySelectorAll('.student-balance').forEach(el=>el.hidden=true);
- const u=M.db.user;if(u){document.querySelectorAll('[data-action="profile"].avatar,[data-action="profile"]>.avatar').forEach(el=>el.textContent=M.initials(u.name));const label=document.querySelector('.profile>span:nth-child(2)');if(label)label.innerHTML=`${E(u.name)}<small>${E(u.roleName)}</small>`;}
+ const u=M.db.user;if(u){document.querySelectorAll('[data-action="profile"].avatar,[data-action="profile"]>.avatar').forEach(el=>el.textContent=M.initials(u.name));document.querySelectorAll('[data-profile-name]').forEach(el=>el.textContent=u.name);document.querySelectorAll('[data-profile-role]').forEach(el=>el.textContent=u.roleName);document.querySelectorAll('.topbar-profile').forEach(el=>{el.title=`${u.name} · ${u.roleName}`;el.setAttribute('aria-label',`Mon profil : ${u.name}, ${u.roleName}`);});const label=document.querySelector('.profile>span:nth-child(2)');if(label)label.innerHTML=`${E(u.name)}<small>${E(u.roleName)}</small>`;}
 };
 const fullNav=[...M.nav,{label:'ADMINISTRATION',items:[['users','Utilisateurs','users'],['roles','Rôles & permissions','shield-check'],['profile','Mon profil','user']]}];
 const originalRender=M.render;
