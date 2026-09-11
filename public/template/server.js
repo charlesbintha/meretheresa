@@ -12,7 +12,7 @@ async function request(path,body){
 }
 M.command=async(action,payload={},id=null)=>{
  if(busy)throw Error('Un enregistrement est déjà en cours. Patientez un instant.');busy=true;status('Enregistrement…');
- try{const result=await request('commands',{action,payload,id:id==null?null:String(id),revision:M.db.revision});apply(result.state);return result;}
+ try{const result=await request('commands',{action,payload,id:id==null?null:String(id),revision:M.db.revision});apply(result.state);if(result.csrfToken){M.$('meta[name="csrf-token"]').content=result.csrfToken;document.querySelectorAll('input[name="_token"]').forEach(input=>input.value=result.csrfToken);}return result;}
  catch(error){status('Non synchronisé');if(error.status===409){try{apply(await request('state'));}catch(_){}}throw error;}
  finally{busy=false;}
 };
@@ -26,7 +26,6 @@ A['save-grades']=async()=>{
  const rows=new Map();for(const input of inputs){const id=Number(input.dataset.student);if(!rows.has(id))rows.set(id,{studentId:id});rows.get(id)[input.dataset.grade]=Number(input.value);}
  await run('grades',{classId:M.view.gradeClass,subjectId:M.view.subject,term:Number(M.view.term),rows:[...rows.values()]});
 };
-A.profile=()=>M.drawer('Mon profil',`<div class="profile-summary">${M.avatar(M.db.user.name,0,'large')}<div><h3>${M.esc(M.db.user.name)}</h3><p>Administration de l’établissement</p>${M.status('Actif')}</div></div><p class="subtitle">Compte connecté. Les données sont partagées entre les utilisateurs autorisés.</p>`);
 A.reset=A['reset-confirm']=()=>M.notify('Le remplacement des données s’effectue uniquement depuis le serveur.',true);
 M.totalDue=s=>M.db.tuitions.filter(t=>t.studentId===s.id).reduce((n,t)=>n+t.total,0);
 M.paid=s=>M.db.tuitions.filter(t=>t.studentId===s.id).reduce((n,t)=>n+t.paid,0);

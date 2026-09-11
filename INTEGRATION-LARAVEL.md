@@ -10,7 +10,7 @@ Le template est raccordé au schéma normalisé du projet scolaire local, distin
 - `TemplateImporter` : remplacement des données scolaires avec sauvegarde JSON compressée vérifiée, suppression transactionnelle et clés étrangères actives.
 - `school:admin` : création ou mise à jour explicite d’un compte administrateur.
 
-Les écritures sont réservées au rôle `is_school_admin`, avec session Laravel et CSRF. Les anciennes routes CRUD et l’inscription publique ne sont pas exposées dans cette version. Le rôle administrateur donne accès à l’ensemble de l’établissement ; des rôles enseignants/parents nécessitent des politiques supplémentaires.
+Les permissions de `school_roles` contrôlent les lectures et écritures côté serveur, avec session Laravel et CSRF. `SchoolAccess` refuse les comptes désactivés et les sessions révoquées. `SchoolAccounts` gère les comptes, profils et rôles ; ces commandes participent à la transaction et à la révision de `SchoolStore`. Les anciennes routes CRUD et l’inscription publique ne sont pas exposées. Les rôles s’appliquent à l’ensemble de l’établissement, sans filtrage par classe ni portail parents. Voir [ROLES.md](ROLES.md).
 
 Les élèves sont rattachés aux classes par `enrollments`. Les scolarités sont conservées dans `tuitions`, les versements dans `payments`, les trimestres dans `periods`, et les notes dans `grades`. Les trois services utilisent leurs tables existantes. Les préférences utilisent `school_preferences` et les actions sont journalisées dans `school_audit_logs`.
 

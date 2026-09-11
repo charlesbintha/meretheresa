@@ -36,7 +36,7 @@ class SchoolStore
             $this->fail('Créez puis activez une année scolaire.');
         }
 
-return $y;
+        return $y;
     }
 
     private function row(string $table, int|string $id): object
@@ -59,7 +59,7 @@ return $y;
             return $id;
         }
 
-return DB::table($table)->insertGetId($values + ['created_at' => now()]);
+        return DB::table($table)->insertGetId($values + ['created_at' => now()]);
     }
 
     private function currentClass(int $id): object
@@ -69,7 +69,7 @@ return DB::table($table)->insertGetId($values + ['created_at' => now()]);
             $this->fail('La classe ne fait pas partie de l’année active.');
         }
 
-return $c;
+        return $c;
     }
 
     private function capacity(int $class, ?int $student = null): void
@@ -85,6 +85,8 @@ return $c;
 
     public function state(int $user): array
     {
+        $account = \App\Models\User::findOrFail($user);
+        abort_unless($account->is_active && ($account->school_role_id || $account->isSchoolAdministrator()), 403);
         $y = $this->year();
         $settings = DB::table('school_settings')->find(1);
         $values = json_decode($settings->values, true);
@@ -113,12 +115,12 @@ return $c;
             }
         })->get();
 
-        return ['version' => 2, 'revision' => (int) $settings->revision, 'activeYear' => $y, 'students' => $students->map(function ($s) use ($enrollments) {
+        $state = ['version' => 2, 'revision' => (int) $settings->revision, 'activeYear' => $y, 'students' => $students->map(function ($s) use ($enrollments) {
             $e = $enrollments[$s->id];
 
             return ['id' => $s->id, 'matricule' => $s->matricule, 'firstName' => $s->first_name, 'lastName' => $s->last_name, 'birth' => $s->date_of_birth, 'gender' => $s->gender, 'parent' => $s->parent_name, 'phone' => $s->parent_phone, 'email' => $s->parent_email ?? '', 'address' => $s->address, 'classId' => (int) $e->class_id, 'status' => $s->status !== 'active' || $e->status === 'cancelled' ? 'Archivé' : ($e->status === 'pending' ? 'En attente' : 'Actif'), 'joined' => $e->enrollment_date];
         })->all(),
-            'classes' => $classes->map(fn ($c) => ['id' => $c->id, 'name' => $c->name, 'cycle' => $c->level, 'capacity' => (int) $c->capacity, 'teacher' => (int) $c->class_teacher_id, 'room' => $c->room ?? ''])->all(),
+            'classes' => $classes->map(fn ($c) => ['id' => $c->id, 'name' => $c->name, 'cycle' => $c->level, 'capacity' => (int) $c->capacity, 'studentCount' => $enrollments->where('class_id', $c->id)->count(), 'teacher' => (int) $c->class_teacher_id, 'room' => $c->room ?? ''])->all(),
             'teachers' => DB::table('teachers')->get()->map(fn ($t) => ['id' => $t->id, 'name' => trim($t->first_name.' '.$t->last_name), 'email' => $t->email, 'phone' => $t->phone ?? '', 'subject' => $t->specialization ?? '', 'status' => $t->status === 'active' ? 'Actif' : 'Archivé'])->all(),
             'subjects' => DB::table('subjects')->get()->map(fn ($s) => ['id' => $s->id, 'name' => $s->name, 'coefficient' => (int) $s->coefficient, 'teacher' => (int) $s->teacher_id])->all(),
             'years' => DB::table('academic_years')->get()->map(fn ($a) => ['id' => $a->id, 'name' => $a->year_name, 'start' => $a->start_date, 'end' => $a->end_date, 'active' => (bool) $a->is_current])->all(),
@@ -133,17 +135,52 @@ return $c;
             'tuitions' => DB::table('tuitions')->where('academic_year_id', $y)->get()->map(fn ($t) => ['id' => $t->id, 'studentId' => (int) $t->student_id, 'total' => (float) $t->total_amount, 'paid' => (float) $t->paid_amount, 'balance' => (float) $t->remaining_amount, 'dueDate' => $t->due_date, 'term' => (int) ($periods[$t->period_id]->term_number ?? 2)])->all(),
             'timetable' => DB::table('timetables')->where('academic_year_id', $y)->get()->map(fn ($l) => ['id' => $l->id, 'classId' => (int) $l->class_id, 'subjectId' => (int) $l->subject_id, 'teacherId' => (int) $l->teacher_id, 'day' => array_search($l->day_of_week, self::DAYS), 'start' => (int) substr($l->start_time, 0, 2), 'end' => (int) substr($l->end_time, 0, 2), 'room' => $l->room ?? ''])->all(),
             'subscriptions' => $subs, 'grades' => (object) $grades, 'settings' => $values + ['theme' => $pref['theme'] ?? 'light', 'compact' => $pref['compact'] ?? false], 'widgets' => $pref['widgets'] ?? ['revenue', 'enrollments', 'activity', 'collections', 'agenda'], 'notificationsRead' => $pref['notificationsRead'] ?? false, 'user' => ['name' => DB::table('users')->where('id', $user)->value('name')]];
+        $state = array_replace($state, app(SchoolAccounts::class)->state($account));
+        if (! $account->canSchool('students.view')) {
+            $state['students'] = [];
+            $state['enrollments'] = [];
+        }
+        if (! $account->canSchool('academics.view')) {
+            $state['teachers'] = [];
+            $state['subjects'] = [];
+            $state['timetable'] = [];
+        }
+        if (! $account->canSchool('academics.view') && ! $account->canSchool('students.view')) {
+            $state['classes'] = [];
+        }
+        if (! $account->canSchool('finance.view')) {
+            $state['payments'] = [];
+            $state['tuitions'] = [];
+        }
+        if (! $account->canSchool('grades.view')) {
+            $state['grades'] = (object) [];
+        }
+        if (! $account->canSchool('services.view')) {
+            $state['subscriptions'] = [];
+        }
+
+        return $state;
     }
 
     public function command(string $action, array $v, ?string $id, int $user, int $revision): array
     {
         return DB::transaction(function () use ($action, $v, $id, $user, $revision) {
             $s = DB::table('school_settings')->where('id', 1)->lockForUpdate()->first();
+            $actor = \App\Models\User::findOrFail($user);
+            abort_unless($actor->is_active && ($actor->school_role_id || $actor->isSchoolAdministrator()), 403);
+            if (! in_array($action, ['preferences', 'profile'], true)) {
+                $permission = \App\Support\SchoolPermissions::ACTIONS[$action] ?? null;
+                abort_unless($permission && $actor->canSchool($permission), 403, 'Votre rôle ne permet pas cette action.');
+            }
+            if ($id !== null && $action !== 'subscription-toggle') {
+                abort_unless(ctype_digit($id) && (int) $id > 0, 422, 'Identifiant invalide.');
+            }
             if ($action === 'payment' && ! empty($v['requestKey']) && ($p = DB::table('payments')->where('request_key', $v['requestKey'])->first())) {
                 return ['recordId' => $p->id, 'state' => $this->state($user)];
             }
             abort_if((int) $s->revision !== $revision, 409, 'Les données ont changé. Actualisez puis réessayez.');
             $record = match ($action) {
+                'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
                 'student' => $this->student($v, $id),'teacher' => $this->teacher($v, $id),'class' => $this->classroom($v, $id),'subject' => $this->subject($v, $id),'year' => $this->academicYear($v, $id),'year-activate' => $this->activate($id),'enrollment' => $this->enrollment($v),'enrollment-approve' => $this->decide($id, true),'enrollment-reject' => $this->decide($id, false),'payment' => $this->payment($v),'subscription' => $this->subscription($v),'subscription-toggle' => $this->toggleSubscription($id),'lesson' => $this->lesson($v, $id),'lesson-delete' => $this->deleteLesson($id),'grades' => $this->grades($v),'settings' => $this->settings($v),'preferences' => $this->preferences($v, $user),default => abort(404)
             };
             DB::table('school_settings')->where('id', 1)->update(['revision' => $s->revision + 1, 'updated_at' => now()]);
@@ -201,7 +238,7 @@ return $c;
             }
         }
 
-return $this->write('classes', $id ? (int) $id : null, ['name' => $v['name'], 'level' => $v['cycle'], 'capacity' => $v['capacity'], 'class_teacher_id' => $v['teacher'], 'room' => $v['room'], 'academic_year_id' => $y]);
+        return $this->write('classes', $id ? (int) $id : null, ['name' => $v['name'], 'level' => $v['cycle'], 'capacity' => $v['capacity'], 'class_teacher_id' => $v['teacher'], 'room' => $v['room'], 'academic_year_id' => $y]);
     }
 
     private function subject(array $v, ?string $id): int
@@ -212,7 +249,7 @@ return $this->write('classes', $id ? (int) $id : null, ['name' => $v['name'], 'l
             $values['code'] = 'SUB-'.strtoupper(Str::random(10));
         }
 
-return $this->write('subjects', $id ? (int) $id : null, $values);
+        return $this->write('subjects', $id ? (int) $id : null, $values);
     }
 
     private function academicYear(array $v, ?string $id): int
@@ -226,7 +263,7 @@ return $this->write('subjects', $id ? (int) $id : null, $values);
             }
         }
 
-return $y;
+        return $y;
     }
 
     private function activate(?string $id): int
@@ -336,7 +373,7 @@ return $y;
             $this->fail('Créneau occupé pour la classe, l’enseignant ou la salle.');
         }
 
-return $this->write('timetables', $id ? (int) $id : null, ['class_id' => $v['classId'], 'subject_id' => $v['subjectId'], 'teacher_id' => $v['teacherId'], 'academic_year_id' => $y, 'day_of_week' => self::DAYS[$v['day']], 'start_time' => $start, 'end_time' => $end, 'room' => $v['room']]);
+        return $this->write('timetables', $id ? (int) $id : null, ['class_id' => $v['classId'], 'subject_id' => $v['subjectId'], 'teacher_id' => $v['teacherId'], 'academic_year_id' => $y, 'day_of_week' => self::DAYS[$v['day']], 'start_time' => $start, 'end_time' => $end, 'room' => $v['room']]);
     }
 
     private function deleteLesson(?string $id): int
@@ -369,7 +406,7 @@ return $this->write('timetables', $id ? (int) $id : null, ['class_id' => $v['cla
             }
         }
 
-return count($v['rows']);
+        return count($v['rows']);
     }
 
     private function settings(array $v): int

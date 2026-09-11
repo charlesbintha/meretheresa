@@ -26,6 +26,15 @@ class SchoolController extends Controller
     {
         $v = $r->validate(['action' => 'required|string|max:40', 'payload' => 'present|array', 'id' => 'nullable|string|max:100', 'revision' => 'required|integer|min:1']);
 
-        return response()->json($store->command($v['action'], $v['payload'], $v['id'] ?? null, $r->user()->id, $v['revision']))->header('Cache-Control', 'no-store, private');
+        $result = $store->command($v['action'], $v['payload'], $v['id'] ?? null, $r->user()->id, $v['revision']);
+        if ($v['action'] === 'profile') {
+            $fresh = $r->user()->fresh();
+            \Illuminate\Support\Facades\Auth::setUser($fresh);
+            $r->session()->regenerate();
+            $r->session()->put('school_auth_version', $fresh->auth_version);
+            $result['csrfToken'] = $r->session()->token();
+        }
+
+        return response()->json($result)->header('Cache-Control', 'no-store, private');
     }
 }

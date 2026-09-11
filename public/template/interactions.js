@@ -47,7 +47,8 @@ document.addEventListener('drop',e=>{if(draggedWidget){const target=e.target.clo
 document.addEventListener('dragend',()=>{draggedWidget=null;draggedLesson=null;document.querySelectorAll('.drag-over,.dragging').forEach(el=>el.classList.remove('drag-over','dragging'));});
 document.addEventListener('submit',async e=>{
  const f=e.target.closest('form[data-form]');if(!f)return;e.preventDefault();if(f.dataset.saving||!f.reportValidity())return;
- const values=Object.fromEntries(new FormData(f));Object.keys(values).forEach(k=>{if(typeof values[k]==='string')values[k]=values[k].trim();});
+ const values=Object.fromEntries(new FormData(f));Object.keys(values).forEach(k=>{if(typeof values[k]==='string'&&!['password','password_confirmation','current_password'].includes(k))values[k]=values[k].trim();});
+ if(f.dataset.form==='role'){values.permissions=new FormData(f).getAll('permissions[]');delete values['permissions[]'];}
  if(f.dataset.form==='payment'){f.dataset.requestKey ||= crypto.randomUUID();values.requestKey=f.dataset.requestKey;}
  f.dataset.saving='true';const submit=f.querySelector('[type="submit"]');if(submit)submit.disabled=true;
  const field=f.querySelector('.form-error');if(field)field.hidden=true;

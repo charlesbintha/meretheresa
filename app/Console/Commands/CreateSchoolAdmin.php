@@ -28,6 +28,9 @@ class CreateSchoolAdmin extends Command
         $user->name = $this->option('name');
         $user->password = Hash::make($password);
         $user->is_school_admin = true;
+        $user->school_role_id = \App\Models\SchoolRole::where('is_system', true)->firstOrFail()->id;
+        $user->is_active = true;
+        $user->auth_version = ($user->auth_version ?? 0) + 1;
         $user->save();
         $this->info('Compte administrateur enregistré.');
 

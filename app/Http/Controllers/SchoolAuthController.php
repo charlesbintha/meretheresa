@@ -16,9 +16,16 @@ class SchoolAuthController extends Controller
     public function store(Request $r)
     {
         $v = $r->validate(['email' => 'required|email', 'password' => 'required|string']);
-        if (! Auth::attempt($v + ['is_school_admin' => true])) {
-            throw ValidationException::withMessages(['email' => 'Identifiants incorrects ou accès administrateur non autorisé.']);
-        }$r->session()->regenerate();
+        if (! Auth::attempt($v + ['is_active' => true])) {
+            throw ValidationException::withMessages(['email' => 'Identifiants incorrects ou compte désactivé.']);
+        }
+        if (! $r->user()->school_role_id && ! $r->user()->isSchoolAdministrator()) {
+            Auth::logout();
+            throw ValidationException::withMessages(['email' => 'Aucun rôle attribué à ce compte. Contactez un administrateur.']);
+        }
+        $r->session()->regenerate();
+        $r->session()->put('school_auth_version', $r->user()->auth_version);
+        $r->user()->forceFill(['last_login_at' => now()])->save();
 
         return redirect()->intended('/');
     }

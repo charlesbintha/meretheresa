@@ -20,7 +20,7 @@ php artisan school:admin votre-adresse@example.com
 php artisan serve --host=127.0.0.1 --port=8770
 ```
 
-Le mot de passe administrateur est demandé sans être affiché. Aucun compte ou mot de passe par défaut n’est livré. Les comptes non administrateurs ne peuvent pas accéder aux dossiers scolaires.
+Le mot de passe administrateur est demandé sans être affiché. Aucun compte ou mot de passe par défaut n’est livré. Les administrateurs peuvent ensuite créer les autres comptes et leur attribuer un rôle depuis Utilisateurs.
 
 ## Import des données du template
 
@@ -44,7 +44,8 @@ Contenu : 288 élèves, 18 enseignants, 12 classes, 6 demandes en attente, 84 pa
 
 ## Fonctionnement
 
-- Connexion Laravel par session et protection CSRF ; accès réservé aux administrateurs.
+- Connexion Laravel par session et protection CSRF ; accès contrôlé par rôle.
+- Utilisateurs, activation/désactivation, réinitialisation des mots de passe, rôles personnalisés et profil personnel.
 - Écriture validée côté serveur, transactions, contrôle de capacité et de chevauchement du planning.
 - Paiements idempotents, contrôle du solde et mise à jour atomique des scolarités.
 - Révision serveur pour détecter un changement concurrent et éviter d’écraser une modification récente.
@@ -66,6 +67,6 @@ PHP 8.5 n’est pas supporté par certaines dépendances de ce fichier lock. Uti
 
 Voir [DEPLOY-HOSTINGER.md](DEPLOY-HOSTINGER.md) pour `app.lesbambinos.sn` et [INTEGRATION-LARAVEL.md](INTEGRATION-LARAVEL.md) pour l’architecture.
 
-Cette version propose un rôle administrateur, des documents imprimables/PDF via le navigateur et un chargement global des données de l’année. Elle n’inclut pas de paiement bancaire en ligne, SMS, messagerie, portail parents ou pagination serveur. Les sauvegardes automatiques de production sont à configurer chez l’hébergeur.
+Cette version propose cinq rôles initiaux modifiables (voir [ROLES.md](ROLES.md)), des documents imprimables/PDF via le navigateur et un chargement global des données de l’année. Elle n’inclut pas de paiement bancaire en ligne, SMS, messagerie, portail parents ou pagination serveur. Les sauvegardes automatiques de production sont à configurer chez l’hébergeur.
 
 L’ancien site vitrine est conservé dans la branche `archive/laravel-before-template-2026-09-11`.

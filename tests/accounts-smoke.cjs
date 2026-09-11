@@ -1,0 +1,45 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const url=process.env.SCHOOL_TEST_URL;
+ if(!url||!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(url))throw Error('An isolated local test server is required.');
+ const browser=await chromium.launch({channel:process.env.PLAYWRIGHT_CHANNEL||'chrome',headless:true});
+ const admin=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});const errors=[];
+ admin.on('pageerror',e=>errors.push(e.message));
+ const login=async(page,email,password)=>{await page.goto(url+'/login');await page.locator('[name=email]').fill(email);await page.locator('[name=password]').fill(password);await page.locator('[type=submit]').click();await page.waitForFunction(()=>window.MT?.ready);};
+ try{
+  await login(admin,process.env.SCHOOL_TEST_EMAIL,process.env.SCHOOL_TEST_PASSWORD);
+  await admin.locator('a[href="#users"]').click();await admin.locator('[data-action=account-form]').first().click();
+  let f=admin.locator('form[data-form=account]');
+  for(const [name,value] of Object.entries({name:'Comptable UI',email:'comptable-ui@example.test',phone:'770000000',password:'Test-secret-account-2026',password_confirmation:'Test-secret-account-2026'}))await f.locator(`[name=${name}]`).fill(value);
+  await f.locator('[name=roleId]').selectOption({label:'Comptabilité'});await f.locator('[type=submit]').click();
+  await admin.waitForFunction(()=>MT.db.users.some(u=>u.email==='comptable-ui@example.test'));
+  const uid=await admin.evaluate(()=>MT.db.users.find(u=>u.email==='comptable-ui@example.test').id);
+  await admin.reload();await admin.waitForFunction(()=>MT.ready);assert(await admin.evaluate(id=>MT.db.users.some(u=>u.id===id),uid));
+  const restricted=await browser.newPage();restricted.on('pageerror',e=>errors.push(e.message));
+  await login(restricted,'comptable-ui@example.test','Test-secret-account-2026');
+  assert.equal(await restricted.locator('a[href="#users"]').count(),0);assert.equal(await restricted.locator('a[href="#grades"]').count(),0);
+  assert.equal(await restricted.evaluate(()=>MT.db.users.length),0);assert.equal(await restricted.evaluate(()=>Object.keys(MT.db.grades).length),0);
+  const response=await restricted.evaluate(async()=>{const r=await fetch('/school-api/commands',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json','X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},body:JSON.stringify({action:'account',payload:{},revision:MT.db.revision})});return r.status;});assert.equal(response,403);
+  await admin.locator('a[href="#profile"]').click();f=admin.locator('form[data-form=profile]');await f.locator('[name=name]').fill('Administrateur UI');
+  await f.locator('[name=current_password]').fill(process.env.SCHOOL_TEST_PASSWORD);await f.locator('[name=password]').fill('Changed-secret-admin-2026');await f.locator('[name=password_confirmation]').fill('Changed-secret-admin-2026');
+  await f.locator('[type=submit]').click();await admin.waitForFunction(()=>MT.db.user.name==='Administrateur UI');
+  await admin.locator('form[action$="/logout"] [type=submit]').click();await admin.waitForURL(url=>url.pathname==='/login');await login(admin,process.env.SCHOOL_TEST_EMAIL,'Changed-secret-admin-2026');await admin.locator('a[href="#profile"]').click();assert.equal(await admin.locator('form[data-form=profile] [name=name]').inputValue(),'Administrateur UI');
+  await admin.locator('a[href="#roles"]').click();await admin.locator('[data-action=role-form]').first().click();f=admin.locator('form[data-form=role]');
+  await f.locator('[name=name]').fill('Consultation UI');await f.locator('[name=description]').fill('Rôle de test de consultation scolaire');await f.locator('[value="students.view"]').check();await f.locator('[type=submit]').click();await admin.waitForFunction(()=>MT.db.roles.some(r=>r.name==='Consultation UI'));
+  const rid=await admin.evaluate(()=>MT.db.roles.find(r=>r.name==='Consultation UI').id);
+  await admin.locator('a[href="#users"]').click();await admin.locator(`[data-action=account-status][data-id="${uid}"]`).click();await admin.locator('[data-action=account-status-confirm]').click();await admin.waitForFunction(id=>!MT.db.users.find(u=>u.id===id).isActive,uid);
+  await restricted.reload();await restricted.waitForURL(url=>url.pathname==='/login');
+  await admin.locator('a[href="#roles"]').click();await admin.locator(`[data-action=role-form][data-id="${rid}"]`).click();f=admin.locator('form[data-form=role]');await f.locator('[value="services.manage"]').check();await f.locator('[type=submit]').click();await admin.waitForFunction(id=>MT.db.roles.find(r=>r.id===id).permissions.includes('services.view'),rid);
+  await admin.locator(`[data-action=role-delete][data-id="${rid}"]`).click();await admin.locator('[data-action=role-delete-confirm]').click();await admin.waitForFunction(id=>!MT.db.roles.some(r=>r.id===id),rid);
+  await admin.locator('a[href="#users"]').click();await admin.locator('[data-action=account-form]').first().click();f=admin.locator('form[data-form=account]');
+  for(const [name,value] of Object.entries({name:'Direction UI',email:'direction-ui@example.test',password:'Read-only-secret-2026',password_confirmation:'Read-only-secret-2026'}))await f.locator(`[name=${name}]`).fill(value);
+  await f.locator('[name=roleId]').selectOption({label:'Direction'});await f.locator('[type=submit]').click();await admin.waitForFunction(()=>MT.db.users.some(u=>u.email==='direction-ui@example.test'));
+  const viewer=await browser.newPage();viewer.on('pageerror',e=>errors.push(e.message));await login(viewer,'direction-ui@example.test','Read-only-secret-2026');await viewer.locator('#navigation a[href="#timetable"]').click();
+  assert((await viewer.locator('.lesson:visible').count())>0,'Read-only users must still see the timetable');assert.equal(await viewer.locator('[data-action=lesson-form]:visible').count(),0);await viewer.locator('.lesson:visible').first().click();await viewer.getByRole('heading',{name:'Détail du cours',exact:true}).waitFor();assert.equal(await viewer.locator('form[data-form=lesson]').count(),0);
+  await admin.locator('a[href="#roles"]').click();
+  await admin.screenshot({path:'/private/tmp/mt-roles.png',fullPage:true});await admin.locator('a[href="#users"]').click();await admin.screenshot({path:'/private/tmp/mt-users.png',fullPage:true});
+  await admin.setViewportSize({width:390,height:844});await admin.evaluate(()=>MT.navigate('profile'));assert(await admin.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await admin.screenshot({path:'/private/tmp/mt-profile-mobile.png',fullPage:true});
+  assert.deepEqual(errors,[]);console.log('Accounts: creation, role restrictions, profile/password, session revocation, role CRUD and mobile layout passed.');
+ }catch(error){console.error('UI errors:',await admin.locator('.form-error').allTextContents());console.error('Page:',admin.url());console.error('Browser errors:',errors);console.error('Form validity:',await admin.locator('form').evaluateAll(forms=>forms.map(f=>({kind:f.dataset.form,invalid:[...f.elements].filter(i=>i.validity&&!i.validity.valid).map(i=>({name:i.name,error:i.validationMessage}))}))));await admin.screenshot({path:'/private/tmp/mt-account-failure.png'});throw error;}finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exit(1)});

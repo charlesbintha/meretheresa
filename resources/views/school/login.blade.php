@@ -79,7 +79,7 @@
             @endif
             <button class="btn primary" type="submit">Se connecter <span aria-hidden="true">→</span></button>
         </form>
-        <p class="login-foot">Accès réservé à l’administration de l’établissement.</p>
+        <p class="login-foot">Accès réservé aux membres autorisés de l’établissement.</p>
     </section>
 </body>
 </html>

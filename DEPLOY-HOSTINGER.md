@@ -1,98 +1,68 @@
-# Déployer sur app.lesbambinos.sn
+# Mise à jour de l’application scolaire sur Hostinger
 
-Cette version utilise Laravel et MySQL. L’ancien déploiement statique et son ZIP ne conviennent plus.
+## Installation concernée
 
-## Répertoires
+- URL : `https://app.lesbambinos.sn`
+- Dépôt Git de l’application : `/home/u528935801/domains/lesbambinos.sn/public_html/app`
+- Entrée Laravel : `public_html/app/public/index.php`
 
-- Code privé : `/home/u528935801/domains/lesbambinos.sn/mere-teresa`
-- Racine du sous-domaine : `/home/u528935801/domains/lesbambinos.sn/public_html/app`
-- Entrée publique : `public_html/app/index.php`
+**Le dossier `/home/u528935801/domains/lesbambinos.sn/mere-teresa` appartient à un autre projet et ne doit pas être modifié.** Ne pas y exécuter les commandes de cette application. Ne pas copier `deploy/hostinger-index.php` dans l’installation actuelle : ce fichier correspond à l’ancienne disposition proposée et pointe vers cet autre dossier.
 
-Le code Laravel, `.env`, `vendor`, `database` et `storage` restent hors de `public_html`. Seul le contenu de `public/` est copié dans `public_html/app`. Le fichier `deploy/hostinger-index.php` adapte les chemins à cette disposition. Cette séparation suit le [principe documenté par Hostinger](https://www.hostinger.com/fr/support/6152127-comment-deployer-laravel-8-chez-hostinger/), avec un point d’entrée adapté à Laravel 12.
+## Mise à jour par Git SSH
 
-## 1. Préparer hPanel
-
-Vérifier que le sous-domaine utilise `public_html/app`, que son SSL est actif et que PHP 8.3 ou 8.4 est sélectionné. Vérifier également la version PHP en SSH avec `php -v`. Créer une base MySQL et son utilisateur ; noter le nom complet fourni par hPanel. Activer l’accès SSH si disponible sur votre offre.
-
-## 2. Installer le code privé
-
-En SSH, récupérer `main` dans le répertoire privé (utiliser une clé SSH GitHub autorisée si le dépôt est privé) :
+Sauvegarder la base de l’application avant une mise à jour. Puis, dans le terminal SSH :
 
 ```sh
-cd /home/u528935801/domains/lesbambinos.sn
-git clone --branch main git@github.com:charlesbintha/meretheresa.git mere-teresa
-cd mere-teresa
-composer install --no-dev --optimize-autoloader
-cp .env.example .env
+cd /home/u528935801/domains/lesbambinos.sn/public_html/app &&
+git pull --ff-only origin main &&
+php artisan migrate --force &&
+php artisan view:clear &&
+php artisan route:clear
 ```
 
-Si le dossier existe déjà, utiliser son dépôt avec `git pull --ff-only origin main`. Préserver son `.env` et sa clé existante.
+Si `composer.json` ou `composer.lock` ont changé, exécuter aussi `composer install --no-dev --optimize-autoloader` avec PHP 8.3/8.4. Les mises à jour de la gestion des profils et rôles n’ajoutent pas de dépendance Composer.
 
-## 3. Configurer la base
+Conserver le `.env`, sa clé `APP_KEY`, ses accès MySQL et le `.htaccess` adapté au serveur. Ne pas employer `git reset --hard` pour résoudre un conflit avec la configuration locale. Les mises à jour ne nécessitent pas de relancer le seeder, qui remplacerait les données scolaires.
 
-Éditer le `.env` privé avec les valeurs fournies par hPanel :
+Après la mise à jour, recharger complètement le navigateur (Ctrl+F5, ou Cmd+Maj+R sur Mac).
 
-```dotenv
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://app.lesbambinos.sn
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=nom_complet_de_la_base_hostinger
-DB_USERNAME=utilisateur_mysql_hostinger
-DB_PASSWORD="mot_de_passe_mysql"
-SESSION_DRIVER=database
-SESSION_SECURE_COOKIE=true
-SESSION_ENCRYPT=true
-CACHE_STORE=file
-QUEUE_CONNECTION=sync
+## Routage web actuel
+
+Le sous-domaine pointe actuellement sur `public_html/app`. Son `.htaccess` local dirige toutes les requêtes vers `public/`, sans servir directement le code Laravel ou le `.env` :
+
+```apache
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+RewriteEngine On
+RewriteRule (^|/)\. - [F,L]
+RewriteRule ^public(?:/|$) - [L]
+RewriteRule ^(.*)$ public/$1 [L]
 ```
 
-Utiliser l’hôte MySQL indiqué par hPanel s’il diffère. Générer la clé **uniquement à la première installation** :
+Le `public/.htaccess` livré par Laravel reste en place. Cette configuration locale remplace le `Require all denied` présent dans le `.htaccess` racine du dépôt. Elle n’est pas remplacée par les mises à jour actuelles, qui ne modifient pas ce fichier. Si un futur `git pull` signale un conflit à cet endroit, le résoudre en conservant le routage adapté, sans supprimer la protection des fichiers privés.
+
+Vérifier que `/login` et `/template/assets/back.jpg` fonctionnent, et que `/.env`, `/composer.json`, `/database/seed-data/template.json` et `/storage/logs/laravel.log` ne donnent jamais accès aux fichiers correspondants. Les deux premiers écrans d’administration des comptes sont `/#users` et `/#roles` après connexion.
+
+## Base de données et initialisation
+
+Le `.env` de **cette application** doit utiliser une base MySQL dédiée, distincte de celle du site principal. Utiliser les noms complets et le mot de passe fournis par hPanel. Après un changement du `.env` :
 
 ```sh
-php artisan key:generate
-php artisan migrate --force
-php artisan school:admin votre-adresse@example.com
-```
-
-La dernière commande demande un mot de passe de 12 caractères minimum et sa confirmation, sans les afficher.
-
-Pour démarrer avec les données de `data.js`, lancer une seule fois la commande ci-dessous en remplaçant le nom de base. Elle écrase les données scolaires de cette base après sauvegarde privée, en conservant les comptes :
-
-```sh
-php artisan school:import-template --replace --database-name=nom_complet_de_la_base_hostinger
-```
-
-La base locale `mere_theresa` a déjà été importée. L’envoi du code sur GitHub ne copie pas MySQL sur Hostinger. Si vous souhaitez transférer ultérieurement des modifications locales, exporter la base locale puis l’importer dans la base Hostinger ; ne pas relancer l’import du jeu d’exemple par-dessus ces modifications.
-
-## 4. Publier les fichiers publics
-
-Sauvegarder d’abord le dossier `public_html/app` existant hors de `public_html`, puis libérer ce dossier pour éviter que l’ancien `index.html` soit encore servi. Ne toucher qu’au sous-dossier `app`, pas au site principal.
-
-Depuis le répertoire privé `mere-teresa` :
-
-```sh
-mkdir -p ../public_html/app
-cp -R public/. ../public_html/app/
-cp deploy/hostinger-index.php ../public_html/app/index.php
-chmod -R u+rwX storage bootstrap/cache
-chmod 600 .env
-php artisan optimize:clear
+php artisan config:clear
 php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+php artisan migrate:status
 ```
 
-Le `.htaccess` à publier est **`public/.htaccess`**, jamais celui de la racine privée. Laisser les sauvegardes sous `storage/app/private/backups` hors du site public.
+Pour créer les tables sur une base neuve : `php artisan migrate --force`. Pour créer ou rétablir un administrateur : `php artisan school:admin votre-adresse@example.com` (mot de passe demandé sans affichage).
 
-## 5. Vérifier
+Pour importer volontairement les données initiales de `data.js` :
 
-Ouvrir `https://app.lesbambinos.sn/login`, se connecter avec le compte créé, puis vérifier les élèves, paiements et notes. Créer une fiche de test et recharger la page pour vérifier sa persistance. Les chemins `/.env`, `/database/seed-data/template.json` et `/storage/logs/laravel.log` doivent être inaccessibles. L’API sans connexion doit renvoyer un refus ou rediriger vers la connexion.
+```sh
+php artisan db:seed --class=TemplateDataSeeder --force
+```
 
-Pour les prochaines mises à jour : sauvegarder la base, mettre temporairement l’application en maintenance (`php artisan down`), récupérer le code, installer les dépendances, exécuter `php artisan migrate --force`, recopier les fichiers publics et le point d’entrée adapté, reconstruire les caches puis `php artisan up`. **Ne pas relancer l’import destructif du template**. En cas d’échec, consulter `storage/logs/laravel.log` dans le répertoire privé.
+Ce seeder **remplace les données scolaires de la base configurée**, après sauvegarde vérifiée, en conservant les utilisateurs et les rôles. Ne pas l’exécuter lors d’une mise à jour normale. Les sauvegardes sont privées dans `storage/app/private/backups`. Prévoir également une sauvegarde SQL régulière via hPanel.
 
-## Sans accès SSH
+## Profils et rôles
 
-Préparer `vendor/` avec Composer sur une machine compatible, téléverser le projet complet dans le dossier privé et les fichiers publics dans `public_html/app`. Utiliser un terminal fourni par l’hébergeur pour les commandes Artisan. Ne pas créer de route web publique permettant de lancer des migrations ou un import.
+La migration `2026_09_11_160000_add_user_profiles_and_roles` ajoute les cinq rôles initiaux et affecte les anciens administrateurs au rôle protégé. Elle ne remplace ni les comptes ni les données scolaires. Voir [ROLES.md](ROLES.md) pour les permissions, la création de comptes et la gestion du profil.
