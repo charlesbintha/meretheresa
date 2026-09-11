@@ -1,6 +1,6 @@
 # Préparation de l’intégration à Laravel
 
-Cette étape n’est pas exécutée : le template est autonome afin de valider le design et les parcours. Le template occupe désormais la racine de `main` ; l’application Laravel à raccorder est conservée dans `archive/laravel-before-template-2026-09-11`. Les chemins et routes ci-dessous concernent cette branche Laravel.
+Cette étape n’est pas exécutée : le template est autonome afin de valider le design et les parcours. Le template occupe désormais la racine de `main`. L’ancien contenu GitHub, un site Laravel, est conservé dans `archive/laravel-before-template-2026-09-11`. Les modules de gestion scolaire décrits ci-dessous proviennent du projet Laravel local examiné lors de la création du template ; ils ne sont pas présents dans cette branche d’archive du site vitrine.
 
 ## Approche proposée
 
@@ -18,7 +18,7 @@ Conserver Laravel comme socle. Le template utilise du HTML, CSS et JavaScript na
 
 ## Correspondance des écrans
 
-Routes vérifiées dans `routes/web.php` au moment de la création du template.
+Routes vérifiées dans `routes/web.php` du projet local de gestion scolaire au moment de la création du template. Ne pas les confondre avec les routes du site vitrine Laravel archivé sur GitHub.
 
 | Template | Contrôleur / routes Laravel actuelles |
 | --- | --- |
