@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('tuitions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('paid_amount', 10, 2)->default(0);
+            $table->decimal('remaining_amount', 10, 2);
+            $table->date('due_date');
+            $table->enum('status', ['pending', 'partial', 'paid', 'overdue'])->default('pending');
+            $table->timestamps();
+
+            // Indexes for faster lookups
+            $table->index('student_id');
+            $table->index('academic_year_id');
+            $table->index('status');
+            $table->index('due_date');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('tuitions');
+    }
+};

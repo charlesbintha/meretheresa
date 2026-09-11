@@ -1,2 +1,2 @@
-DirectoryIndex index.html
-Options -Indexes
+# The application root must remain outside public_html.
+Require all denied

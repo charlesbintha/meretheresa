@@ -1,73 +1,98 @@
-# Déployer le template sur app.lesbambinos.sn
+# Déployer sur app.lesbambinos.sn
 
-## État du dépôt
+Cette version utilise Laravel et MySQL. L’ancien déploiement statique et son ZIP ne conviennent plus.
 
-- Dépôt : https://github.com/charlesbintha/meretheresa
-- Branche à déployer : `main`
-- Ancienne application Laravel : branche `archive/laravel-before-template-2026-09-11` (état sauvegardé : `d08cdca0bd6f47fe5fd3de9dc5981f34b7051e70`).
-- Le template est directement à la racine du dépôt, avec `index.html` comme point d’entrée.
+## Répertoires
 
-Cette version est une application HTML/CSS/JavaScript statique. Aucun Composer, npm, serveur Node.js ou MySQL n’est nécessaire. Les données sont fictives et les changements restent dans le navigateur de chaque utilisateur : le déploiement ne crée pas une base partagée entre plusieurs personnes.
+- Code privé : `/home/u528935801/domains/lesbambinos.sn/mere-teresa`
+- Racine du sous-domaine : `/home/u528935801/domains/lesbambinos.sn/public_html/app`
+- Entrée publique : `public_html/app/index.php`
 
-## Destination Hostinger
+Le code Laravel, `.env`, `vendor`, `database` et `storage` restent hors de `public_html`. Seul le contenu de `public/` est copié dans `public_html/app`. Le fichier `deploy/hostinger-index.php` adapte les chemins à cette disposition. Cette séparation suit le [principe documenté par Hostinger](https://www.hostinger.com/fr/support/6152127-comment-deployer-laravel-8-chez-hostinger/), avec un point d’entrée adapté à Laravel 12.
 
-- Sous-domaine : `app.lesbambinos.sn`
-- Racine du site : `/home/u528935801/domains/lesbambinos.sn/public_html/app`
-- Point d’entrée attendu : `/home/u528935801/domains/lesbambinos.sn/public_html/app/index.html`
+## 1. Préparer hPanel
 
-Le dossier de destination ne doit pas être `public_html` seul : celui-ci correspond au site principal. Le template doit être servi depuis le dossier `app`.
+Vérifier que le sous-domaine utilise `public_html/app`, que son SSL est actif et que PHP 8.3 ou 8.4 est sélectionné. Vérifier également la version PHP en SSH avec `php -v`. Créer une base MySQL et son utilisateur ; noter le nom complet fourni par hPanel. Activer l’accès SSH si disponible sur votre offre.
 
-## Avant le premier déploiement
+## 2. Installer le code privé
 
-1. Dans hPanel, ouvrir le tableau de bord du site `lesbambinos.sn`.
-2. Vérifier dans la gestion des sous-domaines que `app.lesbambinos.sn` utilise le dossier `public_html/app`. Si ce sous-domaine n’existe pas, le créer avec cette racine et utiliser les paramètres DNS fournis par Hostinger.
-3. Si le dossier `app` contient déjà un site, en télécharger une sauvegarde avant remplacement. Déplacer ensuite les anciens fichiers hors du dossier public de destination, notamment les anciens `index.php` et `.htaccess` Laravel, afin d’éviter le mélange des deux applications. Ne pas modifier les fichiers du site principal `public_html`.
+En SSH, récupérer `main` dans le répertoire privé (utiliser une clé SSH GitHub autorisée si le dépôt est privé) :
 
-## Méthode recommandée : Git dans hPanel
+```sh
+cd /home/u528935801/domains/lesbambinos.sn
+git clone --branch main git@github.com:charlesbintha/meretheresa.git mere-teresa
+cd mere-teresa
+composer install --no-dev --optimize-autoloader
+cp .env.example .env
+```
 
-1. Dans le tableau de bord du site, ouvrir **Avancé → Git**.
-2. Cliquer **Continuer avec GitHub**, se connecter et autoriser Hostinger à accéder au dépôt `charlesbintha/meretheresa`.
-3. Choisir ce dépôt.
-4. Sélectionner la branche **main**.
-5. Configurer le répertoire cible pour qu’il corresponde exactement à :
+Si le dossier existe déjà, utiliser son dépôt avec `git pull --ff-only origin main`. Préserver son `.env` et sa clé existante.
 
-   ```text
-   /home/u528935801/domains/lesbambinos.sn/public_html/app
-   ```
+## 3. Configurer la base
 
-   Si le champ affiche un chemin relatif au domaine et propose `public_html` par défaut, utiliser **public_html/app**. Si l’ancienne interface affiche « Install path » relatif à `public_html`, utiliser **app**. Vérifier la destination finale affichée avant de lancer le déploiement.
+Éditer le `.env` privé avec les valeurs fournies par hPanel :
 
-6. Cliquer **Deploy / Déployer** et attendre la confirmation.
-7. Dans le gestionnaire de fichiers, vérifier que `index.html`, `styles.css`, `app.js`, les autres scripts et `assets/` sont directement dans `app/`, sans dossier `meretheresa-main` ou `mere-teresa-template` intermédiaire.
-8. Vérifier que le certificat SSL couvre `app.lesbambinos.sn`, puis ouvrir **https://app.lesbambinos.sn**.
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://app.lesbambinos.sn
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nom_complet_de_la_base_hostinger
+DB_USERNAME=utilisateur_mysql_hostinger
+DB_PASSWORD="mot_de_passe_mysql"
+SESSION_DRIVER=database
+SESSION_SECURE_COOKIE=true
+SESSION_ENCRYPT=true
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+```
 
-Le `.htaccess` fourni définit `index.html` comme page d’accueil et désactive l’indexation des dossiers. La navigation utilise des fragments d’URL (`#students`, `#payments`, etc.) : aucune réécriture SPA n’est nécessaire.
+Utiliser l’hôte MySQL indiqué par hPanel s’il diffère. Générer la clé **uniquement à la première installation** :
 
-Après les prochains changements sur GitHub, cliquer **Redeploy / Redéployer** dans hPanel, ou activer le déploiement automatique de `main` si souhaité.
+```sh
+php artisan key:generate
+php artisan migrate --force
+php artisan school:admin votre-adresse@example.com
+```
 
-## Alternative : téléversement ZIP
+La dernière commande demande un mot de passe de 12 caractères minimum et sa confirmation, sans les afficher.
 
-Utiliser l’archive `mere-teresa-hostinger.zip` fournie avec cette livraison : son `index.html` est déjà à la racine.
+Pour démarrer avec les données de `data.js`, lancer une seule fois la commande ci-dessous en remplaçant le nom de base. Elle écrase les données scolaires de cette base après sauvegarde privée, en conservant les comptes :
 
-1. Ouvrir **Fichiers → Gestionnaire de fichiers** puis `public_html/app`.
-2. Téléverser l’archive et l’extraire directement dans ce dossier.
-3. Vérifier la présence de `app/index.html`, et non `app/mere-teresa-template/index.html`.
-4. Retirer l’archive ZIP du dossier public une fois l’extraction terminée.
-5. Ouvrir https://app.lesbambinos.sn.
+```sh
+php artisan school:import-template --replace --database-name=nom_complet_de_la_base_hostinger
+```
 
-Si vous utilisez **GitHub → Code → Download ZIP**, l’archive contient un dossier `meretheresa-main`. C’est son contenu qu’il faut placer dans `app/`.
+La base locale `mere_theresa` a déjà été importée. L’envoi du code sur GitHub ne copie pas MySQL sur Hostinger. Si vous souhaitez transférer ultérieurement des modifications locales, exporter la base locale puis l’importer dans la base Hostinger ; ne pas relancer l’import du jeu d’exemple par-dessus ces modifications.
 
-## Vérifications après déploiement
+## 4. Publier les fichiers publics
 
-- Le tableau de bord s’affiche avec le logo et les styles.
-- La page **Élèves** s’ouvre et le bouton **Ajouter un élève** affiche le formulaire.
-- Les fenêtres de personnalisation et de paiement fonctionnent.
-- Les styles d’impression s’appliquent aux reçus et bulletins.
-- En cas d’ancienne version affichée, vider le cache du site dans hPanel si activé et actualiser le navigateur sans cache.
+Sauvegarder d’abord le dossier `public_html/app` existant hors de `public_html`, puis libérer ce dossier pour éviter que l’ancien `index.html` soit encore servi. Ne toucher qu’au sous-dossier `app`, pas au site principal.
 
-Si une ancienne application Laravel apparaît encore, vérifier d’abord la racine du sous-domaine et les anciens fichiers de routage. Si une erreur 403 apparaît, vérifier que `index.html` est présent directement dans la bonne racine. Ne pas appliquer des permissions 777 : conserver les permissions normales du gestionnaire de fichiers.
+Depuis le répertoire privé `mere-teresa` :
 
-## Références Hostinger
+```sh
+mkdir -p ../public_html/app
+cp -R public/. ../public_html/app/
+cp deploy/hostinger-index.php ../public_html/app/index.php
+chmod -R u+rwX storage bootstrap/cache
+chmod 600 .env
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
-- Déploiement Git : https://www.hostinger.com/support/1583302-how-to-deploy-a-git-repository-in-hostinger/
-- Gestionnaire de fichiers : https://www.hostinger.com/support/4548688-basic-actions-in-the-file-manager-in-hostinger/
+Le `.htaccess` à publier est **`public/.htaccess`**, jamais celui de la racine privée. Laisser les sauvegardes sous `storage/app/private/backups` hors du site public.
+
+## 5. Vérifier
+
+Ouvrir `https://app.lesbambinos.sn/login`, se connecter avec le compte créé, puis vérifier les élèves, paiements et notes. Créer une fiche de test et recharger la page pour vérifier sa persistance. Les chemins `/.env`, `/database/seed-data/template.json` et `/storage/logs/laravel.log` doivent être inaccessibles. L’API sans connexion doit renvoyer un refus ou rediriger vers la connexion.
+
+Pour les prochaines mises à jour : sauvegarder la base, mettre temporairement l’application en maintenance (`php artisan down`), récupérer le code, installer les dépendances, exécuter `php artisan migrate --force`, recopier les fichiers publics et le point d’entrée adapté, reconstruire les caches puis `php artisan up`. **Ne pas relancer l’import destructif du template**. En cas d’échec, consulter `storage/logs/laravel.log` dans le répertoire privé.
+
+## Sans accès SSH
+
+Préparer `vendor/` avec Composer sur une machine compatible, téléverser le projet complet dans le dossier privé et les fichiers publics dans `public_html/app`. Utiliser un terminal fourni par l’hébergeur pour les commandes Artisan. Ne pas créer de route web publique permettant de lancer des migrations ou un import.

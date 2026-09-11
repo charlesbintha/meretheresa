@@ -1,27 +1,36 @@
-// Tests des parcours métier de démonstration, sans navigateur ni Laravel.
-const vm = require('node:vm');
-const fs = require('node:fs');
-const path = require('node:path');
-const assert = require('node:assert/strict');
-const storage = new Map();
-const context = {console, Intl, Date, Set, Map, URL, Blob, setTimeout, clearTimeout, document:{addEventListener(){},querySelector(){return null;}}, localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)}};
-context.window=context;
-vm.createContext(context);
-for(const name of ['icons.js','data.js','ui.js','views.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',name),'utf8'),context);
-context.MT.actions={};
-vm.runInContext(fs.readFileSync(path.join(__dirname,'..','interactions.js'),'utf8'),context);
-const M=context.MT;
-let checks=0;
-const test=(name,fn)=>{fn();checks++;console.log('✓ '+name);};
-test('Toutes les pages produisent un contenu complet',()=>{for(const [route,view] of Object.entries(M.views)){M.view.route=route;const html=view();assert.ok(html.includes('<h1>'),route);assert.ok(!html.includes('undefined'),route);}});
-test('Inscription et dossier élève restent cohérents',()=>{M.forms.student({firstName:'Test',lastName:'Élève',gender:'F',classId:'1',birth:'2018-01-01',status:'En attente',parent:'Parent test',phone:'770000000',email:'test@example.test',address:'Dakar'});const s=M.db.students.at(-1);assert.equal(s.id,289);assert.equal(M.db.enrollments.at(-1).studentId,s.id);M.forms.student({...s,status:'Actif'},s.id);assert.equal(M.db.enrollments.at(-1).status,'Validée');});
-test('Un paiement diminue exactement le solde',()=>{const before=M.balance(M.student(289));M.forms.payment({studentId:'289',type:'Scolarité',amount:'40000',method:'Wave',date:'2026-03-16'});assert.equal(M.balance(M.student(289)),before-40000);assert.equal(M.db.payments.at(-1).reference,'REC-2026-0085');assert.ok(M.receiptHTML(M.db.payments.at(-1)).includes('40'));});
-test('Le trop-perçu est refusé sans créer de paiement',()=>{const n=M.db.payments.length;assert.throws(()=>M.forms.payment({studentId:'289',type:'Scolarité',amount:'999999',method:'Wave',date:'2026-03-16'}));assert.equal(M.db.payments.length,n);});
-test('Les notes alimentent le bulletin pondéré',()=>{M.view.term='2';M.db.grades['289-1-2-test']=18;M.db.grades['289-1-2-exam']=15;assert.equal(M.average(289,1),16);assert.ok(M.reportHTML(M.student(289)).includes('16.00'));});
-test('Les doublons de matières et abonnements sont refusés',()=>{assert.throws(()=>M.forms.subject({name:'Français',coefficient:'4',teacher:'1'}));assert.throws(()=>M.forms.subscription({studentId:'1',service:'Cantine',plan:'Déjeuner',amount:'25000'}));});
-test('La capacité d’une classe est respectée',()=>{assert.throws(()=>M.forms.class({name:'Petite section',capacity:'5',teacher:'1',cycle:'Maternelle',room:'Salle 01'},1));});
-test('Les dates de l’année sont validées',()=>{assert.throws(()=>M.forms.year({name:'Test',start:'2027-07-31',end:'2026-10-01'}));});
-test('Le planning initial ne contient pas de chevauchements',()=>{const seen=new Set();for(const l of M.db.timetable){for(const key of [`c${l.classId}-${l.day}-${l.start}`,`t${l.teacherId}-${l.day}-${l.start}`,`r${l.room}-${l.day}-${l.start}`]){assert.ok(!seen.has(key),key);seen.add(key);}}});
-test('Un cours ne peut pas occuper une classe, salle ou enseignant déjà pris',()=>{assert.throws(()=>M.forms.lesson({classId:'8',subjectId:'1',teacherId:'8',day:'0',start:'8',room:'Salle 08'}));assert.throws(()=>M.forms.lesson({classId:'8',subjectId:'1',teacherId:'1',day:'0',start:'8',room:'Salle libre'},M.db.timetable.find(l=>l.classId===8).id));});
-test('Les données sont sauvegardées et relisibles',()=>{assert.equal(M.save(),true);const parsed=JSON.parse(storage.get('mere-teresa-template-v1'));assert.equal(parsed.students.length,289);assert.equal(parsed.payments.length,85);});
-console.log(`${checks} vérifications réussies.`);
+// Run against an isolated, seeded test database; never a production URL.
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const url=process.env.SCHOOL_TEST_URL;
+ if(!url||!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(url))throw Error('Set SCHOOL_TEST_URL to an isolated local server.');
+ if(!process.env.SCHOOL_TEST_EMAIL||!process.env.SCHOOL_TEST_PASSWORD)throw Error('Test credentials required.');
+ const browser=await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL||'chrome'});
+ const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'});const errors=[];
+ page.on('pageerror',error=>errors.push(error.message));
+ try{
+  await page.goto(url);await page.locator('[name=email]').fill(process.env.SCHOOL_TEST_EMAIL);await page.locator('[name=password]').fill(process.env.SCHOOL_TEST_PASSWORD);await page.locator('[type=submit]').click();
+  await page.waitForFunction(()=>window.MT?.ready===true);
+  const routes=await page.evaluate(()=>Object.keys(MT.views));
+  for(const route of routes){await page.evaluate(r=>MT.navigate(r),route);await page.locator('h1').waitFor();assert(!(await page.locator('#main').innerText()).includes('undefined'),route);}
+  await page.evaluate(()=>MT.navigate('students'));await page.locator('[data-action=student-form]').first().click();
+  const f=page.locator('form[data-form=student]');
+  for(const [name,value] of Object.entries({firstName:'UI',lastName:'Persistance',birth:'2018-01-01',parent:'Parent UI',phone:'770000000',email:'ui-parent@example.test',address:'Dakar'}))await f.locator(`[name=${name}]`).fill(value);
+  await f.locator('[name=classId]').selectOption('1');await f.locator('[type=submit]').click();await page.waitForFunction(()=>MT.db.students.some(s=>s.lastName==='Persistance'));
+  const id=await page.evaluate(()=>MT.db.students.find(s=>s.lastName==='Persistance').id);
+  await page.reload();await page.waitForFunction(()=>MT.ready);assert(await page.evaluate(id=>MT.db.students.some(s=>s.id===id),id));
+  await page.evaluate(id=>MT.actions['payment-form']({dataset:{student:String(id)}}),id);
+  const pay=page.locator('form[data-form=payment]');await pay.locator('[name=amount]').fill('40000');await pay.locator('[name=date]').fill('2026-03-16');await pay.locator('[type=submit]').click();await page.locator('#modal-title').filter({hasText:'Reçu de paiement'}).waitFor();
+  await page.reload();await page.waitForFunction(()=>MT.ready);assert.equal(await page.evaluate(id=>MT.balance(MT.student(id)),id),110000);
+  await page.evaluate(()=>MT.navigate('grades'));await page.locator('[data-change=grade-class]').selectOption('1');
+  const test=page.locator(`[data-student="${id}"][data-grade=test]`),exam=page.locator(`[data-student="${id}"][data-grade=exam]`);
+  assert.equal(await test.inputValue(),'');await test.fill('18');await exam.fill('15');await page.locator('[data-action=save-grades]').click();await page.waitForFunction(id=>MT.db.grades[`${id}-1-2-test`]===18,id);
+  await page.reload();await page.waitForFunction(()=>MT.ready);assert.equal(await page.evaluate(id=>MT.average(id,1),id),16);
+  await page.evaluate(()=>MT.actions['year-activate']({dataset:{id:'2'}}));await page.waitForFunction(()=>MT.db.activeYear===2);assert.equal(await page.evaluate(()=>MT.db.students.length),0);
+  for(const route of routes){await page.evaluate(r=>MT.navigate(r),route);assert(!(await page.locator('#main').innerHTML()).match(/undefined|NaN/),route+' empty state');}
+  await page.evaluate(()=>MT.actions['year-activate']({dataset:{id:'1'}}));await page.waitForFunction(()=>MT.db.activeYear===1);
+  await page.evaluate(()=>MT.navigate('dashboard'));await page.screenshot({path:'/private/tmp/mere-teresa-connected.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Mobile overflow');
+  assert.deepEqual(errors,[]);console.log(`${routes.length} pages, creation/reload, payment balance, grades and year isolation: passed.`);
+ }finally{await browser.close();}
+})().catch(error=>{console.error(error);process.exit(1)});
