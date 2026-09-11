@@ -30,6 +30,14 @@ Le mot de passe administrateur est demandé sans être affiché. Aucun compte ou
 php artisan school:import-template --replace --database-name=mere_theresa
 ```
 
+Un seeder nommé est également disponible, après les migrations :
+
+```sh
+php artisan db:seed --class=TemplateDataSeeder --force
+```
+
+Il utilise le même import transactionnel et la même sauvegarde vérifiée. **Cette commande remplace les données scolaires de la base configurée dans `.env`**, sans supprimer les comptes utilisateurs. Elle ne doit être lancée qu’à l’initialisation voulue, jamais automatiquement à chaque mise à jour. Le seeder n’est pas inclus dans un `DatabaseSeeder` par défaut.
+
 Le nom doit correspondre exactement à la base configurée. Pour une base Hostinger, employer son vrai nom, avec le préfixe du compte. Ne pas exécuter cette commande lors de chaque déploiement.
 
 Contenu : 288 élèves, 18 enseignants, 12 classes, 6 demandes en attente, 84 paiements, 36 abonnements, 180 cours et 10 368 notes. Les données importées sont un jeu d’exemple, même une fois stockées en base.
