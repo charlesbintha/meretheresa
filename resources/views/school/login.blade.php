@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Connexion · Mère Theresa</title>
+    <title>Connexion · Mère Thérèsa</title>
     <link rel="icon" href="{{ asset('template/assets/school-logo.jpg') }}">
     <link rel="stylesheet" href="{{ asset('template/styles.css') }}">
     <style>
@@ -59,7 +59,7 @@
     <section class="login-card" aria-labelledby="school-name">
         <div class="login-brand">
             <img src="{{ asset('template/assets/school-logo.jpg') }}" alt="Logo de l’établissement">
-            <h1 id="school-name">Mère Theresa</h1>
+            <h1 id="school-name">Mère Thérèsa</h1>
             <p>Groupe scolaire</p>
         </div>
         <div class="login-intro">
