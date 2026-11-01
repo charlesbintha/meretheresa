@@ -135,6 +135,20 @@ class SchoolStore
             'tuitions' => DB::table('tuitions')->where('academic_year_id', $y)->get()->map(fn ($t) => ['id' => $t->id, 'studentId' => (int) $t->student_id, 'total' => (float) $t->total_amount, 'paid' => (float) $t->paid_amount, 'balance' => (float) $t->remaining_amount, 'dueDate' => $t->due_date, 'term' => (int) ($periods[$t->period_id]->term_number ?? 2)])->all(),
             'timetable' => DB::table('timetables')->where('academic_year_id', $y)->get()->map(fn ($l) => ['id' => $l->id, 'classId' => (int) $l->class_id, 'subjectId' => (int) $l->subject_id, 'teacherId' => (int) $l->teacher_id, 'day' => array_search($l->day_of_week, self::DAYS), 'start' => (int) substr($l->start_time, 0, 2), 'end' => (int) substr($l->end_time, 0, 2), 'room' => $l->room ?? ''])->all(),
             'subscriptions' => $subs, 'grades' => (object) $grades, 'settings' => $values + ['theme' => $pref['theme'] ?? 'light', 'compact' => $pref['compact'] ?? false], 'widgets' => $pref['widgets'] ?? ['revenue', 'enrollments', 'activity', 'collections', 'agenda'], 'notificationsRead' => $pref['notificationsRead'] ?? false, 'user' => ['name' => DB::table('users')->where('id', $user)->value('name')]];
+        $state['billing'] = app(SchoolBilling::class)->state($y, $account);
+        if ($state['billing']['enabled']) {
+            $charges = collect($state['billing']['charges'])->keyBy('id');
+            $receipts = collect($state['billing']['receipts']);
+            $state['payments'] = $receipts->map(function ($r) use ($charges) {
+                $c = $charges[$r['charge_id']];
+                return ['id'=>$r['id'],'studentId'=>$c['student_id'],'amount'=>$r['amount'],'date'=>$r['paid_at']??'', 'reference'=>$r['reference']??'', 'type'=>SchoolBilling::LABELS[$c['kind']], 'method'=>$r['method']??'Non renseigné', 'month'=>$c['month']];
+            })->all();
+            $state['tuitions'] = $charges->where('kind','tuition')->map(function ($c) use ($receipts) {
+                $paid = $receipts->where('charge_id',$c['id'])->sum('amount');
+                return ['id'=>$c['id'],'studentId'=>$c['student_id'],'total'=>$c['amount']-$c['waiver'],'paid'=>$paid,'balance'=>$c['amount']-$c['waiver']-$paid,'dueDate'=>$c['due_date'],'term'=>0];
+            })->values()->all();
+            $state['subscriptions'] = collect($state['billing']['memberships'])->map(fn($r)=>['id'=>'billing:'.$r['id'],'studentId'=>$r['student_id'],'service'=>SchoolBilling::LABELS[$r['kind']],'plan'=>trim(($r['zone']??'').' '.($r['kind']==='transport'?match($r['trip']){'outbound'=>'Aller seul','return'=>'Retour seul',default=>'Aller-retour'}:'Mensuel')),'amount'=>$r['monthly_fee'],'status'=>$r['active']?'Actif':'Suspendu'])->all();
+        }
         $state = array_replace($state, app(SchoolAccounts::class)->state($account));
         if (! $account->canSchool('students.view')) {
             $state['students'] = [];
@@ -179,7 +193,11 @@ class SchoolStore
                 return ['recordId' => $p->id, 'state' => $this->state($user)];
             }
             abort_if((int) $s->revision !== $revision, 409, 'Les données ont changé. Actualisez puis réessayez.');
+            if (app(SchoolBilling::class)->enabled($this->year())) {
+                abort_if(in_array($action, ['payment','subscription','subscription-toggle'], true), 422, 'Utilisez les échéances et adhésions de la facturation mensuelle.');
+            }
             $record = match ($action) {
+                'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),
                 'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
                 'student' => $this->student($v, $id),'teacher' => $this->teacher($v, $id),'class' => $this->classroom($v, $id),'subject' => $this->subject($v, $id),'year' => $this->academicYear($v, $id),'year-activate' => $this->activate($id),'enrollment' => $this->enrollment($v),'enrollment-approve' => $this->decide($id, true),'enrollment-reject' => $this->decide($id, false),'payment' => $this->payment($v),'subscription' => $this->subscription($v),'subscription-toggle' => $this->toggleSubscription($id),'lesson' => $this->lesson($v, $id),'lesson-delete' => $this->deleteLesson($id),'grades' => $this->grades($v),'settings' => $this->settings($v),'preferences' => $this->preferences($v, $user),default => abort(404)
             };
@@ -192,6 +210,11 @@ class SchoolStore
 
     private function charge(int $student, int $year): void
     {
+        if (app(SchoolBilling::class)->enabled($year)) {
+            $entry = DB::table('enrollments')->where('student_id',$student)->where('academic_year_id',$year)->first();
+            app(SchoolBilling::class)->schoolCharges($student,$year,DB::table('classes')->where('id',$entry->class_id)->value('name'),$entry->enrollment_date);
+            return;
+        }
         if (DB::table('tuitions')->where('student_id', $student)->where('academic_year_id', $year)->exists()) {
             return;
         }$values = json_decode(DB::table('school_settings')->find(1)->values, true);
@@ -202,10 +225,11 @@ class SchoolStore
 
     private function student(array $v, ?string $id): int
     {
-        $v = $this->rules($v, ['firstName' => 'required|string|max:60', 'lastName' => 'required|string|max:60', 'birth' => 'required|date|before_or_equal:today', 'gender' => 'required|in:F,M', 'classId' => 'required|integer|exists:classes,id', 'status' => 'required|in:Actif,En attente,Archivé', 'parent' => 'required|string|max:100', 'phone' => 'required|string|min:8|max:25', 'email' => 'nullable|email|max:191', 'address' => 'nullable|string|max:500']);
+        abort_if(!$id && app(SchoolBilling::class)->enabled($this->year()),422,'Utilisez le formulaire d’inscription avec un numéro d’ordre.');
+        $v = $this->rules($v, ['firstName' => 'required|string|max:60', 'lastName' => 'required|string|max:60', 'birth' => 'nullable|date|before_or_equal:today', 'gender' => 'nullable|in:F,M', 'classId' => 'required|integer|exists:classes,id', 'status' => 'required|in:Actif,En attente,Archivé', 'parent' => 'nullable|string|max:100', 'phone' => 'nullable|string|min:8|max:25', 'email' => 'nullable|email|max:191', 'address' => 'nullable|string|max:500']);
         $year = $this->requiredYear();
         $this->capacity($v['classId'], $id ? (int) $id : null);
-        $values = ['first_name' => $v['firstName'], 'last_name' => $v['lastName'], 'date_of_birth' => $v['birth'], 'place_of_birth' => 'Dakar', 'gender' => $v['gender'], 'parent_name' => $v['parent'], 'parent_phone' => $v['phone'], 'parent_email' => $v['email'] ?? null, 'address' => $v['address'] ?? '', 'status' => $v['status'] === 'Archivé' ? 'inactive' : 'active'];
+        $values = ['first_name' => $v['firstName'], 'last_name' => $v['lastName'], 'date_of_birth' => $v['birth'] ?? null, 'place_of_birth' => $id ? $this->row('students', (int) $id)->place_of_birth : null, 'gender' => $v['gender'] ?? null, 'parent_name' => $v['parent'] ?? null, 'parent_phone' => $v['phone'] ?? null, 'parent_email' => $v['email'] ?? null, 'address' => $v['address'] ?? '', 'status' => $v['status'] === 'Archivé' ? 'inactive' : 'active'];
         if (! $id) {
             $values['matricule'] = 'MT-'.now()->format('y').'-'.strtoupper(Str::random(10));
         }

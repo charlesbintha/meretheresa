@@ -4,3 +4,5 @@ MT.view={route:'dashboard',query:'',filter:'Tous',page:1,sort:'name',direction:1
 MT.nav=[{label:'VUE D’ENSEMBLE',items:[['dashboard','Tableau de bord','layout-dashboard']]},{label:'SCOLARITÉ',items:[['students','Élèves','users'],['enrollments','Inscriptions','user-plus'],['classes','Classes & matières','school'],['teachers','Enseignants','chalkboard'],['timetable','Emploi du temps','calendar-week'],['grades','Notes & bulletins','report-analytics']]},{label:'FINANCES & SERVICES',items:[['finance','Vue financière','chart-pie'],['payments','Paiements','wallet'],['billing','Scolarités & factures','receipt'],['services','Services scolaires','bus']]},{label:'ÉTABLISSEMENT',items:[['years','Années scolaires','calendar-event']]}];
 
 MT.nav.splice(3,0,{label:"RAPPORTS",items:[["analytics","KPI & diagrammes","chart-pie"],["reports","Rapports filtrables","report-analytics"]]});
+
+MT.nav.push({label:'SUIVI FINANCIER',items:[['monthly','Échéances & alertes','receipt'],['annual-balances','Restes annuels','report-analytics']]});

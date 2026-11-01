@@ -1,7 +1,7 @@
 (()=>{
 const M=MT,E=M.esc,I=M.icon,B=M.button,A=M.actions;
 M.can=permission=>!permission||(M.db.permissions||[]).includes(permission);
-M.routePermission={students:'students.view',enrollments:'students.view',classes:'academics.view',teachers:'academics.view',timetable:'academics.view',grades:'grades.view',finance:'finance.view',payments:'finance.view',billing:'finance.view',services:'services.view',years:'settings.manage',users:'users.manage',roles:'roles.manage'};
+M.routePermission={'monthly':'finance.view','annual-balances':'finance.view',students:'students.view',enrollments:'students.view',classes:'academics.view',teachers:'academics.view',timetable:'academics.view',grades:'grades.view',finance:'finance.view',payments:'finance.view',billing:'finance.view',services:'services.view',years:'settings.manage',users:'users.manage',roles:'roles.manage'};
 const actionPermission={
  'class-students':'students.view','student-detail':'students.view','student-form':'students.manage','enrollment-form':'students.manage','enrollment-approve':'students.manage','enrollment-reject':'students.manage','reject-confirmed':'students.manage',
  'teacher-form':'academics.manage','class-form':'academics.manage','subject-form':'academics.manage','lesson-form':'academics.manage','lesson':'academics.view','lesson-delete':'academics.manage',

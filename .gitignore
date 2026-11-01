@@ -10,3 +10,6 @@
 /public/hot
 
 /.phpunit.result.cache
+
+/.git-pointer-backup
+/scripts/__pycache__/
