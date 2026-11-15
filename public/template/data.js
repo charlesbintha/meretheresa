@@ -6,3 +6,5 @@ MT.nav=[{label:'VUE D’ENSEMBLE',items:[['dashboard','Tableau de bord','layout-
 MT.nav.splice(3,0,{label:"RAPPORTS",items:[["analytics","KPI & diagrammes","chart-pie"],["reports","Rapports filtrables","report-analytics"]]});
 
 MT.nav.push({label:'SUIVI FINANCIER',items:[['monthly','Échéances & alertes','receipt'],['annual-balances','Restes annuels','report-analytics']]});
+
+MT.nav.push({label:'PERSONNEL',items:[['staff','Personnel & cantine','users']]});

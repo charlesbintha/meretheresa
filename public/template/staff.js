@@ -1,6 +1,6 @@
 (()=>{
 const M=MT,E=M.esc,B=M.button;
-M.nav.push({label:'PERSONNEL',items:[['staff','Personnel & cantine','users']]});
+
 const db=()=>M.db.staffCanteen||{people:[],memberships:[],charges:[],receipts:[]};
 const name=s=>`${s.first_name} ${s.last_name}`;
 const person=id=>db().people.find(s=>s.id===Number(id));

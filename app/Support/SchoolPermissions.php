@@ -19,6 +19,7 @@ class SchoolPermissions
     ];
 
     public const ACTIONS = [
+        'student-profile'=>'students.manage',
         'staff-profile'=>'services.manage', 'staff-membership'=>'services.manage', 'staff-receipt'=>'finance.manage',
         'billing-receipt'=>'finance.manage', 'billing-waiver'=>'finance.manage', 'billing-membership'=>'services.manage', 'billing-enrollment'=>'students.manage',
         'student' => 'students.manage', 'enrollment' => 'students.manage',

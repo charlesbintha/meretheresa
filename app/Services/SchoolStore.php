@@ -118,7 +118,7 @@ class SchoolStore
         $state = ['version' => 2, 'revision' => (int) $settings->revision, 'activeYear' => $y, 'students' => $students->map(function ($s) use ($enrollments) {
             $e = $enrollments[$s->id];
 
-            return ['id' => $s->id, 'matricule' => $s->matricule, 'firstName' => $s->first_name, 'lastName' => $s->last_name, 'birth' => $s->date_of_birth, 'gender' => $s->gender, 'parent' => $s->parent_name, 'phone' => $s->parent_phone, 'email' => $s->parent_email ?? '', 'address' => $s->address, 'classId' => (int) $e->class_id, 'status' => $s->status !== 'active' || $e->status === 'cancelled' ? 'Archivé' : ($e->status === 'pending' ? 'En attente' : 'Actif'), 'joined' => $e->enrollment_date];
+            return ['id' => $s->id, 'matricule' => $s->matricule, 'firstName' => $s->first_name, 'lastName' => $s->last_name, 'birth' => $s->date_of_birth, 'birthPlace' => $s->place_of_birth, 'gender' => $s->gender, 'parent' => $s->parent_name, 'phone' => $s->parent_phone, 'email' => $s->parent_email ?? '', 'address' => $s->address, 'classId' => (int) $e->class_id, 'status' => $s->status !== 'active' || $e->status === 'cancelled' ? 'Archivé' : ($e->status === 'pending' ? 'En attente' : 'Actif'), 'joined' => $e->enrollment_date];
         })->all(),
             'classes' => $classes->map(fn ($c) => ['id' => $c->id, 'name' => $c->name, 'cycle' => $c->level, 'capacity' => (int) $c->capacity, 'studentCount' => $enrollments->where('class_id', $c->id)->count(), 'teacher' => (int) $c->class_teacher_id, 'room' => $c->room ?? ''])->all(),
             'teachers' => DB::table('teachers')->get()->map(fn ($t) => ['id' => $t->id, 'name' => trim($t->first_name.' '.$t->last_name), 'email' => $t->email, 'phone' => $t->phone ?? '', 'subject' => $t->specialization ?? '', 'status' => $t->status === 'active' ? 'Actif' : 'Archivé'])->all(),
@@ -135,6 +135,12 @@ class SchoolStore
             'tuitions' => DB::table('tuitions')->where('academic_year_id', $y)->get()->map(fn ($t) => ['id' => $t->id, 'studentId' => (int) $t->student_id, 'total' => (float) $t->total_amount, 'paid' => (float) $t->paid_amount, 'balance' => (float) $t->remaining_amount, 'dueDate' => $t->due_date, 'term' => (int) ($periods[$t->period_id]->term_number ?? 2)])->all(),
             'timetable' => DB::table('timetables')->where('academic_year_id', $y)->get()->map(fn ($l) => ['id' => $l->id, 'classId' => (int) $l->class_id, 'subjectId' => (int) $l->subject_id, 'teacherId' => (int) $l->teacher_id, 'day' => array_search($l->day_of_week, self::DAYS), 'start' => (int) substr($l->start_time, 0, 2), 'end' => (int) substr($l->end_time, 0, 2), 'room' => $l->room ?? ''])->all(),
             'subscriptions' => $subs, 'grades' => (object) $grades, 'settings' => $values + ['theme' => $pref['theme'] ?? 'light', 'compact' => $pref['compact'] ?? false], 'widgets' => $pref['widgets'] ?? ['revenue', 'enrollments', 'activity', 'collections', 'agenda'], 'notificationsRead' => $pref['notificationsRead'] ?? false, 'user' => ['name' => DB::table('users')->where('id', $user)->value('name')]];
+        if ($account->canSchool('students.view')) {
+            $profiles=DB::table('school_student_profiles')->whereIn('student_id',$students->pluck('id'))->get()->keyBy('student_id');
+            $history=DB::table('enrollments as e')->join('academic_years as y','y.id','=','e.academic_year_id')->join('classes as c','c.id','=','e.class_id')->whereIn('e.student_id',$students->pluck('id'))->orderByDesc('y.start_date')->select('e.student_id','y.year_name','c.name as class_name','e.enrollment_date','e.status')->get()->groupBy('student_id');
+            $documents=DB::table('student_documents')->whereIn('student_id',$students->pluck('id'))->select('student_id','document_type','document_name','uploaded_at')->get()->groupBy('student_id');
+            foreach($state['students'] as &$record){$profile=$profiles[$record['id']]??null;$record['details']=$profile?json_decode($profile->details,true):new \stdClass;$record['detailSource']=$profile?->source_cell;$record['history']=($history[$record['id']]??collect())->all();$record['documents']=($documents[$record['id']]??collect())->all();}unset($record);
+        }
         $state['staffCanteen'] = app(SchoolStaff::class)->state($y, $account);
         $state['billing'] = app(SchoolBilling::class)->state($y, $account);
         if ($state['billing']['enabled']) {
@@ -198,6 +204,7 @@ class SchoolStore
                 abort_if(in_array($action, ['payment','subscription','subscription-toggle'], true), 422, 'Utilisez les échéances et adhésions de la facturation mensuelle.');
             }
             $record = match ($action) {
+                'student-profile' => app(SchoolStudentProfiles::class)->edit((int)$id, $this->year(), $v),
                 'staff-profile', 'staff-membership', 'staff-receipt' => app(SchoolStaff::class)->execute($action, $v, $id, $actor, $this->year()),
                 'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),
                 'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
