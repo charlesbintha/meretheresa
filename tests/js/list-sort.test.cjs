@@ -1,0 +1,4 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const vm=require('node:vm');const fs=require('node:fs');
+const MT={actions:{},paginate(){},table(){}};vm.runInNewContext(fs.readFileSync(require('node:path').join(__dirname,'../../public/template/table-sort.js'),'utf8'),{MT,Intl});
+test('French amounts, dates and matricules sort by their values',()=>{const c=MT.compareListValues;for(const [a,b] of [['9 000 FCFA','20 000 FCFA'],['-100 F','50 F'],['9,5','10'],['30 déc. 2026','02 janv. 2027'],['01/02/2026','31/12/2026'],['2026-10-01','2027-01-01'],['MAT-9','MAT-100']]){assert.ok(c(a,b,1)<0,a);assert.ok(c(a,b,-1)>0,a);}assert.equal(c('École','ecole',1),0);});
+test('missing values remain last in both directions',()=>{for(const d of [1,-1])for(const missing of ['','—','Date à compléter#12','Invalid Date'])assert.ok(MT.compareListValues(missing,'20 000 F',d)>0);});
