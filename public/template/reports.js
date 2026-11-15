@@ -35,7 +35,7 @@ function dataset(f){
  }
  return {headers:['Matricule','Élève','Classe','Statut','Date d’inscription'],rows:selected.map(s=>[s.matricule,M.name(s),M.cls(s.classId)?.name,s.status,s.joined]),summary:`${selected.length} élève(s) · ${selected.filter(s=>s.status==='Actif').length} actif(s)`};
 }
-// Reused by the screen, print view and CSV so they always share the same filters.
+// Reused by the screen, print view and Excel/PDF so they always share the same filters.
 M.reporting={dataset,average};
 function tabs(active){return `<div class="report-tabs"><a href="#analytics" class="${active==='analytics'?'active':''}">${M.icon('chart-pie')}KPI & diagrammes</a><a href="#reports" class="${active==='reports'?'active':''}">${M.icon('report-analytics')}Rapports filtrables</a></div>`;}
 const noAccess=()=>M.empty('Aucun rapport accessible','Votre rôle ne dispose pas de droits sur les données scolaires ou financières.');
@@ -45,10 +45,10 @@ function filterForm(){
 }
 M.views.reports=()=>{
  safeType(applied);const d=dataset(applied),pg=M.paginate(d.rows,15);
- return M.heading('Rapports filtrables','Consultez, exportez et imprimez les données de l’année active.',allowed().length?B('Exporter CSV','reports-export','download','','')+B('Imprimer','reports-print','printer','',''): '')+tabs('reports')+(!allowed().length?noAccess():filterForm()+`<section class="card report-results"><div class="report-results-head"><h2>${E(types[applied.type][0])}</h2><p class="subtitle">${E(d.summary)}</p><small>Les exports et l’impression comprennent tous les résultats des filtres appliqués.</small></div>${M.table(d.headers,pg.rows.map(row=>`<tr>${row.map(v=>`<td>${E(v===''?'—':v)}</td>`).join('')}</tr>`),pg.footer)}</section>`);
+ return M.heading('Rapports filtrables','Consultez, exportez et imprimez les données de l’année active.',allowed().length?B('Exporter Excel / PDF','reports-export','download','','')+B('Imprimer','reports-print','printer','',''): '')+tabs('reports')+(!allowed().length?noAccess():filterForm()+`<section class="card report-results"><div class="report-results-head"><h2>${E(types[applied.type][0])}</h2><p class="subtitle">${E(d.summary)}</p><small>Les exports et l’impression comprennent tous les résultats des filtres appliqués.</small></div>${M.table(d.headers,pg.rows.map(row=>`<tr>${row.map(v=>`<td>${E(v===''?'—':v)}</td>`).join('')}</tr>`),pg.footer)}</section>`);
 };
 M.actions['reports-reset']=()=>{filters=defaults();applied=safeType(defaults());M.view.page=1;M.render();};
-M.actions['reports-export']=()=>{const d=dataset(applied);if(!d.headers.length)return;M.csv(`mere-theresa-${applied.type}-${year()}`,d.headers,d.rows);};
+M.actions['reports-export']=()=>{const d=dataset(applied);if(!d.headers.length)return;M.exportTable(`mere-theresa-${applied.type}-${year()}`,d.headers,d.rows,({payments:'finance',balances:'finance',students:'students',grades:'grades'})[applied.type]||'finance');};
 M.actions['reports-print']=()=>{const d=dataset(applied);if(!d.headers.length)return;const details=[year(),applied.classId?M.cls(Number(applied.classId))?.name:'Toutes les classes',applied.status,applied.query,applied.type==='payments'?[applied.from&&`Depuis ${applied.from}`,applied.to&&`Jusqu’au ${applied.to}`,applied.method].filter(Boolean).join(' · '):'',applied.result].filter(Boolean).join(' · ');M.print(`<article class="report-sheet">${M.reportBrand()}<h2>${E(types[applied.type][0])}</h2><p>${E(details)}</p><p>${E(d.summary)}</p>${M.table(d.headers,d.rows.map(row=>`<tr>${row.map(v=>`<td>${E(v===''?'—':v)}</td>`).join('')}</tr>`))}</article>`);};
 document.addEventListener('change',e=>{if(!e.target.closest('#report-filters'))return;Object.assign(filters,Object.fromEntries(new FormData(e.target.form)));if(e.target.name==='type'){filters.result='';M.render();}});
 document.addEventListener('submit',e=>{

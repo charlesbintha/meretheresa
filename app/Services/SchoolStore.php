@@ -204,6 +204,7 @@ class SchoolStore
                 abort_if(in_array($action, ['payment','subscription','subscription-toggle'], true), 422, 'Utilisez les échéances et adhésions de la facturation mensuelle.');
             }
             $record = match ($action) {
+                'accounting-entry','accounting-post','accounting-reverse','accounting-prepare','accounting-year','accounting-close','accounting-account' => app(SchoolAccounting::class)->execute($action,$v,$id,$actor),
                 'student-profile' => app(SchoolStudentProfiles::class)->edit((int)$id, $this->year(), $v),
                 'staff-profile', 'staff-membership', 'staff-receipt' => app(SchoolStaff::class)->execute($action, $v, $id, $actor, $this->year()),
                 'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),

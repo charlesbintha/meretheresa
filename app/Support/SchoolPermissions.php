@@ -5,6 +5,7 @@ namespace App\Support;
 class SchoolPermissions
 {
     public const CATALOG = [
+        'accounting.view'=>'Consulter la comptabilité et les états', 'accounting.manage'=>'Préparer les écritures comptables', 'accounting.post'=>'Valider les écritures comptables', 'accounting.configure'=>'Configurer et clôturer la comptabilité',
         'students.view' => 'Consulter les élèves et inscriptions',
         'students.manage' => 'Créer et modifier les élèves et inscriptions',
         'academics.view' => 'Consulter les classes, enseignants et emplois du temps',
@@ -19,6 +20,7 @@ class SchoolPermissions
     ];
 
     public const ACTIONS = [
+        'accounting-entry'=>'accounting.manage','accounting-prepare'=>'accounting.manage','accounting-reverse'=>'accounting.manage','accounting-post'=>'accounting.post','accounting-year'=>'accounting.configure','accounting-close'=>'accounting.configure','accounting-account'=>'accounting.configure',
         'student-profile'=>'students.manage',
         'staff-profile'=>'services.manage', 'staff-membership'=>'services.manage', 'staff-receipt'=>'finance.manage',
         'billing-receipt'=>'finance.manage', 'billing-waiver'=>'finance.manage', 'billing-membership'=>'services.manage', 'billing-enrollment'=>'students.manage',
@@ -41,6 +43,7 @@ class SchoolPermissions
                 $result[] = $module.'.view';
             }
         }
+        if (array_intersect(['accounting.manage','accounting.post','accounting.configure'], $result)) $result[]='accounting.view';
         // Linked modules need the student records and class labels to display their records.
         if (array_intersect(['grades.view', 'finance.view', 'services.view'], $result)) {
             $result[] = 'students.view';

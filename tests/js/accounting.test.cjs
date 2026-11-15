@@ -1,0 +1,8 @@
+const test=require('node:test'),assert=require('node:assert/strict');global.MT={};require('../../public/template/accounting-reports.js');
+const accounts=['101','5711','411101','706101','6051'].map(code=>({code,name:code}));
+const entry=(id,date,lines,status='posted')=>({id,date,status,number:'VE'+id,reference:'R'+id,lines:lines.map(([account,debit,credit])=>({account,debit,credit}))});
+const data={yearId:1,years:[{id:1,start:'2026-01-01',end:'2026-12-31'}],accounts,entries:[entry(1,'2026-01-01',[['5711',100000,0],['101',0,100000]]),entry(2,'2026-10-01',[['411101',15000,0],['706101',0,15000]]),entry(3,'2026-10-02',[['5711',15000,0],['411101',0,15000]]),entry(4,'2026-10-03',[['6051',5000,0],['5711',0,5000]]),entry(5,'2026-10-03',[['5711',999999,0],['706101',0,999999]],'draft')]};
+test('trial balance includes opening, excludes draft and preserves equality',()=>{const r=MT.accountingReport(data,'balance','2026-10-01','2026-10-31');const t=r.rows.at(-1);assert.equal(t[2],100000);assert.equal(t[4],35000);assert.equal(t[4],t[5]);assert.equal(t[6],t[7]);});
+test('income is accrual revenue less expense, not cash received',()=>{const r=MT.accountingReport(data,'income','2026-10-01','2026-10-31');assert.equal(r.rows.find(r=>r[0]==='XI')[2],10000);assert.equal(r.rows.find(r=>r[0]==='XB')[2],15000);});
+test('balance sheet integrates current result without double counting',()=>{const r=MT.accountingReport(data,'bilan','2026-10-01','2026-10-31');assert.equal(r.rows.at(-1)[2],0);assert.equal(r.rows.find(r=>r[1]==='TOTAL ACTIF')[2],110000);});
+test('ledger filters account and calculates running balance',()=>{const r=MT.accountingReport(data,'ledger','2026-10-01','2026-10-31','5711');assert.equal(r.rows.length,3);assert.equal(r.rows.at(-1).at(-1),110000);});

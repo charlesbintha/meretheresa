@@ -8,3 +8,5 @@ MT.nav.splice(3,0,{label:"RAPPORTS",items:[["analytics","KPI & diagrammes","char
 MT.nav.push({label:'SUIVI FINANCIER',items:[['monthly','Échéances & alertes','receipt'],['annual-balances','Restes annuels','report-analytics']]});
 
 MT.nav.push({label:'PERSONNEL',items:[['staff','Personnel & cantine','users']]});
+
+MT.nav.push({label:'COMPTABILITÉ',items:[['accounting','Écritures comptables','receipt'],['accounting-plan','Plan comptable','report-analytics'],['accounting-balance','Balance','chart-pie'],['accounting-ledger','Grand livre','report-analytics'],['accounting-bilan','Bilan','report-analytics'],['accounting-income','Compte de résultat','chart-pie']]});
