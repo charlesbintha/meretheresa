@@ -3,8 +3,11 @@ import argparse, collections, datetime, hashlib, json, os
 import openpyxl
 
 def norm(v): return ' '.join(str(v or '').upper().split())
-def prepare(path):
+def prepare(path, order_overrides=None, service_overrides=None, abandoned_rows=None):
     w=openpyxl.load_workbook(path,data_only=True)
+    corrected=order_overrides is not None
+    for sheet,rows in (order_overrides or {}).items():
+        for row,order in rows.items():w[sheet].cell(row,1).value=order
     def people(s):return [r for r in range(2,s.max_row+1) if s.cell(r,3).value and s.cell(r,4).value]
     def v(s,r,c):return s.cell(r,c).value
     base=w['CLASSE']; index=collections.defaultdict(list)
@@ -34,7 +37,7 @@ def prepare(path):
     targets={}
     for r in people(base):
         order=v(base,r,1)
-        if order==678:result['excluded'].append({'sheet':'CLASSE','row':r,'order':order,'reason':'Matricule 678 exclu sur demande'});continue
+        if order==678 and not corrected:result['excluded'].append({'sheet':'CLASSE','row':r,'order':order,'reason':'Matricule 678 exclu sur demande'});continue
         if not isinstance(order,int) or len(index[str(order)])!=1:raise ValueError(f'Matricule ambigu CLASSE ligne {r}')
         schoolclass=norm(v(base,r,2)); assert schoolclass in ['GARDE','PS','MS','GS','CI','CP','CE1','CE2','CM1','CM2']
         enrolled,raw=date(base,r,10)
@@ -52,19 +55,20 @@ def prepare(path):
     for name in ['CANTINE','TRANSPORT']:
         s=w[name]
         for r in people(s):
-            order=str(v(s,r,1));target=targets.get(order)
+            order=str((service_overrides or {}).get(name,{}).get(r,v(s,r,1)));target=targets.get(order)
+            abandoned=name=='TRANSPORT' and r in (abandoned_rows or [])
             reason=None
             if not target:reason='Matricule exclu ou absent de CLASSE'
             elif (norm(v(s,r,3)),norm(v(s,r,4)))!=(norm(target['lastName']),norm(target['firstName'])):reason='Identité différente de CLASSE pour ce matricule'
-            elif name=='TRANSPORT' and norm(v(s,r,6)) in ['ABD','']:reason='Zone exclue ou absente' if norm(v(s,r,5))=='OUI' else None
+            elif name=='TRANSPORT' and not abandoned and norm(v(s,r,6)) in ['ABD','']:reason='Zone exclue ou absente' if norm(v(s,r,5))=='OUI' else None
             if reason:
                 result['excluded'].append({'sheet':name,'row':r,'order':order,'reason':reason});continue
             if norm(v(s,r,5))!='OUI':continue
             kind='canteen' if name=='CANTINE' else 'transport';zone=None;trip='round_trip'
-            if kind=='transport':
+            if kind=='transport' and not abandoned:
                 zone=norm(v(s,r,6));trip='return' if 'RETOUR' in zone else 'outbound' if 'ALLER' in zone else 'round_trip';zone=zone.replace(' RETOUR','').replace(' ALLER','')
                 if zone not in ['ZONE 1','ZONE 2','ZONE 3','HORS ZONE']:raise ValueError(f'Zone inconnue {s.title}!F{r}')
-            target['subscriptions'].append({'kind':kind,'zone':zone,'trip':trip,'source':f'{name}!E{r}'})
+            target['subscriptions'].append({'kind':kind,'zone':zone,'trip':trip,'source':f'{name}!E{r}',**({'abandoned':True} if abandoned else {})})
             start=7 if kind=='canteen' else 9;last=31 if kind=='canteen' else 41
             # Adhesion uses first month's receipt metadata; missing fields remain flagged.
             rec=receipt(s,r,6 if kind=='canteen' else 8,start+1,start+2,kind+'_adhesion','2026-11' if kind=='canteen' else '2026-10')

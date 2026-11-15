@@ -135,6 +135,7 @@ class SchoolStore
             'tuitions' => DB::table('tuitions')->where('academic_year_id', $y)->get()->map(fn ($t) => ['id' => $t->id, 'studentId' => (int) $t->student_id, 'total' => (float) $t->total_amount, 'paid' => (float) $t->paid_amount, 'balance' => (float) $t->remaining_amount, 'dueDate' => $t->due_date, 'term' => (int) ($periods[$t->period_id]->term_number ?? 2)])->all(),
             'timetable' => DB::table('timetables')->where('academic_year_id', $y)->get()->map(fn ($l) => ['id' => $l->id, 'classId' => (int) $l->class_id, 'subjectId' => (int) $l->subject_id, 'teacherId' => (int) $l->teacher_id, 'day' => array_search($l->day_of_week, self::DAYS), 'start' => (int) substr($l->start_time, 0, 2), 'end' => (int) substr($l->end_time, 0, 2), 'room' => $l->room ?? ''])->all(),
             'subscriptions' => $subs, 'grades' => (object) $grades, 'settings' => $values + ['theme' => $pref['theme'] ?? 'light', 'compact' => $pref['compact'] ?? false], 'widgets' => $pref['widgets'] ?? ['revenue', 'enrollments', 'activity', 'collections', 'agenda'], 'notificationsRead' => $pref['notificationsRead'] ?? false, 'user' => ['name' => DB::table('users')->where('id', $user)->value('name')]];
+        $state['staffCanteen'] = app(SchoolStaff::class)->state($y, $account);
         $state['billing'] = app(SchoolBilling::class)->state($y, $account);
         if ($state['billing']['enabled']) {
             $charges = collect($state['billing']['charges'])->keyBy('id');
@@ -197,6 +198,7 @@ class SchoolStore
                 abort_if(in_array($action, ['payment','subscription','subscription-toggle'], true), 422, 'Utilisez les échéances et adhésions de la facturation mensuelle.');
             }
             $record = match ($action) {
+                'staff-profile', 'staff-membership', 'staff-receipt' => app(SchoolStaff::class)->execute($action, $v, $id, $actor, $this->year()),
                 'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),
                 'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
                 'student' => $this->student($v, $id),'teacher' => $this->teacher($v, $id),'class' => $this->classroom($v, $id),'subject' => $this->subject($v, $id),'year' => $this->academicYear($v, $id),'year-activate' => $this->activate($id),'enrollment' => $this->enrollment($v),'enrollment-approve' => $this->decide($id, true),'enrollment-reject' => $this->decide($id, false),'payment' => $this->payment($v),'subscription' => $this->subscription($v),'subscription-toggle' => $this->toggleSubscription($id),'lesson' => $this->lesson($v, $id),'lesson-delete' => $this->deleteLesson($id),'grades' => $this->grades($v),'settings' => $this->settings($v),'preferences' => $this->preferences($v, $user),default => abort(404)

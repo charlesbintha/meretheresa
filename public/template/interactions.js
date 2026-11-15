@@ -52,7 +52,7 @@ document.addEventListener('submit',async e=>{
  if(f.dataset.form==='payment'){f.dataset.requestKey ||= crypto.randomUUID();values.requestKey=f.dataset.requestKey;}
  f.dataset.saving='true';const submit=f.querySelector('[type="submit"]');if(submit)submit.disabled=true;
  const field=f.querySelector('.form-error');if(field)field.hidden=true;
- try{const result=await M.command(f.dataset.form,values,f.dataset.id||null);if(f.closest('dialog'))f.closest('dialog').close();M.render();M.notify('Enregistré dans la base de données.');if(f.dataset.form==='payment')A.receipt({dataset:{id:result.recordId}});}
+ try{const result=await M.command(f.dataset.form,values,f.dataset.id||null);if(f.closest('dialog'))f.closest('dialog').close();M.render();M.notify('Enregistré dans la base de données.');if(f.dataset.form==='payment')A.receipt({dataset:{id:result.recordId}});if(f.dataset.form==='staff-receipt')A['staff-charge']({dataset:{id:values.chargeId}});}
  catch(error){if(field){field.hidden=false;field.textContent=error.message;}else M.notify(error.message,true);}
  finally{delete f.dataset.saving;if(submit)submit.disabled=false;}
 });

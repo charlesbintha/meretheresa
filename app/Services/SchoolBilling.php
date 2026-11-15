@@ -33,7 +33,7 @@ class SchoolBilling
     public function membership(int $student,int $year,string $kind,?string $zone=null,string $trip='round_trip',?int $custom=null): int {
         $fee=$kind==='canteen'?12000:self::transportFee($zone,$trip,$custom);
         $key=['student_id'=>$student,'academic_year_id'=>$year,'kind'=>$kind];$old=DB::table('school_service_memberships')->where($key)->first();
-        $values=['zone'=>$zone,'trip'=>$trip,'monthly_fee'=>$fee,'active'=>true,'updated_at'=>now()];
+        $values=['zone'=>$zone,'trip'=>$trip,'monthly_fee'=>$fee,'active'=>true,'abandoned'=>false,'updated_at'=>now()];
         if($old){DB::table('school_service_memberships')->where('id',$old->id)->update($values);$id=$old->id;}else{$id=DB::table('school_service_memberships')->insertGetId($key+$values+['created_at'=>now()]);}
         $start=(int)substr(DB::table('academic_years')->where('id',$year)->value('start_date'),0,4);
         $this->charge($student,$year,$kind.'_adhesion',"$start-".($kind==='canteen'?'11':'10'),$kind==='canteen'?3000:2500);
@@ -62,7 +62,7 @@ class SchoolBilling
         abort_unless($this->enabled($year),422,'La facturation mensuelle n’est pas activée pour cette année.');
         if($action==='billing-enrollment'){
             $v=Validator::make($v,[
-                'order'=>['required','integer','min:1','not_in:678'], 'firstName'=>'required|string|max:100','lastName'=>'required|string|max:100',
+                'order'=>['required','integer','min:1'], 'firstName'=>'required|string|max:100','lastName'=>'required|string|max:100',
                 'classId'=>['required','integer',Rule::exists('classes','id')->where('academic_year_id',$year)],
                 'date'=>'nullable|date_format:Y-m-d|before_or_equal:today','reference'=>'nullable|string|max:191',
                 'general'=>'required|integer|min:0|max:1000000','uniform'=>'required|integer|min:0|max:1000000','sport'=>'required|integer|min:0|max:1000000','extra'=>'required|integer|min:0|max:1000000','october'=>'required|integer|min:0|max:1000000',
@@ -105,7 +105,15 @@ class SchoolBilling
             abort_unless(DB::table('enrollments')->where('academic_year_id',$year)->where('student_id',$v['studentId'])->exists(),422);
             if(!$v['active']){
                 $old=DB::table('school_service_memberships')->where(['student_id'=>$v['studentId'],'academic_year_id'=>$year,'kind'=>$v['kind']])->first()??abort(404);
-                DB::table('school_service_memberships')->where('id',$old->id)->update(['active'=>false,'updated_at'=>now()]);
+                $values=['active'=>false,'updated_at'=>now()];
+                if($old->abandoned && !empty($v['zone'])){
+                    $fee=self::transportFee($v['zone'],$v['trip'],$v['monthlyFee']??null);
+                    $values+=['zone'=>$v['zone'],'trip'=>$v['trip'],'monthly_fee'=>$fee];
+                    $october=substr(DB::table('academic_years')->where('id',$year)->value('start_date'),0,4).'-10';
+                    $cid=$this->charge($v['studentId'],$year,'transport',$october,$fee);
+                    DB::table('school_charges')->where('id',$cid)->update(['amount'=>$fee,'tariff_pending'=>false,'updated_at'=>now()]);
+                }
+                DB::table('school_service_memberships')->where('id',$old->id)->update($values);
                 // Existing charges remain explicit. Cancellation/exemption is recorded by finance.
                 return $old->id;
             }
