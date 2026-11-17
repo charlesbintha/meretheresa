@@ -37,3 +37,5 @@ M.gauge=percent=>`<svg viewBox="0 0 270 160" role="img" aria-label="${percent} p
 M.reportBrand=()=>`<div class="report-brand"><img src="/template/assets/school-logo.jpg" alt="Logo"><div><h3>${M.esc(M.db.settings.school)}</h3><p>${M.esc(M.db.settings.city)} · ${M.esc(M.db.settings.phone)}</p></div></div>`;
 M.print=(html)=>{M.$('#print-area').innerHTML=html;window.print();};
 })();
+
+MT.paymentMethodField=(current='',required=false)=>{const values=['Wave','Espèces','Orange Money','Virement'];if(current&&!values.includes(current))values.push(current);return MT.selectField('Moyen de paiement','method','<option value="">'+(required?'Choisir un moyen de paiement':'Non renseigné — à compléter')+'</option>'+MT.options(values,current),required?'required':'');};

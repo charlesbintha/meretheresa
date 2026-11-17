@@ -43,11 +43,11 @@ class SchoolStaff {
             DB::table('school_staff_canteen')->where('id',$row->id)->update(['active'=>false]+$stamp);return $row->id;
         }
         if($action==='staff-receipt'){
-            $v=Validator::make($v,['chargeId'=>'required|integer','amount'=>'required|integer|min:1|max:10000000','date'=>'nullable|date_format:Y-m-d|before_or_equal:today','reference'=>'nullable|string|max:191','requestKey'=>'required|uuid'])->validate();
+            $v=Validator::make($v,['chargeId'=>'required|integer','amount'=>'required|integer|min:1|max:10000000','date'=>'nullable|date_format:Y-m-d|before_or_equal:today','reference'=>'nullable|string|max:191','method'=>'nullable|in:Wave,Espèces,Orange Money,Virement','type'=>'sometimes|in:Cantine personnel','requestKey'=>'required|uuid'])->validate();
             $charge=DB::table('school_staff_charges')->where('id',$v['chargeId'])->whereIn('membership_id',DB::table('school_staff_canteen')->where('academic_year_id',$year)->select('id'))->first()??abort(404);
             if($id){$old=DB::table('school_staff_receipts')->find($id)??abort(404);abort_unless($old->charge_id===$charge->id,422,'Impossible de déplacer ce paiement.');}
             elseif($old=DB::table('school_staff_receipts')->where('request_key',$v['requestKey'])->first()){abort_unless($old->charge_id===$charge->id,422);return $old->id;}
-            $values=['charge_id'=>$charge->id,'amount'=>$v['amount'],'paid_at'=>$v['date']??null,'reference'=>$v['reference']??null]+$stamp;
+            $values=['charge_id'=>$charge->id,'amount'=>$v['amount'],'paid_at'=>$v['date']??null,'reference'=>$v['reference']??null,'method'=>$v['method']??($old->method??null)]+$stamp;
             if($id){DB::table('school_staff_receipts')->where('id',$id)->update($values);return (int)$id;}
             return DB::table('school_staff_receipts')->insertGetId($values+['request_key'=>$v['requestKey'],'created_at'=>now()]);
         }

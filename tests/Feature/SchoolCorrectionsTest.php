@@ -37,8 +37,8 @@ class SchoolCorrectionsTest extends TestCase {
     }
     public function test_staff_permissions_receipts_and_paid_month_tariff_preservation(): void {
         $this->seedImport();app(SchoolWorkbookCorrections::class)->apply($this->correctionManifest());$u=User::factory()->create(['is_school_admin'=>true]);$this->actingAs($u);
-        $sid=DB::table('school_staff')->value('id');$cid=DB::table('school_staff_charges')->value('id');$request=['chargeId'=>$cid,'amount'=>6000,'date'=>'2026-11-01','reference'=>'STAFF-1','requestKey'=>(string)\Illuminate\Support\Str::uuid()];
-        $this->command('staff-receipt',$request)->assertOk();$this->command('staff-receipt',$request)->assertOk();$this->assertDatabaseCount('school_staff_receipts',1);
+        $sid=DB::table('school_staff')->value('id');$cid=DB::table('school_staff_charges')->value('id');$request=['chargeId'=>$cid,'amount'=>6000,'date'=>'2026-11-01','reference'=>'STAFF-1','method'=>'Wave','type'=>'Cantine personnel','requestKey'=>(string)\Illuminate\Support\Str::uuid()];
+        $this->command('staff-receipt',$request)->assertOk();$this->command('staff-receipt',$request)->assertOk();$this->assertDatabaseCount('school_staff_receipts',1);$this->assertDatabaseHas('school_staff_receipts',['charge_id'=>$cid,'method'=>'Wave']);
         $this->command('staff-membership',['staffId'=>$sid,'monthlyFee'=>5000,'active'=>1])->assertOk();$this->assertDatabaseHas('school_staff_charges',['id'=>$cid,'amount'=>6000]);$this->assertSame(6,DB::table('school_staff_charges')->where('amount',5000)->count());
         $role=DB::table('school_roles')->where('name','Secrétariat')->value('id');$limited=User::factory()->create(['school_role_id'=>$role]);$this->actingAs($limited);
         $this->command('staff-receipt',$request)->assertForbidden();$this->getJson('/school-api/state')->assertOk()->assertJsonCount(0,'staffCanteen.receipts')->assertJsonCount(0,'staffCanteen.charges');
