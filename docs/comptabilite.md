@@ -10,7 +10,7 @@ Sources : [publication OHADA, 2017](https://biblio.ohada.org/pmb/opac_css/doc_nu
 
 ## Circuit des écritures
 
-Les exercices comptables sont indépendants des années scolaires. L’exercice initial est 2026. Créer les suivants dans Comptabilité. Journaux : AN, AC, VE, CA, BQ, MM, OD.
+Les exercices comptables sont indépendants des années scolaires. L’exercice initial est 2026. Créer les suivants dans Comptabilité. Journaux : AN, AC, VE, CA (caisse principale), BQ (BOA), MW (Wave), MO (Orange Money), MM (mobile non précisé), OD.
 
 Saisir des écritures équilibrées et cocher la vérification, puis enregistrer et valider. Date, référence, comptes imputables et équilibre sont contrôlés côté serveur. Une écriture validée est immuable. La contrepassation génère un brouillon inverse, à vérifier et valider. L’exercice clôturé est définitivement verrouillé ; la clôture est réservée à la permission de configuration et refuse les brouillons restants. Les à-nouveaux de l’exercice suivant sont à préparer séparément.
 
@@ -27,3 +27,15 @@ Seules les écritures validées alimentent ces états. Les montants de scolarit�
 ## Accès
 
 Administrateur : tous les droits. Comptabilité : consultation, préparation et validation. Direction : consultation. Les rôles restent modifiables dans l’administration. La configuration et la clôture nécessitent `accounting.configure`.
+
+## Comptes de trésorerie
+
+L’onglet « Banque et caisses » présente BOA (5211), la caisse principale (5711), Wave (5521) et Orange Money (5522). Les coordonnées sont facultatives et modifiables avec la permission accounting.configure. Aucun solde d’ouverture n’est inventé. Les nouveaux encaissements Wave et Orange Money sont préparés dans des journaux distincts ; les écritures déjà préparées ou validées restent inchangées tant que leur source ne change pas. Le compte 552 reste disponible pour les reprises historiques ou les paiements mobiles dont l’opérateur est inconnu.
+
+## Dépenses et fournisseurs
+
+Le menu permet de créer et modifier les fournisseurs, saisir une facture simple en FCFA, rechercher et filtrer les factures, consulter le reste à régler, préparer des règlements partiels et exporter en Excel/PDF. La facture génère un brouillon AC (charge au débit, fournisseur 4011 au crédit). Le règlement génère un brouillon dans le journal du compte choisi (4011 au débit, trésorerie au crédit). La validation nécessite accounting.post et une confirmation de vérification. Seuls les règlements validés sont comptés comme réglés ; les brouillons réservent leur montant afin d’empêcher un dépassement. Un règlement en brouillon peut être annulé.
+
+Les justificatifs PDF/JPG/PNG (10 Mo maximum) sont stockés sur le disque privé et téléchargés après contrôle de la permission accounting.view. Un justificatif manquant est signalé mais n’empêche pas la saisie. Les coordonnées BOA restent facultatives. Aucun paiement bancaire externe n’est exécuté.
+
+La saisie dédiée utilise un seul compte de charges, sans ventilation de TVA. Les immobilisations et factures à plusieurs imputations doivent passer par la saisie comptable générale. Les écritures validées liées aux dépenses ne sont pas modifiables ; leur contrepassation automatisée et les avoirs fournisseurs ne sont pas encore pris en charge dans ce module. Les factures de ce module ne doivent pas être ressaisies manuellement dans un autre journal.

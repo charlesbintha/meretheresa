@@ -7,10 +7,15 @@ class SchoolAccounting {
   $years=DB::table('accounting_years')->orderByDesc('start')->get();$year=$year?:($years->first()->id??0);
   $entries=DB::table('accounting_entries')->where('year_id',$year)->orderByDesc('id')->get();$lines=DB::table('accounting_lines')->whereIn('entry_id',$entries->pluck('id'))->get()->groupBy('entry_id');
   foreach($entries as $entry)$entry->lines=$lines[$entry->id]??[];
-  return ['yearId'=>$year,'years'=>$years,'accounts'=>DB::table('accounting_accounts')->orderBy('code')->get(),'journals'=>DB::table('accounting_journals')->get(),'entries'=>$entries];
+  return ['yearId'=>$year,'years'=>$years,'accounts'=>DB::table('accounting_accounts')->orderBy('code')->get(),'journals'=>DB::table('accounting_journals')->get(),'entries'=>$entries,'treasury'=>DB::table('school_treasury_accounts')->orderBy('id')->get()];
  }
  public function execute(string $action,array $v,?string $id,User $actor):int {
-  return match($action){'accounting-entry'=>$this->save($v,$id,$actor),'accounting-post'=>$this->post((int)$id,$actor),'accounting-reverse'=>$this->reverse((int)$id,$v,$actor),'accounting-prepare'=>$this->prepare((int)($v['yearId']??0),$actor),'accounting-year'=>$this->year($v),'accounting-close'=>$this->close((int)$id),'accounting-account'=>$this->account($v),default=>abort(404)};
+  return match($action){'accounting-treasury'=>$this->treasury((int)$id,$v),'accounting-entry'=>$this->save($v,$id,$actor),'accounting-post'=>$this->post((int)$id,$actor),'accounting-reverse'=>$this->reverse((int)$id,$v,$actor),'accounting-prepare'=>$this->prepare((int)($v['yearId']??0),$actor),'accounting-year'=>$this->year($v),'accounting-close'=>$this->close((int)$id),'accounting-account'=>$this->account($v),default=>abort(404)};
+ }
+ private function treasury(int $id,array $v):int {
+  abort_unless(DB::table('school_treasury_accounts')->where('id',$id)->exists(),404);
+  $v=Validator::make($v,['holder'=>'nullable|string|max:255','account_number'=>'nullable|string|max:255','iban'=>'nullable|string|max:255','bic'=>'nullable|string|max:255','phone'=>'nullable|string|max:255'])->validate();
+  DB::table('school_treasury_accounts')->where('id',$id)->update($v+['updated_at'=>now()]);return $id;
  }
  private function year(array $v):int {
   $v=Validator::make($v,['name'=>'required|string|max:50|unique:accounting_years,name','start'=>'required|date_format:Y-m-d','end'=>'required|date_format:Y-m-d|after_or_equal:start'])->validate();
@@ -29,7 +34,10 @@ class SchoolAccounting {
   DB::table('accounting_accounts')->where('code',$v['parent'])->update(['postable'=>false]);DB::table('accounting_accounts')->insert(['code'=>$v['code'],'name'=>$v['name'],'postable'=>true]);return 0;
  }
  private function openYear(int $id):object {$y=DB::table('accounting_years')->where('id',$id)->lockForUpdate()->first();abort_unless($y,422,'Exercice inconnu.');abort_if($y->closed,422,'Cet exercice est clôturé.');return $y;}
- private function save(array $v,?string $id,User $actor):int {
+ public function saveExpenseEntry(array $v,?int $id,User $actor):int {return $this->save($v,$id?(string)$id:null,$actor,true);}
+ private function expenseLinked(int $id):bool {return DB::table('school_expenses')->where('entry_id',$id)->exists()||DB::table('school_expense_payments')->where('entry_id',$id)->exists();}
+ private function save(array $v,?string $id,User $actor,bool $expense=false):int {
+  abort_if($id&&!$expense&&$this->expenseLinked((int)$id),422,'Modifiez cette écriture depuis Dépenses et fournisseurs.');
   $v=Validator::make($v,['year_id'=>'required|integer|exists:accounting_years,id','journal'=>'required|exists:accounting_journals,code','date'=>'nullable|date_format:Y-m-d','reference'=>'nullable|string|max:255','memo'=>'required|string|max:2000','reviewed'=>'boolean','lines'=>'required|array|min:2|max:100','lines.*.account'=>'nullable|exists:accounting_accounts,code','lines.*.label'=>'nullable|string|max:255','lines.*.auxiliary'=>'nullable|string|max:255','lines.*.debit'=>'required|integer|min:0|max:999999999999','lines.*.credit'=>'required|integer|min:0|max:999999999999'])->validate();
   $old=$id?DB::table('accounting_entries')->where('id',$id)->lockForUpdate()->first():null;
   abort_if($id&&!$old,404);abort_if($old&&$old->status!=='draft',422,'Une écriture validée ne peut plus être modifiée.');
@@ -49,6 +57,7 @@ class SchoolAccounting {
   DB::table('accounting_entries')->where('id',$id)->update(['status'=>'posted','number'=>$number,'posted_by'=>$actor->id,'posted_at'=>now(),'updated_at'=>now()]);return $id;
  }
  private function reverse(int $id,array $v,User $actor):int {
+  abort_if($this->expenseLinked($id),422,'Cette écriture est liée à une dépense. La contrepassation liée aux dépenses doit être traitée avec le comptable.');
   $e=DB::table('accounting_entries')->find($id);abort_unless($e&&$e->status==='posted',422,'Choisissez une écriture validée.');abort_if(DB::table('accounting_entries')->where('reversal_of',$id)->exists(),422,'Une contrepassation existe déjà.');
   $lines=DB::table('accounting_lines')->where('entry_id',$id)->get()->map(fn($l)=>['account'=>$l->account,'label'=>$l->label,'auxiliary'=>$l->auxiliary,'debit'=>$l->credit,'credit'=>$l->debit])->all();
   $new=$this->save(['year_id'=>$v['year_id']??$e->year_id,'journal'=>'OD','date'=>$v['date']??null,'reference'=>'EXT-'.$e->number,'memo'=>'Contrepassation '.$e->number.' · '.$e->memo,'lines'=>$lines],null,$actor);DB::table('accounting_entries')->where('id',$new)->update(['reversal_of'=>$id]);return $new;
@@ -65,9 +74,9 @@ class SchoolAccounting {
    $key=$table.':'.$r->id;$hash=$this->fingerprint($r);$old=DB::table('accounting_entries')->where('source_key',$key)->first();
    if($old&&($old->status==='posted'||$old->source_hash===$hash))continue;
    if($old)$this->openYear($old->year_id);
-   $method=mb_strtolower($r->method??'');$cash=in_array($method,['espèces','especes','cash'],true)?'5711':(in_array($method,['virement','virement bancaire','bank_transfer'],true)?'5211':(in_array($method,['wave','orange money','mobile money','mobile_money'],true)?'552':null));
+   $method=mb_strtolower(trim($r->method??''));$cash=in_array($method,['espèces','especes','cash'],true)?'5711':(in_array($method,['virement','virement bancaire','bank_transfer'],true)?'5211':(match($method){'wave'=>'5521','orange money'=>'5522','mobile money','mobile_money'=>'552',default=>null}));
    $memo='Encaissement à vérifier · '.$key.' · '.($r->label??'Cantine personnel').' · Vérifier la créance ou l’à-nouveau correspondant.';
-   $fields=['year_id'=>$year,'journal'=>$cash==='5711'?'CA':($cash==='5211'?'BQ':($cash==='552'?'MM':'OD')),'date'=>$r->paid_at,'reference'=>$r->reference,'memo'=>$memo,'source_hash'=>$hash,'reviewed'=>false,'updated_at'=>now()];
+   $fields=['year_id'=>$year,'journal'=>$cash==='5711'?'CA':($cash==='5211'?'BQ':(match($cash){'5521'=>'MW','5522'=>'MO','552'=>'MM',default=>'OD'})),'date'=>$r->paid_at,'reference'=>$r->reference,'memo'=>$memo,'source_hash'=>$hash,'reviewed'=>false,'updated_at'=>now()];
    if($old){$id=$old->id;DB::table('accounting_entries')->where('id',$id)->update($fields);DB::table('accounting_lines')->where('entry_id',$id)->delete();}else $id=DB::table('accounting_entries')->insertGetId($fields+['source_key'=>$key,'created_by'=>$actor->id,'created_at'=>now()]);
    $aux=$table==='school_receipts'?DB::table('students')->where('id',$charge->student_id)->value('matricule'):'PERSONNEL-'.$charge->staff_id;
    foreach([[$cash,$r->amount,0],['411101',0,$r->amount]] as [$account,$debit,$credit])DB::table('accounting_lines')->insert(['entry_id'=>$id,'account'=>$account,'debit'=>$debit,'credit'=>$credit,'auxiliary'=>$aux,'label'=>'Encaissement source '.$r->id]);$n++;

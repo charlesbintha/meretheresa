@@ -13,3 +13,5 @@
 
 /.git-pointer-backup
 /scripts/__pycache__/
+
+/storage/framework/testing/

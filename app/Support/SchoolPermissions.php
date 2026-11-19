@@ -20,7 +20,8 @@ class SchoolPermissions
     ];
 
     public const ACTIONS = [
-        'accounting-entry'=>'accounting.manage','accounting-prepare'=>'accounting.manage','accounting-reverse'=>'accounting.manage','accounting-post'=>'accounting.post','accounting-year'=>'accounting.configure','accounting-close'=>'accounting.configure','accounting-account'=>'accounting.configure',
+        'expense-supplier'=>'accounting.manage','expense-save'=>'accounting.manage','expense-payment'=>'accounting.manage','expense-payment-cancel'=>'accounting.manage','expense-post'=>'accounting.post',
+        'accounting-entry'=>'accounting.manage','accounting-prepare'=>'accounting.manage','accounting-reverse'=>'accounting.manage','accounting-post'=>'accounting.post','accounting-year'=>'accounting.configure','accounting-close'=>'accounting.configure','accounting-treasury'=>'accounting.configure','accounting-account'=>'accounting.configure',
         'student-profile'=>'students.manage',
         'staff-profile'=>'services.manage', 'staff-membership'=>'services.manage', 'staff-receipt'=>'finance.manage',
         'billing-receipt'=>'finance.manage', 'billing-waiver'=>'finance.manage', 'billing-membership'=>'services.manage', 'billing-enrollment'=>'students.manage',

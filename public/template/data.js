@@ -9,4 +9,4 @@ MT.nav.push({label:'SUIVI FINANCIER',items:[['monthly','Échéances & alertes','
 
 MT.nav.push({label:'PERSONNEL',items:[['staff','Personnel & cantine','users']]});
 
-MT.nav.push({label:'COMPTABILITÉ',items:[['accounting','Écritures comptables','receipt'],['accounting-plan','Plan comptable','report-analytics'],['accounting-balance','Balance','chart-pie'],['accounting-ledger','Grand livre','report-analytics'],['accounting-bilan','Bilan','report-analytics'],['accounting-income','Compte de résultat','chart-pie']]});
+MT.nav.push({label:'COMPTABILITÉ',items:[['expenses','Dépenses et fournisseurs','receipt'],['accounting-treasury','Banque et caisses','building-community'],['accounting','Écritures comptables','receipt'],['accounting-plan','Plan comptable','report-analytics'],['accounting-balance','Balance','chart-pie'],['accounting-ledger','Grand livre','report-analytics'],['accounting-bilan','Bilan','report-analytics'],['accounting-income','Compte de résultat','chart-pie']]});

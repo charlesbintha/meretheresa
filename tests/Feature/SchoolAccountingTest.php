@@ -10,6 +10,28 @@ class SchoolAccountingTest extends TestCase {
  protected function setUp():void {parent::setUp();app(TemplateImporter::class)->replace(false);$u=User::factory()->create(['school_role_id'=>SchoolRole::where('name','Administrateur')->value('id')]);$this->actingAs($u)->withSession(['school_auth_version'=>$u->auth_version]);}
  private function command($a,$v=[],$id=null){return $this->postJson('/school-api/commands',['action'=>$a,'payload'=>$v,'id'=>$id?(string)$id:null,'revision'=>DB::table('school_settings')->value('revision')]);}
  private function entry():array{return ['year_id'=>1,'journal'=>'VE','date'=>'2026-10-01','reference'=>'PIECE-001','memo'=>'Scolarité octobre','reviewed'=>true,'lines'=>[['account'=>'411101','debit'=>15000,'credit'=>0],['account'=>'706101','debit'=>0,'credit'=>15000]]];}
+ public function test_treasury_accounts_allow_empty_details_and_require_configuration_permission():void {
+  $this->getJson('/school-api/accounting')->assertOk()->assertJsonCount(4,'treasury');
+  $boa=DB::table('school_treasury_accounts')->where('name','BOA')->first();
+  $this->assertNull($boa->account_number);
+  $this->command('accounting-treasury',['holder'=>'École','account_number'=>'','iban'=>'','bic'=>''],$boa->id)->assertOk();
+  $this->assertDatabaseHas('school_treasury_accounts',['id'=>$boa->id,'holder'=>'École','account_number'=>null]);
+  $u=User::factory()->create(['school_role_id'=>SchoolRole::where('name','Comptabilité')->value('id')]);
+  $this->actingAs($u)->withSession(['school_auth_version'=>$u->auth_version]);
+  $this->command('accounting-treasury',['holder'=>'Interdit'],$boa->id)->assertForbidden();
+ }
+ public function test_receipts_use_separate_treasury_journals():void {
+  $student=DB::table('students')->first();$year=DB::table('academic_years')->first();
+  $cid=DB::table('school_charges')->insertGetId(['student_id'=>$student->id,'academic_year_id'=>$year->id,'kind'=>'tuition','month'=>'2026-10','due_date'=>'2026-10-01','amount'=>60000]);
+  foreach(['Espèces'=>['CA','5711'],'Virement'=>['BQ','5211'],'Wave'=>['MW','5521'],'Orange Money'=>['MO','5522']] as $method=>$expected){
+   $rid=DB::table('school_receipts')->insertGetId(['charge_id'=>$cid,'amount'=>15000,'paid_at'=>'2026-10-01','reference'=>$method,'label'=>'Scolarité','method'=>$method]);
+   $this->command('accounting-prepare',['yearId'=>1])->assertOk();
+   $entry=DB::table('accounting_entries')->where('source_key','school_receipts:'.$rid)->first();
+   $this->assertSame($expected[0],$entry->journal);
+   $this->assertDatabaseHas('accounting_lines',['entry_id'=>$entry->id,'account'=>$expected[1],'debit'=>15000]);
+  }
+  $this->command('accounting-prepare',['yearId'=>1])->assertOk();$this->assertDatabaseCount('accounting_entries',4);
+ }
  public function test_balanced_posting_immutable_entries_and_reversal():void {
   $id=$this->command('accounting-entry',$this->entry())->assertOk()->json('recordId');$this->command('accounting-post',[],$id)->assertOk();
   $this->command('accounting-entry',$this->entry(),$id)->assertUnprocessable();$this->command('accounting-post',[],$id)->assertUnprocessable();
