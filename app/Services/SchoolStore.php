@@ -209,7 +209,7 @@ class SchoolStore
                 'student-profile' => app(SchoolStudentProfiles::class)->edit((int)$id, $this->year(), $v),
                 'staff-profile', 'staff-membership', 'staff-receipt' => app(SchoolStaff::class)->execute($action, $v, $id, $actor, $this->year()),
                 'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),
-                'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
+                'account-welcome', 'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
                 'student' => $this->student($v, $id),'teacher' => $this->teacher($v, $id),'class' => $this->classroom($v, $id),'subject' => $this->subject($v, $id),'year' => $this->academicYear($v, $id),'year-activate' => $this->activate($id),'enrollment' => $this->enrollment($v),'enrollment-approve' => $this->decide($id, true),'enrollment-reject' => $this->decide($id, false),'payment' => $this->payment($v),'subscription' => $this->subscription($v),'subscription-toggle' => $this->toggleSubscription($id),'lesson' => $this->lesson($v, $id),'lesson-delete' => $this->deleteLesson($id),'grades' => $this->grades($v),'settings' => $this->settings($v),'preferences' => $this->preferences($v, $user),default => abort(404)
             };
             DB::table('school_settings')->where('id', 1)->update(['revision' => $s->revision + 1, 'updated_at' => now()]);

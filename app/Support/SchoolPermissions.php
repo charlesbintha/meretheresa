@@ -32,7 +32,7 @@ class SchoolPermissions
         'grades' => 'grades.manage', 'payment' => 'finance.manage',
         'subscription' => 'services.manage', 'subscription-toggle' => 'services.manage',
         'year' => 'settings.manage', 'year-activate' => 'settings.manage', 'settings' => 'settings.manage',
-        'account' => 'users.manage', 'account-status' => 'users.manage', 'account-password' => 'users.manage',
+        'account-welcome'=>'users.manage', 'account' => 'users.manage', 'account-status' => 'users.manage', 'account-password' => 'users.manage',
         'role' => 'roles.manage', 'role-delete' => 'roles.manage',
     ];
 

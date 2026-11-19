@@ -27,6 +27,10 @@ class SchoolController extends Controller
         $v = $r->validate(['action' => 'required|string|max:40', 'payload' => 'present|array', 'id' => 'nullable|string|max:100', 'revision' => 'required|integer|min:1']);
 
         $result = $store->command($v['action'], $v['payload'], $v['id'] ?? null, $r->user()->id, $v['revision']);
+        if (($v['action'] === 'account' && empty($v['id'])) || $v['action'] === 'account-welcome') {
+            $result['welcomeEmail'] = app(\App\Services\SchoolWelcomeEmail::class)->send($result['recordId']);
+            $result['state'] = $store->state($r->user()->id);
+        }
         if ($v['action'] === 'profile') {
             $fresh = $r->user()->fresh();
             \Illuminate\Support\Facades\Auth::setUser($fresh);

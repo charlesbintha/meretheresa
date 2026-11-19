@@ -50,3 +50,9 @@ Le `.htaccess` personnalisé du serveur n’est pas modifié par cette livraison
 ## Validation
 
 `SchoolAccountsTest` couvre les permissions de lecture/écriture, l’escalade par le profil, les mots de passe, le dernier administrateur, les rôles attribués et la révocation de sessions. `tests/accounts-smoke.cjs` vérifie les parcours dans un navigateur et doit être utilisé uniquement sur une base de test isolée.
+
+## Email de bienvenue
+
+La création d’un utilisateur depuis l’administration déclenche un email personnalisé après validation de la transaction. Il contient le logo, le nom, le rôle, l’identifiant et le lien de connexion basé sur APP_URL. Le mot de passe n’est jamais inclus ; il reste à communiquer séparément. Aucun email n’est envoyé automatiquement aux comptes déjà existants ni lors d’une modification.
+
+La liste des utilisateurs affiche le statut de transmission au serveur SMTP et propose un renvoi réservé à l’administrateur. Un échec d’envoi conserve le compte et affiche un avertissement. Un compte désactivé ne reçoit pas de renvoi. Les modes mail log/array sont indiqués comme non délivrés. Un statut transmis ne garantit pas l’arrivée en boîte de réception.

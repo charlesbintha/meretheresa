@@ -16,6 +16,7 @@ class SchoolAccounts
     public function identity(User $user): array
     {
         return ['id' => $user->id, 'name' => $user->name, 'email' => $user->email, 'phone' => $user->phone ?? '',
+            'welcomeEmailStatus'=>$user->welcome_email_status ?? 'not_sent', 'welcomeEmailSentAt'=>$user->welcome_email_sent_at,
             'roleId' => $user->school_role_id, 'roleName' => $user->schoolRole?->name ?? ($user->isSchoolAdministrator() ? 'Administrateur' : 'Sans rôle'),
             'isActive' => $user->is_active, 'lastLogin' => $user->last_login_at?->toIso8601String()];
     }
@@ -37,6 +38,7 @@ class SchoolAccounts
         }
 
         return match ($action) {
+            'account-welcome' => User::findOrFail($id)->id,
             'account' => $this->account($data, $id, $actor),
             'account-status' => $this->status($data, $id, $actor),
             'account-password' => $this->password($data, $id),
@@ -108,6 +110,10 @@ class SchoolAccounts
             $user->is_active = true;
         }
         $user->name = $v['name'];
+        if ($user->exists && $user->email !== $v['email']) {
+            $user->welcome_email_status = 'not_sent';
+            $user->welcome_email_sent_at = null;
+        }
         $user->email = $v['email'];
         $user->phone = $v['phone'] ?? null;
         $user->school_role_id = $role->id;
@@ -167,6 +173,10 @@ class SchoolAccounts
             }
         }
         $user->name = $v['name'];
+        if ($user->exists && $user->email !== $v['email']) {
+            $user->welcome_email_status = 'not_sent';
+            $user->welcome_email_sent_at = null;
+        }
         $user->email = $v['email'];
         $user->phone = $v['phone'] ?? null;
         $user->save();
