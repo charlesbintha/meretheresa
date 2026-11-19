@@ -2,7 +2,7 @@
 namespace App\Services;
 use App\Mail\SchoolWelcome;
 use App\Models\User;
-use Illuminate\Support\Facades\{DB,Mail,Log};
+use Illuminate\Support\Facades\{DB,Mail,Log,Password};
 class SchoolWelcomeEmail {
  public function send(int $id):array {
   $user=User::with('schoolRole')->findOrFail($id);
@@ -11,7 +11,12 @@ class SchoolWelcomeEmail {
    if(in_array(config('mail.default'),['log','array'],true))throw new \RuntimeException('Mail delivery not configured');
    config(['mail.mailers.smtp.timeout'=>20]);
    $url=rtrim(config('app.url'),'/').'/login';
-   Mail::to($user->email)->send(new SchoolWelcome($user->name,$user->email,$user->schoolRole?->name??'Équipe scolaire',$url));
+   $setupUrl=null;
+   if($user->password_setup_required){
+    $token=Password::broker()->createToken($user);
+    $setupUrl=rtrim(config('app.url'),'/').'/definir-mot-de-passe/'.rawurlencode($token).'?'.http_build_query(['email'=>$user->email]);
+   }
+   Mail::to($user->email)->send(new SchoolWelcome($user->name,$user->email,$user->schoolRole?->name??'Équipe scolaire',$url,false,$setupUrl));
    DB::table('users')->where('id',$id)->update(['welcome_email_status'=>'sent','welcome_email_sent_at'=>now()]);
    return ['status'=>'sent','message'=>'Compte enregistré. Email de bienvenue transmis au serveur de messagerie.'];
   }catch(\Throwable $e){

@@ -5,6 +5,9 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Middleware\SchoolAccess;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/definir-mot-de-passe/{token}', [\App\Http\Controllers\SchoolPasswordSetupController::class,'show'])->middleware('throttle:30,1')->name('school.password.show');
+Route::post('/definir-mot-de-passe', [\App\Http\Controllers\SchoolPasswordSetupController::class,'store'])->middleware('throttle:5,1')->name('school.password.store');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [SchoolAuthController::class, 'login'])->name('login');
     Route::post('/login', [SchoolAuthController::class, 'store'])->middleware('throttle:5,1');

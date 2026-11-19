@@ -16,7 +16,7 @@ class SchoolAuthController extends Controller
     public function store(Request $r)
     {
         $v = $r->validate(['email' => 'required|email', 'password' => 'required|string']);
-        if (! Auth::attempt($v + ['is_active' => true])) {
+        if (! Auth::attempt($v + ['is_active' => true, 'password_setup_required' => false])) {
             throw ValidationException::withMessages(['email' => 'Identifiants incorrects ou compte désactivé.']);
         }
         if (! $r->user()->school_role_id && ! $r->user()->isSchoolAdministrator()) {

@@ -16,9 +16,9 @@
 <div style="font-size:12px;color:#71809a;margin-bottom:7px;">VOTRE IDENTIFIANT</div><div style="font-size:15px;font-weight:bold;word-break:break-all;">{{ $loginEmail }}</div>
 <div style="font-size:12px;color:#71809a;margin-top:18px;margin-bottom:7px;">VOTRE RÔLE</div><div style="font-size:15px;font-weight:bold;">{{ $roleName }}</div>
 </td></tr></table>
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0;"><tr><td bgcolor="#2864f6" style="border-radius:9px;"><a href="{{ $loginUrl }}" style="display:inline-block;padding:16px 24px;font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;">Accéder à mon espace</a></td></tr></table>
-<p style="font-size:14px;line-height:1.7;color:#52617a;">Votre mot de passe vous est communiqué séparément par l’administration. Après votre première connexion, vous pouvez le modifier depuis <strong>Mon profil</strong>.</p>
-<p style="font-size:13px;line-height:1.7;color:#71809a;">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br><a href="{{ $loginUrl }}" style="color:#2864f6;word-break:break-all;">{{ $loginUrl }}</a></p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0;"><tr><td bgcolor="#2864f6" style="border-radius:9px;"><a href="{{ $setupUrl ?? $loginUrl }}" style="display:inline-block;padding:16px 24px;font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;">{{ $setupUrl ? 'Définir mon mot de passe' : 'Accéder à mon espace' }}</a></td></tr></table>
+<p style="font-size:14px;line-height:1.7;color:#52617a;">@if($setupUrl)Cliquez sur le bouton pour choisir votre mot de passe. Ce lien personnel est valable {{ config('auth.passwords.users.expire', 60) }} minutes et utilisable une seule fois. Un nouvel envoi remplace le lien précédent. Si le lien expire, demandez à l’administration de renvoyer votre invitation.@else Utilisez votre mot de passe habituel pour vous connecter. Vous pouvez le modifier depuis <strong>Mon profil</strong>.@endif</p>
+<p style="font-size:13px;line-height:1.7;color:#71809a;">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br><a href="{{ $setupUrl ?? $loginUrl }}" style="color:#2864f6;word-break:break-all;">{{ $setupUrl ?? $loginUrl }}</a></p>
 <p style="font-size:14px;line-height:1.7;color:#52617a;">Besoin d’aide ou compte créé par erreur ? Contactez l’administration de l’école.</p>
 <p style="font-size:15px;margin-top:25px;">L’équipe administrative<br><strong>Mère Thérèsa</strong></p>
 </td></tr></table>

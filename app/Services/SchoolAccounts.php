@@ -77,6 +77,7 @@ class SchoolAccounts
 
     private function revoke(User $user): void
     {
+        \Illuminate\Support\Facades\Password::broker()->deleteToken($user);
         $user->auth_version++;
         $user->remember_token = null;
         DB::table('sessions')->where('user_id', $user->id)->delete();
@@ -87,8 +88,8 @@ class SchoolAccounts
         $v = $this->validate($data, [
             'name' => 'required|string|max:100', 'email' => ['required', 'email', 'max:191', Rule::unique('users', 'email')->ignore($id)],
             'phone' => 'nullable|string|max:25', 'roleId' => 'required|integer|exists:school_roles,id',
-            'password' => $id ? 'prohibited' : 'required|string|min:12|max:72|confirmed',
-            'password_confirmation' => $id ? 'prohibited' : 'required|string',
+            'password' => 'prohibited',
+            'password_confirmation' => 'prohibited',
         ]);
         $user = $id ? User::findOrFail($id) : new User;
         $role = SchoolRole::findOrFail($v['roleId']);
@@ -106,7 +107,8 @@ class SchoolAccounts
                 $this->reject('Modifiez votre adresse e-mail depuis Mon profil avec votre mot de passe actuel.');
             }
         } else {
-            $user->password = Hash::make($v['password']);
+            $user->password = Hash::make(\Illuminate\Support\Str::random(64));
+            $user->password_setup_required = true;
             $user->is_active = true;
         }
         $user->name = $v['name'];
@@ -149,6 +151,7 @@ class SchoolAccounts
         }
         $this->revoke($user);
         $user->password = Hash::make($v['password']);
+        $user->password_setup_required = false;
         $user->save();
 
         return $user->id;

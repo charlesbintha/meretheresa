@@ -66,7 +66,8 @@
             <h2>Heureux de vous retrouver.</h2>
             <p>Connectez-vous à votre espace de gestion scolaire.</p>
         </div>
-        <form method="post" action="{{ url('/login') }}">
+        @if(session('status'))<p role="status" style="padding:12px;background:#e8f8ef;border-radius:8px;color:#19643b">{{ session('status') }}</p>@endif
+<form method="post" action="{{ url('/login') }}">
             @csrf
             <label class="field">Adresse e-mail
                 <input name="email" type="email" value="{{ old('email') }}" required autocomplete="username" placeholder="votre@email.com">

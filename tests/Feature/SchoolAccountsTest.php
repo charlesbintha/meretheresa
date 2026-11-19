@@ -38,9 +38,10 @@ class SchoolAccountsTest extends TestCase
     public function test_account_creation_assigns_role_and_hashes_password(): void
     {
         $this->login($this->user());
-        $this->command('account', ['name' => 'Agent comptable', 'email' => 'account@example.test', 'roleId' => SchoolRole::where('name', 'Comptabilité')->value('id'), 'password' => 'Private-password-2026', 'password_confirmation' => 'Private-password-2026'])->assertOk();
+        $this->command('account', ['name' => 'Agent comptable', 'email' => 'account@example.test', 'roleId' => SchoolRole::where('name', 'Comptabilité')->value('id')])->assertOk();
         $user = User::where('email', 'account@example.test')->firstOrFail();
-        $this->assertTrue(Hash::check('Private-password-2026', $user->password));
+        $this->assertFalse(Hash::check('Private-password-2026', $user->password));
+        $this->assertTrue((bool)$user->password_setup_required);
         $this->assertFalse($user->isSchoolAdministrator());
         $this->assertTrue($user->canSchool('finance.manage'));
         $this->assertFalse($user->canSchool('grades.view'));
@@ -50,7 +51,7 @@ class SchoolAccountsTest extends TestCase
         $state = $this->getJson('/school-api/state')->assertOk()->json();
         $this->assertArrayNotHasKey('password', $state['users'][0]);
         $this->assertArrayNotHasKey('auth_version', $state['users'][0]);
-        $this->command('account', ['name' => 'Doublon', 'email' => $user->email, 'roleId' => $user->school_role_id, 'password' => 'Private-password-2026', 'password_confirmation' => 'Private-password-2026'])->assertUnprocessable();
+        $this->command('account', ['name' => 'Doublon', 'email' => $user->email, 'roleId' => $user->school_role_id])->assertUnprocessable();
     }
 
     public function test_roles_filter_sensitive_data_and_prevent_forged_commands(): void

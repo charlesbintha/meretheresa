@@ -73,6 +73,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'password_setup_required' => 'boolean',
             'is_school_admin' => 'boolean',
             'is_active' => 'boolean',
             'auth_version' => 'integer',

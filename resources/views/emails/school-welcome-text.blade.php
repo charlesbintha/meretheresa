@@ -6,10 +6,12 @@ Bonjour {{ $displayName }},
 
 Identifiant : {{ $loginEmail }}
 Rôle : {{ $roleName }}
-Connexion : {{ $loginUrl }}
+@if($setupUrl)Définir mon mot de passe : {{ $setupUrl }}
+Lien valable {{ config('auth.passwords.users.expire', 60) }} minutes, utilisable une seule fois. Un nouvel envoi remplace le lien précédent.
+@else Connexion : {{ $loginUrl }}
+@endif
 
-Votre mot de passe vous est communiqué séparément par l’administration.
-Vous pouvez le modifier depuis Mon profil après votre première connexion.
+Si votre lien a expiré, demandez à l’administration de renvoyer votre invitation. Si votre mot de passe est déjà défini, utilisez-le pour vous connecter.
 
 Pour toute question ou si ce compte a été créé par erreur, contactez l’administration de l’école.
 

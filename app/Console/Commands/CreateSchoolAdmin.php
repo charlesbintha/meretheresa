@@ -27,6 +27,8 @@ class CreateSchoolAdmin extends Command
         $user = User::firstOrNew(['email' => $email]);
         $user->name = $this->option('name');
         $user->password = Hash::make($password);
+        $user->password_setup_required = false;
+        \Illuminate\Support\Facades\Password::broker()->deleteToken($user);
         $user->is_school_admin = true;
         $user->school_role_id = \App\Models\SchoolRole::where('is_system', true)->firstOrFail()->id;
         $user->is_active = true;

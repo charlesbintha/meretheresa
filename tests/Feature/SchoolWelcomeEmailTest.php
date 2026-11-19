@@ -10,12 +10,12 @@ class SchoolWelcomeEmailTest extends TestCase {
  use RefreshDatabase;
  protected function setUp():void {parent::setUp();app(TemplateImporter::class)->replace(false);$u=User::factory()->create(['school_role_id'=>SchoolRole::where('name','Administrateur')->value('id')]);$this->actingAs($u)->withSession(['school_auth_version'=>$u->auth_version]);config(['mail.default'=>'smtp','app.url'=>'https://app.lesbambinos.sn']);}
  private function command($action,$payload=[],$id=null){return $this->postJson('/school-api/commands',['action'=>$action,'payload'=>$payload,'id'=>$id?(string)$id:null,'revision'=>DB::table('school_settings')->value('revision')]);}
- private function values():array{return ['name'=>'Awa Test','email'=>'awa@example.test','roleId'=>SchoolRole::where('name','Comptabilité')->value('id'),'password'=>'Private-password-2026','password_confirmation'=>'Private-password-2026'];}
+ private function values():array{return ['name'=>'Awa Test','email'=>'awa@example.test','roleId'=>SchoolRole::where('name','Comptabilité')->value('id')];}
  public function test_creation_sends_personalized_welcome_without_password_and_edit_does_not():void {
   Mail::fake();$v=$this->values();$id=$this->command('account',$v)->assertOk()->assertJsonPath('welcomeEmail.status','sent')->json('recordId');
   Mail::assertSent(SchoolWelcome::class,function($m){return $m->hasTo('awa@example.test')&&$m->displayName==='Awa Test'&&$m->roleName==='Comptabilité'&&$m->loginUrl==='https://app.lesbambinos.sn/login';});
   $this->assertDatabaseHas('users',['id'=>$id,'welcome_email_status'=>'sent']);
-  $mail=new SchoolWelcome('Awa <test>','awa@example.test','Comptabilité','https://app.lesbambinos.sn/login');$html=$mail->render();$this->assertStringContainsString('Accéder à mon espace',$html);$this->assertStringContainsString('Awa &lt;test&gt;',$html);$this->assertStringNotContainsString($v['password'],$html);
+  $mail=new SchoolWelcome('Awa <test>','awa@example.test','Comptabilité','https://app.lesbambinos.sn/login');$html=$mail->render();$this->assertStringContainsString('Accéder à mon espace',$html);$this->assertStringContainsString('Awa &lt;test&gt;',$html);$this->assertStringNotContainsString('Private-password-2026',$html);
   $preview=new SchoolWelcome('Charles','charles@example.test','Aperçu','https://app.lesbambinos.sn/login',true);$this->assertStringContainsString('Aucun compte supplémentaire',$preview->render());$this->assertStringContainsString('[TEST]',$preview->envelope()->subject);
   unset($v['password'],$v['password_confirmation']);$this->command('account',$v,$id)->assertOk();Mail::assertSentCount(1);
   $this->command('account-welcome',[],$id)->assertOk();Mail::assertSentCount(2);
