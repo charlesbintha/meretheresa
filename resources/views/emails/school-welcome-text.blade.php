@@ -2,7 +2,7 @@ MÈRE THÉRÈSA — GROUPE SCOLAIRE
 
 Bonjour {{ $displayName }},
 
-Bienvenue ! L’administration a créé votre compte de gestion scolaire.
+@if($isPreview)Ceci est un aperçu de test. Aucun compte supplémentaire n’a été créé.@else Bienvenue ! L’administration a créé votre compte de gestion scolaire.@endif
 
 Identifiant : {{ $loginEmail }}
 Rôle : {{ $roleName }}

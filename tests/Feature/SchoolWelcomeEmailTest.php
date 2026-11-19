@@ -16,6 +16,7 @@ class SchoolWelcomeEmailTest extends TestCase {
   Mail::assertSent(SchoolWelcome::class,function($m){return $m->hasTo('awa@example.test')&&$m->displayName==='Awa Test'&&$m->roleName==='Comptabilité'&&$m->loginUrl==='https://app.lesbambinos.sn/login';});
   $this->assertDatabaseHas('users',['id'=>$id,'welcome_email_status'=>'sent']);
   $mail=new SchoolWelcome('Awa <test>','awa@example.test','Comptabilité','https://app.lesbambinos.sn/login');$html=$mail->render();$this->assertStringContainsString('Accéder à mon espace',$html);$this->assertStringContainsString('Awa &lt;test&gt;',$html);$this->assertStringNotContainsString($v['password'],$html);
+  $preview=new SchoolWelcome('Charles','charles@example.test','Aperçu','https://app.lesbambinos.sn/login',true);$this->assertStringContainsString('Aucun compte supplémentaire',$preview->render());$this->assertStringContainsString('[TEST]',$preview->envelope()->subject);
   unset($v['password'],$v['password_confirmation']);$this->command('account',$v,$id)->assertOk();Mail::assertSentCount(1);
   $this->command('account-welcome',[],$id)->assertOk();Mail::assertSentCount(2);
  }

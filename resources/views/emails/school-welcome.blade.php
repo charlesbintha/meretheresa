@@ -11,7 +11,7 @@
 <tr><td style="padding:0 32px 32px;">
 <h1 style="font-size:25px;line-height:1.3;color:#192b49;margin:8px 0 20px;">Bienvenue dans votre espace</h1>
 <p style="font-size:16px;line-height:1.7;">Bonjour {{ $displayName }},</p>
-<p style="font-size:15px;line-height:1.7;color:#52617a;">L’administration de Mère Thérèsa vient de créer votre compte. Vous pouvez désormais accéder aux fonctionnalités de gestion scolaire correspondant à votre rôle.</p>
+<p style="font-size:15px;line-height:1.7;color:#52617a;">@if($isPreview)Ceci est un aperçu de l’email de bienvenue. Aucun compte supplémentaire n’a été créé pour ce test.@else L’administration de Mère Thérèsa vient de créer votre compte. Vous pouvez désormais accéder aux fonctionnalités de gestion scolaire correspondant à votre rôle.@endif</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f6fd;border-radius:12px;"><tr><td style="padding:20px;">
 <div style="font-size:12px;color:#71809a;margin-bottom:7px;">VOTRE IDENTIFIANT</div><div style="font-size:15px;font-weight:bold;word-break:break-all;">{{ $loginEmail }}</div>
 <div style="font-size:12px;color:#71809a;margin-top:18px;margin-bottom:7px;">VOTRE RÔLE</div><div style="font-size:15px;font-weight:bold;">{{ $roleName }}</div>
