@@ -16,7 +16,7 @@ class SchoolController extends Controller
     public function state(Request $r, SchoolStore $store)
     {
         return DB::transaction(function () use ($r, $store) {
-            DB::table('school_settings')->where('id', 1)->lockForUpdate()->first();
+            // Consistent read snapshot; readers must not acquire the global write lock.
 
             return response()->json($store->state($r->user()->id))->header('Cache-Control', 'no-store, private');
         });

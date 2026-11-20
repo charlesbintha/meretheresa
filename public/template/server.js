@@ -35,8 +35,6 @@ M.average=(sid,subject)=>{const a=M.grade(sid,subject,'test'),b=M.grade(sid,subj
 M.generalAverage=sid=>{const subjects=M.db.subjects;if(!subjects.length)return null;const scores=subjects.map(s=>M.average(sid,s.id));if(scores.some(s=>s===null))return null;return subjects.reduce((sum,s,i)=>sum+scores[i]*s.coefficient,0)/subjects.reduce((sum,s)=>sum+s.coefficient,0);};
 M.score=value=>value===null?'—':Number(value).toFixed(2);
 M.paymentDate=()=>{const y=M.db.years.find(y=>y.active),today=new Date().toISOString().slice(0,10);return y?today<y.start?y.start:today>y.end?y.end:today:today;};
-M.chartYear=()=>M.db.years.find(y=>y.active)?.end.slice(0,4)||String(new Date().getFullYear());
-M.chartValues=()=>{const month={janvier:'01',février:'02',mars:'03'}[M.view.period]||'03';return Array.from({length:7},(_,i)=>M.db.payments.filter(p=>p.date.startsWith(M.chartYear()+'-'+month)&&Math.min(6,Math.floor((Number(p.date.slice(-2))-1)/4))===i).reduce((sum,p)=>sum+p.amount,0));};
 M.$('#main').innerHTML='<div class="empty-state"><h3>Chargement de l’établissement…</h3></div>';
 request('state').then(state=>{apply(state);M.navigate(location.hash.slice(1)||'dashboard');}).catch(error=>{status('Connexion impossible');M.$('#main').innerHTML=`<div class="empty-state"><h3>Chargement impossible</h3><p>${M.esc(error.message)}</p><a class="btn primary" href="/">Réessayer</a></div>`;});
 })();

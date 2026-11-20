@@ -150,8 +150,9 @@ class SchoolStore
                 $c = $charges[$r['charge_id']];
                 return ['id'=>$r['id'],'studentId'=>$c['student_id'],'amount'=>$r['amount'],'date'=>$r['paid_at']??'', 'reference'=>$r['reference']??'', 'type'=>SchoolBilling::LABELS[$c['kind']], 'method'=>$r['method']??'Non renseigné', 'month'=>$c['month']];
             })->all();
-            $state['tuitions'] = $charges->where('kind','tuition')->map(function ($c) use ($receipts) {
-                $paid = $receipts->where('charge_id',$c['id'])->sum('amount');
+            $paidByCharge = $receipts->groupBy('charge_id')->map(fn ($rows) => $rows->sum('amount'));
+            $state['tuitions'] = $charges->where('kind','tuition')->map(function ($c) use ($paidByCharge) {
+                $paid = $paidByCharge->get($c['id'], 0);
                 return ['id'=>$c['id'],'studentId'=>$c['student_id'],'total'=>$c['amount']-$c['waiver'],'paid'=>$paid,'balance'=>$c['amount']-$c['waiver']-$paid,'dueDate'=>$c['due_date'],'term'=>0];
             })->values()->all();
             $state['subscriptions'] = collect($state['billing']['memberships'])->map(fn($r)=>['id'=>'billing:'.$r['id'],'studentId'=>$r['student_id'],'service'=>SchoolBilling::LABELS[$r['kind']],'plan'=>trim(($r['zone']??'').' '.($r['kind']==='transport'?match($r['trip']){'outbound'=>'Aller seul','return'=>'Retour seul',default=>'Aller-retour'}:'Mensuel')),'amount'=>$r['monthly_fee'],'status'=>$r['active']?'Actif':'Suspendu'])->all();

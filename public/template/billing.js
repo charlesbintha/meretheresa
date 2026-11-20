@@ -3,14 +3,17 @@ const M=MT,E=M.esc,B=M.button;
 const labels={registration:'Inscription',supplement:'Tenue / sport supplémentaire',tuition:'Scolarité',studies:'Études',canteen:'Cantine',transport:'Transport',canteen_adhesion:'Adhésion cantine',transport_adhesion:'Adhésion transport'};
 const enabled=()=>!!M.db.billing?.enabled,charges=()=>M.db.billing?.charges||[],receipts=()=>M.db.billing?.receipts||[],members=()=>M.db.billing?.memberships||[];
 let filter={student:'',kind:'',month:'',alert:''};
-const paid=c=>receipts().filter(r=>r.charge_id===c.id).reduce((s,r)=>s+Number(r.amount),0);
+let indexedReceipts,receiptGroups=new Map(),receiptTotals=new Map();
+function receiptIndex(){const rows=receipts();if(rows!==indexedReceipts){indexedReceipts=rows;receiptGroups=new Map();receiptTotals=new Map();for(const r of rows){const id=r.charge_id;if(!receiptGroups.has(id))receiptGroups.set(id,[]);receiptGroups.get(id).push(r);receiptTotals.set(id,(receiptTotals.get(id)||0)+Number(r.amount));}}}
+const chargeReceipts=c=>{receiptIndex();return receiptGroups.get(c.id)||[];};
+const paid=c=>{receiptIndex();return receiptTotals.get(c.id)||0;};
 const balance=c=>Number(c.amount)-Number(c.waiver)-paid(c);
 const today=()=>new Date().toLocaleDateString('sv-SE');
-const issues=c=>{const rs=receipts().filter(r=>r.charge_id===c.id),out=[];if(c.tariff_pending)out.push('Ancienne zone à confirmer');if(balance(c)>0)out.push(paid(c)>0?'Montant incomplet':c.due_date<=today()?'À régler':'À venir');if(rs.some(r=>!r.paid_at||!r.reference))out.push('Justificatif à compléter');if(c.waiver>0)out.push('Exonération enregistrée');return out;};
+const issues=c=>{const rs=chargeReceipts(c),out=[];if(c.tariff_pending)out.push('Ancienne zone à confirmer');if(balance(c)>0)out.push(paid(c)>0?'Montant incomplet':c.due_date<=today()?'À régler':'À venir');if(rs.some(r=>!r.paid_at||!r.reference))out.push('Justificatif à compléter');if(c.waiver>0)out.push('Exonération enregistrée');return out;};
 const option=(name,label,items,value)=>M.selectField(label,name,items.map(([id,text])=>`<option value="${E(id)}" ${String(value)===String(id)?'selected':''}>${E(text)}</option>`).join(''));
 const studentOptions=()=>[['','Tous les élèves'],...M.db.students.map(s=>[s.id,`${s.matricule} · ${M.name(s)}`])];
 const wrap=(kind,body,id='')=>`<form data-form="${kind}" data-id="${id}"><div class="form-grid">${body}</div>${M.formFooter()}</form>`;
-const selected=()=>charges().filter(c=>(!filter.student||String(c.student_id)===filter.student)&&(!filter.kind||c.kind===filter.kind)&&(!filter.month||c.month===filter.month)&&(!filter.alert||(filter.alert==='partial'?balance(c)>0&&paid(c)>0:filter.alert==='documents'?receipts().some(r=>r.charge_id===c.id&&(!r.paid_at||!r.reference)):balance(c)>0&&c.due_date<=today())));
+const selected=()=>charges().filter(c=>(!filter.student||String(c.student_id)===filter.student)&&(!filter.kind||c.kind===filter.kind)&&(!filter.month||c.month===filter.month)&&(!filter.alert||(filter.alert==='partial'?balance(c)>0&&paid(c)>0:filter.alert==='documents'?chargeReceipts(c).some(r=>!r.paid_at||!r.reference):balance(c)>0&&c.due_date<=today())));
 M.views.monthly=()=>{
  if(!enabled())return M.heading('Échéances & alertes')+M.empty('Année sans facturation mensuelle','Cette page sera disponible après l’import de l’année 2026–2027.');
  const rows=selected().sort((a,b)=>a.month.localeCompare(b.month)||a.student_id-b.student_id),pg=M.paginate(rows,15);
@@ -19,7 +22,7 @@ M.views.monthly=()=>{
 M.actions['billing-reset']=()=>{filter={student:'',kind:'',month:'',alert:''};M.view.page=1;M.render();};
 document.addEventListener('submit',e=>{if(e.target.id==='billing-filters'){e.preventDefault();filter=Object.fromEntries(new FormData(e.target));M.view.page=1;M.render();}});
 M.actions['billing-detail']=el=>{
- if(!M.can('finance.view'))return;const c=charges().find(c=>c.id===Number(el.dataset.id));if(!c)return;const rs=receipts().filter(r=>r.charge_id===c.id);
+ if(!M.can('finance.view'))return;const c=charges().find(c=>c.id===Number(el.dataset.id));if(!c)return;const rs=chargeReceipts(c);
  M.drawer(`${labels[c.kind]} · ${c.month}`,`<div class="notice">${E(M.name(M.student(c.student_id)))} · ${M.money(c.amount)} FCFA · Reste ${M.money(balance(c))} FCFA</div><p class="subtitle billing-note">${c.waiver?`Exonération : ${M.money(c.waiver)} FCFA — ${E(c.waiver_reason)}`:'Un montant incomplet n’est pas automatiquement considéré comme une exonération.'}</p>${M.table(['ÉLÉMENT','MONTANT','DATE','REÇU',''],rs.map(r=>`<tr><td>${E(r.label)}${r.raw_date?`<small class="billing-sub">Date source : ${E(r.raw_date)}</small>`:''}</td><td>${M.money(r.amount)}</td><td>${E(r.paid_at||'À compléter')}</td><td>${E(r.reference||'À compléter')}</td><td>${M.can('finance.manage')?B('Corriger','billing-edit','pencil',`data-id="${r.id}"`,'small'):''}</td></tr>`))}${M.can('finance.manage')?`<div class="form-footer">${B('Exonération','billing-waiver-form','pencil',`data-id="${c.id}"`,'')}${B('Ajouter un paiement','billing-pay','plus',`data-id="${c.id}"`)}</div>`:''}`);
 };
 function receiptForm(c,r={}){
