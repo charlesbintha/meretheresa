@@ -16,3 +16,6 @@
 .monthly-invoice .invoice-total strong{font-size:19px}
 .monthly-invoice footer{padding-top:6px;line-height:1.35}
 .monthly-invoice .invoice-contact{margin-top:5px;padding-top:5px;line-height:1.35}
+
+.monthly-invoice .invoice-contact{position:absolute;left:10mm;right:10mm;bottom:8mm;margin-top:0;padding-top:6px}
+.monthly-invoice footer{padding-bottom:15mm}
