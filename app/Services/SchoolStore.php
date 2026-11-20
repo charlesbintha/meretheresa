@@ -424,7 +424,7 @@ class SchoolStore
 
     private function grades(array $v): int
     {
-        $v = $this->rules($v, ['classId' => 'required|integer|exists:classes,id', 'subjectId' => 'required|integer|exists:subjects,id', 'term' => 'required|integer|min:1|max:3', 'rows' => 'required|array|min:1|max:100', 'rows.*.studentId' => 'required|integer|distinct|exists:students,id', 'rows.*.test' => 'required|numeric|min:0|max:20', 'rows.*.exam' => 'required|numeric|min:0|max:20']);
+        $v = $this->rules($v, ['classId' => 'required|integer|exists:classes,id', 'subjectId' => 'required|integer|exists:subjects,id', 'term' => 'required|integer|min:1|max:3', 'rows' => 'required|array|min:1|max:100', 'rows.*.studentId' => 'required|integer|distinct|exists:students,id', 'rows.*.test' => 'present|nullable|numeric|min:0|max:20', 'rows.*.exam' => 'present|nullable|numeric|min:0|max:20']);
         $class = $this->currentClass($v['classId']);
         $period = $this->period($v['term']);
         if (! $period) {
@@ -438,6 +438,7 @@ class SchoolStore
             }foreach (['test' => 'homework', 'exam' => 'exam'] as $kind => $type) {
                 $lookup = ['student_id' => $r['studentId'], 'subject_id' => $v['subjectId'], 'period_id' => $period, 'grade_type' => $type];
                 $old = DB::table('grades')->where($lookup)->first();
+                if ($r[$kind] === null) { if ($old) DB::table('grades')->where('id',$old->id)->delete(); continue; }
                 $this->write('grades', $old?->id, $lookup + ['class_id' => $class->id, 'score' => $r[$kind], 'max_score' => 20, 'grade_date' => today()->toDateString(), 'teacher_id' => $teacher]);
             }
         }

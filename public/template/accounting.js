@@ -2,7 +2,7 @@
 const M=MT,E=M.esc,B=M.button;let data=null,loading=false,yearId='',from='',to='',query='',status='all',account='',page=1;
 const tabs=[['accounting','Écritures'],['accounting-plan','Plan comptable'],['accounting-treasury','Banque et caisses'],['accounting-balance','Balance'],['accounting-ledger','Grand livre'],['accounting-bilan','Bilan'],['accounting-income','Compte de résultat']];
 for(const [route] of tabs)M.routePermission[route]='accounting.view';
-async function load(){if(loading)return;loading=true;try{const r=await fetch('/school-api/accounting?yearId='+yearId,{headers:{Accept:'application/json'}});if(!r.ok)throw Error('Accès à la comptabilité indisponible.');data=await r.json();yearId=data.yearId;const y=data.years.find(y=>Number(y.id)===Number(yearId));from=from||y.start;to=to||y.end;}catch(e){M.notify(e.message,true);}finally{loading=false;M.render();}}
+async function load(){if(loading)return;loading=true;try{const r=await fetch('school-api/accounting?yearId='+yearId,{headers:{Accept:'application/json'}});if(!r.ok)throw Error('Accès à la comptabilité indisponible.');data=await r.json();yearId=data.yearId;const y=data.years.find(y=>Number(y.id)===Number(yearId));from=from||y.start;to=to||y.end;}catch(e){M.notify(e.message,true);}finally{loading=false;M.render();}}
 const options=(rows,value,key='code',label='name')=>rows.map(r=>`<option value="${E(r[key])}" ${String(r[key])===String(value)?'selected':''}>${E(r[key])} · ${E(r[label])}</option>`).join('');
 const control=(key,label,html)=>`<label>${label}<select class="select-control" data-acc-filter="${key}">${html}</select></label>`;
 const button=(label,action,permission,attrs='')=>M.can('accounting.'+permission)?B(label,action,'plus',attrs,'small'):'';

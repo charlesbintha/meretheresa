@@ -27,7 +27,7 @@ class SchoolAuthController extends Controller
         $r->session()->put('school_auth_version', $r->user()->auth_version);
         $r->user()->forceFill(['last_login_at' => now()])->save();
 
-        return redirect()->intended('/');
+        return redirect()->intended(route('dashboard'));
     }
 
     public function logout(Request $r)

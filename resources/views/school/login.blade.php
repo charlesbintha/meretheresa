@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="fr">
-<head>
+<head><base href="{{ rtrim(url('/'), '/') }}/">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Connexion · Mère Thérèsa</title>
-    <link rel="icon" href="{{ asset('template/assets/school-logo.jpg') }}">
+    <title>Connexion · {{ config('school.name') }}</title>
+    <link rel="icon" href="{{ asset(config('school.logo')) }}">
     <link rel="stylesheet" href="{{ asset('template/styles.css') }}">
     <style>
         body.login-page {
@@ -58,8 +58,8 @@
     <div class="login-background" aria-hidden="true"></div>
     <section class="login-card" aria-labelledby="school-name">
         <div class="login-brand">
-            <img src="{{ asset('template/assets/school-logo.jpg') }}" alt="Logo de l’établissement">
-            <h1 id="school-name">Mère Thérèsa</h1>
+            <img src="{{ asset(config('school.logo')) }}" alt="Logo de l’établissement">
+            <h1 id="school-name">{{ config('school.name') }}</h1>
             <p>Groupe scolaire</p>
         </div>
         <div class="login-intro">
