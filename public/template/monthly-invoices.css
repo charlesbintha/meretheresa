@@ -4,3 +4,5 @@
 @media print{body.printing-monthly-invoices #print-area{padding:0;margin:0}body.printing-monthly-invoices .invoice-paper{page:monthly-invoices;width:210mm;height:297mm;min-height:0;margin:0;box-shadow:none;break-after:page;break-inside:avoid}body.printing-monthly-invoices .invoice-paper:last-child{break-after:auto}.monthly-invoice{break-inside:avoid}}
 
 .invoice-school{display:flex;align-items:center;gap:10px;max-width:65%}.invoice-school img{width:52px;height:52px;object-fit:contain;flex-shrink:0}.invoice-school>div{min-width:0}
+
+.invoice-contact{margin-top:6px;padding-top:6px;border-top:1px solid #e1e5eb;text-align:center;color:#20252f;font-size:10px;line-height:1.5}
