@@ -2,7 +2,7 @@
 'use strict';
 const M=MT,A=M.actions;let busy=false;
 const status=text=>{M.$('#save-status').textContent=text;};
-function apply(state){if(!Array.isArray(state.students)||!Number.isInteger(state.revision))throw Error('Données serveur incomplètes.');M.db=state;M.ready=true;for(const k of ['gradeClass','scheduleClass'])if(!M.cls(M.view[k]))M.view[k]=state.classes[0]?.id||0;if(!M.subject(M.view.subject))M.view.subject=state.subjects[0]?.id||0;status('Synchronisé');}
+function apply(state){if(!Array.isArray(state.students)||!Number.isInteger(state.revision))throw Error('Données serveur incomplètes.');M.db=state;M.ready=true;if(!M.view.term)M.view.term=String(state.currentTerm||1);for(const k of ['gradeClass','scheduleClass'])if(!M.cls(M.view[k]))M.view[k]=state.classes[0]?.id||0;if(!M.subject(M.view.subject))M.view.subject=state.subjects[0]?.id||0;status('Synchronisé');}
 async function request(path,body){
  let response;try{response=await fetch('school-api/'+path,{credentials:'same-origin',headers:{Accept:'application/json','Content-Type':'application/json','X-CSRF-TOKEN':M.$('meta[name="csrf-token"]').content},...(body?{method:'POST',body:JSON.stringify(body)}:{})});}catch(_){throw Error('Serveur inaccessible. Vérifiez la connexion puis réessayez.');}
  if(response.status===401){location.assign(new URL('login',document.baseURI).href);throw Error('Votre session a expiré.');}
