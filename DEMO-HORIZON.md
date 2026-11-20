@@ -33,3 +33,10 @@ Chaque génération conserve un instantané ; une génération identique réutil
 l’archive, des résultats modifiés produisent une nouvelle version. Le bouton
 « Dernier généré » ouvre la dernière archive. Impression A4, ou PDF via le navigateur.
 La génération ne transmet aucun bulletin aux parents et ne publie pas de notes.
+
+## Redirections Hostinger
+
+Dans le `.htaccess` racine de l’installation principale, avant la réécriture vers
+`public/`, conserver `RewriteRule ^demo$ /demo/ [R=302,L]`. Le point d’entrée démo
+normalise SCRIPT_NAME et PHP_SELF et redirige les anciennes URL `/public/demo/`
+vers `/demo/` pour récupérer les redirections mises en cache par les navigateurs.
