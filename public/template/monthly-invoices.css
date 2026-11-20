@@ -6,3 +6,13 @@
 .invoice-school{display:flex;align-items:center;gap:10px;max-width:65%}.invoice-school img{width:52px;height:52px;object-fit:contain;flex-shrink:0}.invoice-school>div{min-width:0}
 
 .invoice-contact{margin-top:6px;padding-top:6px;border-top:1px solid #e1e5eb;text-align:center;color:#20252f;font-size:10px;line-height:1.5}
+/* Keep the invoice independent of the application's 63–70px list rows. */
+.monthly-invoice{padding:8mm 10mm;line-height:1.35}
+.monthly-invoice header{padding-bottom:7px}
+.monthly-invoice .invoice-family{margin:9px 0;line-height:1.4}
+.monthly-invoice table tr{height:auto}
+.monthly-invoice table th,.monthly-invoice table td{height:auto;min-height:0;padding:5px 8px;line-height:1.3;font-size:11px}
+.monthly-invoice .invoice-total{padding:8px 0}
+.monthly-invoice .invoice-total strong{font-size:19px}
+.monthly-invoice footer{padding-top:6px;line-height:1.35}
+.monthly-invoice .invoice-contact{margin-top:5px;padding-top:5px;line-height:1.35}
