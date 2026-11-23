@@ -50,6 +50,13 @@ class SchoolBilling
         $data=['enabled'=>$this->enabled($year),'charges'=>[],'receipts'=>[],'memberships'=>[]];if(!$data['enabled'])return $data;
         if($user->canSchool('finance.view')){
             $data['charges']=DB::table('school_charges')->where('academic_year_id',$year)->get()->map(fn($r)=>(array)$r)->all();
+            $data['deletionRequests'] = DB::table('school_receipt_deletion_requests as requests')
+                ->join('school_receipts as receipts', 'receipts.id', '=', 'requests.receipt_id')
+                ->join('users', 'users.id', '=', 'requests.requested_by')
+                ->where('requests.academic_year_id', $year)->where('requests.status', 'pending')
+                ->select('requests.id', 'requests.receipt_id', 'requests.reason', 'users.name as requester')
+                ->orderBy('requests.id')->get()->all();
+            $data['canApproveDeletion'] = $user->isSchoolAdministrator();
             $data['receipts']=DB::table('school_receipts')->whereIn('charge_id',array_column($data['charges'],'id'))->get()->map(fn($r)=>(array)$r)->all();
         }
         if($user->canSchool('services.view')||$user->canSchool('finance.view'))$data['memberships']=DB::table('school_service_memberships')->where('academic_year_id',$year)->get()->map(fn($r)=>(array)$r)->all();
@@ -92,7 +99,12 @@ class SchoolBilling
             if($id){$old=DB::table('school_receipts')->find($id)??abort(404);$this->currentCharge($old->charge_id,$year);abort_unless($old->charge_id===$charge->id,422,'Une correction ne peut pas déplacer un paiement vers un autre compte.');}
             elseif($old=DB::table('school_receipts')->where('request_key',$v['requestKey'])->first())return $old->id;
             $row=['charge_id'=>$charge->id,'amount'=>$v['amount'],'paid_at'=>$v['date']??null,'reference'=>$v['reference']??null,'label'=>$v['label'],'method'=>$v['method']??null,'updated_at'=>now()];
-            if($id){DB::table('school_receipts')->where('id',$id)->update($row);return (int)$id;}
+            if ($id) {
+                abort_if(DB::table('school_receipt_deletion_requests')->where('receipt_id', $id)->where('status', 'pending')->exists(),
+                    422, 'Le paiement fait l’objet d’une demande de suppression en attente.');
+                DB::table('school_receipts')->where('id', $id)->update($row);
+                return (int) $id;
+            }
             return DB::table('school_receipts')->insertGetId($row+['request_key'=>$v['requestKey'],'created_at'=>now()]);
         }
         if($action==='billing-waiver'){

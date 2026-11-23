@@ -38,6 +38,40 @@ class SchoolWorkbookTest extends TestCase {
         $this->command('billing-waiver',['amount'=>0,'reason'=>'Fraude'],$c->id)->assertForbidden();
         $this->getJson('/school-api/state')->assertOk()->assertJsonCount(0,'billing.receipts')->assertJsonCount(0,'billing.charges');
     }
+    public function test_receipt_deletion_requires_admin_and_preserves_the_accounting_audit(): void
+    {
+        app(SchoolWorkbookImporter::class)->import($this->manifest());
+        $admin = $this->admin();
+        $receipt = DB::table('school_receipts')->first();
+        $role = DB::table('school_roles')->where('name', 'Comptabilité')->value('id');
+        $accountant = User::factory()->create(['school_role_id' => $role]);
+        $this->actingAs($accountant);
+        $request = $this->command('billing-delete-request', ['reason' => 'Saisie en double'], $receipt->id)
+            ->assertOk()->assertJsonCount(1, 'state.billing.deletionRequests')->assertJsonCount(1, 'state.billing.receipts')->json('recordId');
+        $this->command('billing-delete-request', ['reason' => 'Saisie en double'], $receipt->id)->assertOk()->assertJsonPath('recordId', $request);
+        $this->command('billing-delete-approve', [], $request)->assertForbidden();
+        $this->actingAs($admin);
+        $this->command('billing-delete-reject', [], $request)->assertOk()->assertJsonCount(0, 'state.billing.deletionRequests');
+        $this->assertDatabaseHas('school_receipts', ['id' => $receipt->id]);
+
+        $request = $this->command('billing-delete-request', ['reason' => 'Vérification du doublon'], $receipt->id)->assertOk()->json('recordId');
+        $entry = DB::table('accounting_entries')->insertGetId([
+            'year_id' => DB::table('accounting_years')->value('id'), 'journal' => 'CA',
+            'memo' => 'Paiement', 'status' => 'posted', 'source_key' => 'school_receipts:'.$receipt->id,
+        ]);
+        $this->command('billing-delete-approve', [], $request)->assertUnprocessable();
+        $this->assertDatabaseHas('school_receipt_deletion_requests', ['id' => $request, 'status' => 'pending']);
+        DB::table('accounting_entries')->insert([
+            'year_id' => DB::table('accounting_years')->value('id'), 'journal' => 'OD',
+            'memo' => 'Contrepassation', 'status' => 'posted', 'reversal_of' => $entry,
+        ]);
+        $this->command('billing-delete-approve', [], $request)->assertOk()
+            ->assertJsonCount(0, 'state.billing.receipts')->assertJsonCount(0, 'state.payments');
+        $this->assertDatabaseHas('school_receipt_deletion_requests', ['id' => $request, 'status' => 'approved', 'decided_by' => $admin->id]);
+        $this->assertDatabaseHas('accounting_entries', ['id' => $entry, 'status' => 'posted']);
+        $this->assertDatabaseMissing('school_receipts', ['id' => $receipt->id]);
+    }
+
     public function test_out_of_zone_single_trip_requires_a_manual_price(): void {
         app(SchoolWorkbookImporter::class)->import($this->manifest());$this->admin();$sid=DB::table('students')->value('id');
         $v=['studentId'=>$sid,'kind'=>'transport','active'=>true,'zone'=>'HORS ZONE','trip'=>'return'];

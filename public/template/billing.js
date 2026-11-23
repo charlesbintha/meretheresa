@@ -17,13 +17,79 @@ const selected=()=>charges().filter(c=>(!filter.student||String(c.student_id)===
 M.views.monthly=()=>{
  if(!enabled())return M.heading('Échéances & alertes')+M.empty('Année sans facturation mensuelle','Cette page sera disponible après l’import de l’année 2026–2027.');
  const rows=selected().sort((a,b)=>a.month.localeCompare(b.month)||a.student_id-b.student_id),pg=M.paginate(rows,15);
- return M.heading('Échéances & alertes','Les montants saisis sont conservés. Les remises se valident explicitement.',B('Restes annuels','navigate','report-analytics','data-route="annual-balances"',''))+`<form id="billing-filters" class="card report-filters"><div class="report-filter-grid">${option('student','Élève',studentOptions(),filter.student)}${option('kind','Objet',[['','Tous les objets'],...Object.entries(labels)],filter.kind)}${option('month','Mois',[['','Tous les mois'],...[...new Set(charges().map(c=>c.month))].sort().map(m=>[m,m])],filter.month)}${option('alert','Afficher',[['','Tout'],['partial','Montants incomplets'],['documents','Justificatifs incomplets'],['due','Échéances dues']],filter.alert)}</div><div class="report-filter-actions">${B('Réinitialiser','billing-reset','x','','')}<button type="submit" class="btn primary">Filtrer</button></div></form><div class="card table-card">${M.table(['ÉLÈVE','OBJET / MOIS','TARIF','EXONÉRATION','VERSÉ','SOLDE','SUIVI'],pg.allRows.map(c=>`<tr><td>${M.person(M.student(c.student_id))}</td><td>${E(labels[c.kind])}<small class="billing-sub">${E(c.month)}</small></td><td>${c.tariff_pending?'À confirmer':M.money(c.amount)}</td><td>${M.money(c.waiver)}</td><td>${M.money(paid(c))}</td><td>${M.money(balance(c))}</td><td>${issues(c).map(i=>`<span class="pill ${i==='Justificatif à compléter'||i==='Montant incomplet'?'orange':'blue'}">${E(i)}</span>`).join(' ')}${B('Détails','billing-detail','receipt',`data-id="${c.id}"`,'small')}</td></tr>`),pg.footer)}</div>`;
+ return M.heading('Échéances & alertes','Les montants saisis sont conservés. Les remises se valident explicitement.',B('Restes annuels','navigate','report-analytics','data-route="annual-balances"','')+deletionInboxButton())+`<form id="billing-filters" class="card report-filters"><div class="report-filter-grid">${option('student','Élève',studentOptions(),filter.student)}${option('kind','Objet',[['','Tous les objets'],...Object.entries(labels)],filter.kind)}${option('month','Mois',[['','Tous les mois'],...[...new Set(charges().map(c=>c.month))].sort().map(m=>[m,m])],filter.month)}${option('alert','Afficher',[['','Tout'],['partial','Montants incomplets'],['documents','Justificatifs incomplets'],['due','Échéances dues']],filter.alert)}</div><div class="report-filter-actions">${B('Réinitialiser','billing-reset','x','','')}<button type="submit" class="btn primary">Filtrer</button></div></form><div class="card table-card">${M.table(['ÉLÈVE','OBJET / MOIS','TARIF','EXONÉRATION','VERSÉ','SOLDE','SUIVI'],pg.allRows.map(c=>`<tr><td>${M.person(M.student(c.student_id))}</td><td>${E(labels[c.kind])}<small class="billing-sub">${E(c.month)}</small></td><td>${c.tariff_pending?'À confirmer':M.money(c.amount)}</td><td>${M.money(c.waiver)}</td><td>${M.money(paid(c))}</td><td>${M.money(balance(c))}</td><td>${issues(c).map(i=>`<span class="pill ${i==='Justificatif à compléter'||i==='Montant incomplet'?'orange':'blue'}">${E(i)}</span>`).join(' ')}${B('Détails','billing-detail','receipt',`data-id="${c.id}"`,'small')}</td></tr>`),pg.footer)}</div>`;
 };
 M.actions['billing-reset']=()=>{filter={student:'',kind:'',month:'',alert:''};M.view.page=1;M.render();};
 document.addEventListener('submit',e=>{if(e.target.id==='billing-filters'){e.preventDefault();filter=Object.fromEntries(new FormData(e.target));M.view.page=1;M.render();}});
+const deletionRequests=()=>M.db.billing?.deletionRequests||[];
+const canDecideDeletion=()=>!!M.db.billing?.canApproveDeletion;
+const deletionInboxButton=()=>canDecideDeletion()?B(
+ 'Suppressions en attente ('+deletionRequests().length+')','navigate','trash','data-route="receipt-deletions"',''
+):'';
+M.routePermission['receipt-deletions']='users.manage';
+
+function receiptActions(receipt){
+ const request=deletionRequests().find(item=>item.receipt_id===receipt.id);
+ const idAttr=`data-id="${receipt.id}"`;
+ const correction=M.can('finance.manage')?B('Corriger','billing-edit','pencil',idAttr+(request?' disabled':''),'small'):'';
+ if(request){
+  return `<div class="receipt-actions">${correction}<span class="pill orange">En attente</span>${canDecideDeletion()?B('Examiner','receipt-delete-review','file-text',`data-id="${request.id}"`,'small'):''}</div>`;
+ }
+ return M.can('finance.manage')?`<div class="receipt-actions">${correction}${B('Demander la suppression','receipt-delete-request','trash',idAttr,'small')}</div>`:'';
+}
+
+M.views['receipt-deletions']=()=>{
+ if(!canDecideDeletion())return '';
+ const rows=deletionRequests().map(request=>{
+  const receipt=receipts().find(r=>r.id===request.receipt_id);
+  const charge=charges().find(c=>c.id===receipt?.charge_id);
+  if(!charge)return '';
+  return `<tr><td>${E(M.name(M.student(charge.student_id)))}</td><td>${E(receipt.label)} · ${E(charge.month)}</td><td>${M.money(receipt.amount)} FCFA</td><td>${E(receipt.reference||'—')}</td><td>${E(request.requester)}<small class="billing-sub">${E(request.reason)}</small></td><td>${B('Examiner','receipt-delete-review','file-text',`data-id="${request.id}"`,'small')}</td></tr>`;
+ });
+ return M.heading('Suppressions en attente','Demandes de suppression de règlements',B('Échéances & alertes','navigate','arrow-left','data-route="monthly"',''))+
+  `<div class="card table-card">${M.table(['ÉLÈVE','PAIEMENT','MONTANT','REÇU','DEMANDE',''],rows,'','Aucune demande en attente.')}</div>`;
+};
+
+M.actions['receipt-delete-request']=el=>{
+ const receipt=receipts().find(r=>r.id===Number(el.dataset.id));
+ if(!receipt||!M.can('finance.manage'))return;
+ M.modal('Demander la suppression',`<form id="receipt-delete-form" data-id="${receipt.id}"><p>${E(receipt.label)} · ${M.money(receipt.amount)} FCFA · ${E(receipt.reference||'Référence non renseignée')}</p><p class="subtitle">Le paiement reste comptabilisé jusqu’à la confirmation d’un administrateur.</p>${M.field('Motif de la demande','reason','','text','required maxlength="500"')}${M.formFooter('Envoyer la demande')}</form>`);
+};
+M.actions['receipt-delete-review']=el=>{
+ if(!canDecideDeletion())return;
+ const request=deletionRequests().find(r=>r.id===Number(el.dataset.id));
+ const receipt=receipts().find(r=>r.id===request?.receipt_id);
+ if(!receipt)return;
+ const attr=`data-id="${request.id}" data-charge="${receipt.charge_id}"`;
+ const charge=charges().find(c=>c.id===receipt.charge_id);
+ M.modal('Confirmer la suppression du paiement',`<p>${E(M.name(M.student(charge?.student_id)))} · ${E(receipt.label)} · ${M.money(receipt.amount)} FCFA · ${E(receipt.reference||'Référence non renseignée')}</p><p>Demande de ${E(request.requester)} : ${E(request.reason)}</p><p class="subtitle">La confirmation retire ce paiement et recalcule le solde de l’échéance.</p><div class="form-footer">${B('Refuser','receipt-delete-decide','x',attr+' data-decision="reject"','')}${B('Confirmer la suppression','receipt-delete-decide','trash',attr+' data-decision="approve"')}</div>`);
+};
+
+async function submitDeletion(action,payload,id,chargeId,button,message){
+ button.disabled=true;
+ try{
+  await M.command(action,payload,id);
+  M.close();M.render();
+  if(M.view.route!=='receipt-deletions')M.actions['billing-detail']({dataset:{id:chargeId}});
+  M.notify(message);
+ }catch(error){M.notify(error.message,true);}
+ finally{button.disabled=false;}
+}
+document.addEventListener('submit',e=>{
+ if(e.target.id!=='receipt-delete-form')return;
+ e.preventDefault();
+ const form=e.target,receipt=receipts().find(r=>r.id===Number(form.dataset.id));
+ if(receipt)void submitDeletion('billing-delete-request',Object.fromEntries(new FormData(form)),receipt.id,receipt.charge_id,form.querySelector('[type="submit"]'),'Demande envoyée. Suppression en attente.');
+});
+M.actions['receipt-delete-decide']=el=>{
+ if(!canDecideDeletion())return;
+ const approve=el.dataset.decision==='approve';
+ return submitDeletion(approve?'billing-delete-approve':'billing-delete-reject',{},el.dataset.id,el.dataset.charge,el,approve?'Paiement supprimé.':'Demande refusée.');
+};
+
 M.actions['billing-detail']=el=>{
  if(!M.can('finance.view'))return;const c=charges().find(c=>c.id===Number(el.dataset.id));if(!c)return;const rs=chargeReceipts(c);
- M.drawer(`${labels[c.kind]} · ${c.month}`,`<div class="notice">${E(M.name(M.student(c.student_id)))} · ${M.money(c.amount)} FCFA · Reste ${M.money(balance(c))} FCFA</div><p class="subtitle billing-note">${c.waiver?`Exonération : ${M.money(c.waiver)} FCFA — ${E(c.waiver_reason)}`:'Un montant incomplet n’est pas automatiquement considéré comme une exonération.'}</p>${M.table(['ÉLÉMENT','MONTANT','DATE','REÇU',''],rs.map(r=>`<tr><td>${E(r.label)}${r.raw_date?`<small class="billing-sub">Date source : ${E(r.raw_date)}</small>`:''}</td><td>${M.money(r.amount)}</td><td>${E(r.paid_at||'À compléter')}</td><td>${E(r.reference||'À compléter')}</td><td>${M.can('finance.manage')?B('Corriger','billing-edit','pencil',`data-id="${r.id}"`,'small'):''}</td></tr>`))}${M.can('finance.manage')?`<div class="form-footer">${B('Exonération','billing-waiver-form','pencil',`data-id="${c.id}"`,'')}${B('Ajouter un paiement','billing-pay','plus',`data-id="${c.id}"`)}</div>`:''}`);
+ M.drawer(`${labels[c.kind]} · ${c.month}`,`<div class="notice">${E(M.name(M.student(c.student_id)))} · ${M.money(c.amount)} FCFA · Reste ${M.money(balance(c))} FCFA</div><p class="subtitle billing-note">${c.waiver?`Exonération : ${M.money(c.waiver)} FCFA — ${E(c.waiver_reason)}`:'Un montant incomplet n’est pas automatiquement considéré comme une exonération.'}</p>${M.table(['ÉLÉMENT','MONTANT','DATE','REÇU',''],rs.map(r=>`<tr><td>${E(r.label)}${r.raw_date?`<small class="billing-sub">Date source : ${E(r.raw_date)}</small>`:''}</td><td>${M.money(r.amount)}</td><td>${E(r.paid_at||'À compléter')}</td><td>${E(r.reference||'À compléter')}</td><td>${receiptActions(r)}</td></tr>`))}${M.can('finance.manage')?`<div class="form-footer">${B('Exonération','billing-waiver-form','pencil',`data-id="${c.id}"`,'')}${B('Ajouter un paiement','billing-pay','plus',`data-id="${c.id}"`)}</div>`:''}`);
 };
 function receiptForm(c,r={}){
  M.modal(r.id?'Corriger le paiement':'Enregistrer un paiement',wrap('billing-receipt',`<input type="hidden" name="chargeId" value="${c.id}"><input type="hidden" name="requestKey" value="${crypto.randomUUID()}">${M.selectField('Type de paiement','label',M.options([...new Set([labels[c.kind],...(c.kind==='registration'?['Frais généraux','Tenue / blouse','Sport']:[]),...(r.label?[r.label]:[])])],r.label||labels[c.kind]),'required')}${M.field('Montant FCFA','amount',r.amount??Math.max(1,balance(c)),'number','required min="1" max="10000000"')}${M.field('Date du paiement','date',r.paid_at||'','date',`max="${today()}"`)}${M.field('Référence du reçu','reference',r.reference||'','text','maxlength="191"')}${M.paymentMethodField(r.method||'')}<p class="subtitle full">Une date ou une référence manquante crée une alerte. Le paiement reste enregistré.</p>`,r.id||''));
@@ -52,6 +118,8 @@ const oldPayment=M.actions['payment-form'];M.actions['payment-form']=el=>{
  const refresh=()=>{const outstanding=charges().filter(c=>String(c.student_id)===student.value&&balance(c)>0);charge.innerHTML='<option value="">'+(student.value&&!outstanding.length?'Aucune échéance restant à régler':'Choisir une échéance')+'</option>'+outstanding.sort((a,b)=>a.month.localeCompare(b.month)||a.kind.localeCompare(b.kind)).map(c=>`<option value="${c.id}">${E(labels[c.kind])} · ${E(c.month)} · Reste ${M.money(balance(c))} FCFA</option>`).join('');charge.disabled=!student.value||!outstanding.length;form.querySelector('[type=submit]').disabled=!student.value||!outstanding.length;form.querySelector('.subtitle').textContent=student.value&&!outstanding.length?'Toutes les échéances de cet élève sont soldées, ou aucune échéance n’est enregistrée.':'Sélectionnez l’élève puis le type et le mois à régler.';};
  student.required=true;student.addEventListener('change',refresh);refresh();form.addEventListener('submit',event=>{event.preventDefault();const c=charges().find(c=>String(c.id)===charge.value&&String(c.student_id)===student.value&&balance(c)>0);if(c)receiptForm(c);});
 };
+const billingWithInvoices=M.views.billing;
+M.views.billing=()=>billingWithInvoices().replace('<div class="heading-actions">','<div class="heading-actions">'+deletionInboxButton());
 const oldReceipt=M.actions.receipt;M.actions.receipt=el=>{if(!enabled())return oldReceipt(el);const r=receipts().find(r=>r.id===Number(el.dataset.id));if(r)M.actions['billing-detail']({dataset:{id:r.charge_id}});};
 const oldDate=M.date;M.date=d=>d?oldDate(d):'À compléter';
 })();

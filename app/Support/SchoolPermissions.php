@@ -24,6 +24,7 @@ class SchoolPermissions
         'accounting-entry'=>'accounting.manage','accounting-prepare'=>'accounting.manage','accounting-reverse'=>'accounting.manage','accounting-post'=>'accounting.post','accounting-year'=>'accounting.configure','accounting-close'=>'accounting.configure','accounting-treasury'=>'accounting.configure','accounting-account'=>'accounting.configure',
         'student-profile'=>'students.manage',
         'staff-profile'=>'services.manage', 'staff-membership'=>'services.manage', 'staff-receipt'=>'finance.manage',
+        'billing-delete-request'=>'finance.manage', 'billing-delete-approve'=>'users.manage', 'billing-delete-reject'=>'users.manage',
         'billing-receipt'=>'finance.manage', 'billing-waiver'=>'finance.manage', 'billing-membership'=>'services.manage', 'billing-enrollment'=>'students.manage',
         'student' => 'students.manage', 'enrollment' => 'students.manage',
         'enrollment-approve' => 'students.manage', 'enrollment-reject' => 'students.manage',
