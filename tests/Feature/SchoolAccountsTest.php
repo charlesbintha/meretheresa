@@ -54,6 +54,27 @@ class SchoolAccountsTest extends TestCase
         $this->command('account', ['name' => 'Doublon', 'email' => $user->email, 'roleId' => $user->school_role_id])->assertUnprocessable();
     }
 
+    public function test_account_creation_validates_current_data_after_another_save(): void
+    {
+        $this->login($this->user());
+        $revision = DB::table('school_settings')->value('revision');
+        $this->command('preferences', ['theme' => 'dark'])->assertOk();
+
+        $request = [
+            'action' => 'account',
+            'revision' => $revision,
+            'payload' => [
+                'name' => 'Nouvel agent',
+                'email' => 'concurrent@example.test',
+                'roleId' => SchoolRole::where('name', 'Comptabilité')->value('id'),
+            ],
+        ];
+        $id = $this->postJson('/school-api/commands', $request)->assertOk()->json('recordId');
+        $this->postJson('/school-api/commands', $request)->assertUnprocessable()
+            ->assertJsonValidationErrors('email');
+        $this->postJson('/school-api/commands', $request + ['id' => (string) $id])->assertConflict();
+    }
+
     public function test_roles_filter_sensitive_data_and_prevent_forged_commands(): void
     {
         $user = $this->user('Pédagogie');

@@ -200,9 +200,10 @@ class SchoolStore
             if ($action === 'payment' && ! empty($v['requestKey']) && ($p = DB::table('payments')->where('request_key', $v['requestKey'])->first())) {
                 return ['recordId' => $p->id, 'state' => $this->state($user)];
             }
-            // Appending a receipt is safe after another command, provided the year is unchanged.
+            // These operations validate against current data under the lock.
             $appendReceipt = $action === 'billing-receipt' && $id === null && isset($v['expectedBalance']) && $activeYear === $this->year();
-            abort_if(! $appendReceipt && (int) $s->revision !== $revision, 409, 'Les données ont changé. Actualisez puis réessayez.');
+            $createAccount = $action === 'account' && $id === null;
+            abort_if(! $appendReceipt && ! $createAccount && (int) $s->revision !== $revision, 409, 'Les données ont changé. Actualisez puis réessayez.');
             if (app(SchoolBilling::class)->enabled($this->year())) {
                 abort_if(in_array($action, ['payment','subscription','subscription-toggle'], true), 422, 'Utilisez les échéances et adhésions de la facturation mensuelle.');
             }
