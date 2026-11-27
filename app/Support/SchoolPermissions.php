@@ -25,6 +25,7 @@ class SchoolPermissions
         'student-profile'=>'students.manage',
         'staff-profile'=>'services.manage', 'staff-membership'=>'services.manage', 'staff-receipt'=>'finance.manage',
         'billing-delete-request'=>'finance.manage', 'billing-delete-approve'=>'users.manage', 'billing-delete-reject'=>'users.manage',
+        'billing-service-stop'=>'services.manage', 'billing-supplement'=>'finance.manage',
         'billing-receipt'=>'finance.manage', 'billing-waiver'=>'finance.manage', 'billing-membership'=>'services.manage', 'billing-enrollment'=>'students.manage',
         'student' => 'students.manage', 'enrollment' => 'students.manage',
         'enrollment-approve' => 'students.manage', 'enrollment-reject' => 'students.manage',

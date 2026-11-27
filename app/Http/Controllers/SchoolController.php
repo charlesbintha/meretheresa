@@ -24,9 +24,9 @@ class SchoolController extends Controller
 
     public function command(Request $r, SchoolStore $store)
     {
-        $v = $r->validate(['action' => 'required|string|max:40', 'payload' => 'present|array', 'id' => 'nullable|string|max:100', 'revision' => 'required|integer|min:1']);
+        $v = $r->validate(['action' => 'required|string|max:40', 'payload' => 'present|array', 'id' => 'nullable|string|max:100', 'revision' => 'required|integer|min:1', 'activeYear' => 'nullable|integer|min:1']);
 
-        $result = $store->command($v['action'], $v['payload'], $v['id'] ?? null, $r->user()->id, $v['revision']);
+        $result = $store->command($v['action'], $v['payload'], $v['id'] ?? null, $r->user()->id, $v['revision'], isset($v['activeYear']) ? (int) $v['activeYear'] : null);
         if (($v['action'] === 'account' && empty($v['id'])) || $v['action'] === 'account-welcome') {
             $result['welcomeEmail'] = app(\App\Services\SchoolWelcomeEmail::class)->send($result['recordId']);
             $result['state'] = $store->state($r->user()->id);

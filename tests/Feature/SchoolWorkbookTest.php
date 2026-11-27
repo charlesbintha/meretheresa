@@ -72,6 +72,42 @@ class SchoolWorkbookTest extends TestCase {
         $this->assertDatabaseMissing('school_receipts', ['id' => $receipt->id]);
     }
 
+    public function test_service_stop_preserves_paid_months_and_supplement_adds_a_separate_charge(): void
+    {
+        app(SchoolWorkbookImporter::class)->import($this->manifest());
+        $this->admin();
+        $membership = DB::table('school_service_memberships')->where('kind', 'transport')->first();
+        $paid = DB::table('school_charges')->where('kind', 'transport')->where('month', '2027-01')->first();
+        DB::table('school_receipts')->insert(['charge_id' => $paid->id, 'amount' => 1000, 'label' => 'Acompte']);
+        $this->command('billing-service-stop', ['month' => '2026-12'], $membership->id)->assertOk();
+        $this->assertDatabaseHas('school_service_memberships', ['id' => $membership->id, 'stop_month' => '2026-12', 'active' => false]);
+        $this->assertDatabaseMissing('school_charges', ['kind' => 'transport', 'month' => '2026-12']);
+        $this->assertDatabaseHas('school_charges', ['id' => $paid->id]);
+        $this->assertDatabaseHas('school_charges', ['kind' => 'transport', 'month' => '2026-11']);
+        $this->assertDatabaseHas('school_charges', ['kind' => 'tuition', 'month' => '2026-12']);
+        $this->command('billing-supplement', ['studentId' => $membership->student_id, 'amount' => 5000, 'date' => '2026-11-27'])->assertOk();
+        $this->assertDatabaseHas('school_charges', ['kind' => 'supplement', 'month' => '2026-11', 'amount' => 5000]);
+    }
+
+    public function test_stale_revision_accepts_independent_receipts_but_detects_a_changed_balance(): void
+    {
+        app(SchoolWorkbookImporter::class)->import($this->manifest());
+        $this->admin();
+        $charges = DB::table('school_charges')->where('kind', 'tuition')->whereIn('month', ['2026-11', '2026-12'])->get();
+        $revision = DB::table('school_settings')->value('revision');
+        $submit = fn ($charge) => $this->postJson('/school-api/commands', [
+            'action' => 'billing-receipt', 'revision' => $revision, 'activeYear' => $charge->academic_year_id,
+            'payload' => [
+                'chargeId' => $charge->id, 'amount' => 1000, 'label' => 'Scolarité',
+                'requestKey' => (string) \Illuminate\Support\Str::uuid(), 'expectedBalance' => $charge->amount,
+            ],
+        ]);
+        $submit($charges[0])->assertOk();
+        $this->admin();
+        $submit($charges[1])->assertOk();
+        $submit($charges[0])->assertConflict();
+    }
+
     public function test_out_of_zone_single_trip_requires_a_manual_price(): void {
         app(SchoolWorkbookImporter::class)->import($this->manifest());$this->admin();$sid=DB::table('students')->value('id');
         $v=['studentId'=>$sid,'kind'=>'transport','active'=>true,'zone'=>'HORS ZONE','trip'=>'return'];

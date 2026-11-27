@@ -184,9 +184,9 @@ class SchoolStore
         return $state;
     }
 
-    public function command(string $action, array $v, ?string $id, int $user, int $revision): array
+    public function command(string $action, array $v, ?string $id, int $user, int $revision, ?int $activeYear = null): array
     {
-        return DB::transaction(function () use ($action, $v, $id, $user, $revision) {
+        return DB::transaction(function () use ($action, $v, $id, $user, $revision, $activeYear) {
             $s = DB::table('school_settings')->where('id', 1)->lockForUpdate()->first();
             $actor = \App\Models\User::findOrFail($user);
             abort_unless($actor->is_active && ($actor->school_role_id || $actor->isSchoolAdministrator()), 403);
@@ -200,7 +200,9 @@ class SchoolStore
             if ($action === 'payment' && ! empty($v['requestKey']) && ($p = DB::table('payments')->where('request_key', $v['requestKey'])->first())) {
                 return ['recordId' => $p->id, 'state' => $this->state($user)];
             }
-            abort_if((int) $s->revision !== $revision, 409, 'Les données ont changé. Actualisez puis réessayez.');
+            // Appending a receipt is safe after another command, provided the year is unchanged.
+            $appendReceipt = $action === 'billing-receipt' && $id === null && isset($v['expectedBalance']) && $activeYear === $this->year();
+            abort_if(! $appendReceipt && (int) $s->revision !== $revision, 409, 'Les données ont changé. Actualisez puis réessayez.');
             if (app(SchoolBilling::class)->enabled($this->year())) {
                 abort_if(in_array($action, ['payment','subscription','subscription-toggle'], true), 422, 'Utilisez les échéances et adhésions de la facturation mensuelle.');
             }
@@ -210,7 +212,7 @@ class SchoolStore
                 'student-profile' => app(SchoolStudentProfiles::class)->edit((int)$id, $this->year(), $v),
                 'staff-profile', 'staff-membership', 'staff-receipt' => app(SchoolStaff::class)->execute($action, $v, $id, $actor, $this->year()),
                 'billing-delete-request', 'billing-delete-approve', 'billing-delete-reject' => app(SchoolReceiptDeletion::class)->execute($action, $v, (int) $id, $actor, $this->year()),
-                'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),
+                'billing-service-stop', 'billing-supplement', 'billing-receipt', 'billing-waiver', 'billing-membership', 'billing-enrollment' => app(SchoolBilling::class)->execute($action, $v, $id, $actor, $this->year()),
                 'account-welcome', 'account', 'account-status', 'account-password', 'role', 'role-delete', 'profile' => app(SchoolAccounts::class)->execute($action, $v, $id, $actor),
                 'student' => $this->student($v, $id),'teacher' => $this->teacher($v, $id),'class' => $this->classroom($v, $id),'subject' => $this->subject($v, $id),'year' => $this->academicYear($v, $id),'year-activate' => $this->activate($id),'enrollment' => $this->enrollment($v),'enrollment-approve' => $this->decide($id, true),'enrollment-reject' => $this->decide($id, false),'payment' => $this->payment($v),'subscription' => $this->subscription($v),'subscription-toggle' => $this->toggleSubscription($id),'lesson' => $this->lesson($v, $id),'lesson-delete' => $this->deleteLesson($id),'grades' => $this->grades($v),'settings' => $this->settings($v),'preferences' => $this->preferences($v, $user),default => abort(404)
             };

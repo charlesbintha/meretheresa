@@ -7,12 +7,12 @@ async function request(path,body){
  let response;try{response=await fetch('school-api/'+path,{credentials:'same-origin',headers:{Accept:'application/json','Content-Type':'application/json','X-CSRF-TOKEN':M.$('meta[name="csrf-token"]').content},...(body?{method:'POST',body:JSON.stringify(body)}:{})});}catch(_){throw Error('Serveur inaccessible. Vérifiez la connexion puis réessayez.');}
  if(response.status===401){location.assign(new URL('login',document.baseURI).href);throw Error('Votre session a expiré.');}
  const data=await response.json().catch(()=>{throw Error('Réponse du serveur illisible. Aucun enregistrement confirmé.');});
- if(!response.ok){const error=Error(response.status===419?'Session expirée : rechargez la page avant de réessayer.':response.status===409?'Un autre changement a été enregistré. Les données ont été actualisées ; vérifiez votre saisie puis réessayez.':response.status>=500?'Le serveur n’a pas confirmé l’enregistrement. Réessayez.':Object.values(data.errors||{}).flat().join(' ')||data.message||'Action refusée.');error.status=response.status;throw error;}
+ if(!response.ok){const error=Error(response.status===419?'Session expirée : rechargez la page avant de réessayer.':response.status===409?(data.message||'Un autre changement a été enregistré. Vérifiez votre saisie puis réessayez.'):response.status>=500?'Le serveur n’a pas confirmé l’enregistrement. Réessayez.':Object.values(data.errors||{}).flat().join(' ')||data.message||'Action refusée.');error.status=response.status;throw error;}
  return data;
 }
 M.command=async(action,payload={},id=null)=>{
  if(busy)throw Error('Un enregistrement est déjà en cours. Patientez un instant.');busy=true;status('Enregistrement…');
- try{const result=await request('commands',{action,payload,id:id==null?null:String(id),revision:M.db.revision});apply(result.state);if(result.csrfToken){M.$('meta[name="csrf-token"]').content=result.csrfToken;document.querySelectorAll('input[name="_token"]').forEach(input=>input.value=result.csrfToken);}return result;}
+ try{const result=await request('commands',{action,payload,id:id==null?null:String(id),revision:M.db.revision,activeYear:M.db.activeYear});apply(result.state);if(result.csrfToken){M.$('meta[name="csrf-token"]').content=result.csrfToken;document.querySelectorAll('input[name="_token"]').forEach(input=>input.value=result.csrfToken);}return result;}
  catch(error){status('Non synchronisé');if(error.status===409){try{apply(await request('state'));}catch(_){}}throw error;}
  finally{busy=false;}
 };

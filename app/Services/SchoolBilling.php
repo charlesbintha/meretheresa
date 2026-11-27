@@ -33,12 +33,18 @@ class SchoolBilling
     public function membership(int $student,int $year,string $kind,?string $zone=null,string $trip='round_trip',?int $custom=null): int {
         $fee=$kind==='canteen'?12000:self::transportFee($zone,$trip,$custom);
         $key=['student_id'=>$student,'academic_year_id'=>$year,'kind'=>$kind];$old=DB::table('school_service_memberships')->where($key)->first();
-        $values=['zone'=>$zone,'trip'=>$trip,'monthly_fee'=>$fee,'active'=>true,'abandoned'=>false,'updated_at'=>now()];
+        // After a cancellation, a new activation starts in the current month or later.
+        $resumeFrom = $old?->stop_month;
+        if ($old && !$old->active && ($resumeFrom || $old->abandoned)) {
+            $resumeFrom = max($resumeFrom ?? '', now('Africa/Dakar')->format('Y-m'));
+        }
+        $values=['zone'=>$zone,'trip'=>$trip,'monthly_fee'=>$fee,'active'=>true,'abandoned'=>false,'stop_month'=>$resumeFrom,'updated_at'=>now()];
         if($old){DB::table('school_service_memberships')->where('id',$old->id)->update($values);$id=$old->id;}else{$id=DB::table('school_service_memberships')->insertGetId($key+$values+['created_at'=>now()]);}
         $start=(int)substr(DB::table('academic_years')->where('id',$year)->value('start_date'),0,4);
         $this->charge($student,$year,$kind.'_adhesion',"$start-".($kind==='canteen'?'11':'10'),$kind==='canteen'?3000:2500);
         for($i=$kind==='canteen'?11:10;$i<=($kind==='canteen'?17:18);$i++){
             $month=sprintf('%04d-%02d',$start+intdiv($i-1,12),($i-1)%12+1);
+            if ($resumeFrom && $month < $resumeFrom) continue;
             $cid=$this->charge($student,$year,$kind,$month,$fee);
             // A change of plan never rewrites a month that already has payments.
             if(!DB::table('school_receipts')->where('charge_id',$cid)->exists())DB::table('school_charges')->where('id',$cid)->update(['amount'=>$fee,'updated_at'=>now()]);
@@ -67,6 +73,40 @@ class SchoolBilling
     }
     public function execute(string $action,array $v,?string $id,User $actor,int $year): int {
         abort_unless($this->enabled($year),422,'La facturation mensuelle n’est pas activée pour cette année.');
+        if ($action === 'billing-service-stop') {
+            $v = Validator::make($v, ['month' => 'required|date_format:Y-m'])->validate();
+            $membership = DB::table('school_service_memberships')->where('academic_year_id', $year)->find($id) ?? abort(404);
+            $schoolYear = DB::table('academic_years')->find($year);
+            abort_unless($v['month'] >= substr($schoolYear->start_date, 0, 7) && $v['month'] <= substr($schoolYear->end_date, 0, 7),
+                422, 'Choisissez un mois de l’année scolaire active.');
+
+            // Paid or partially paid months stay available for review and reconciliation.
+            DB::table('school_charges')->where('academic_year_id', $year)
+                ->where('student_id', $membership->student_id)->where('kind', $membership->kind)
+                ->where('month', '>=', $v['month'])
+                ->whereNotIn('id', DB::table('school_receipts')->select('charge_id'))->delete();
+
+            DB::table('school_service_memberships')->where('id', $id)->update([
+                'active' => false, 'abandoned' => true, 'stop_month' => $v['month'], 'updated_at' => now(),
+            ]);
+            return (int) $id;
+        }
+
+        if ($action === 'billing-supplement') {
+            $v = Validator::make($v, [
+                'studentId' => 'required|integer', 'amount' => 'required|integer|min:1|max:1000000',
+                'date' => 'required|date_format:Y-m-d',
+            ])->validate();
+            $schoolYear = DB::table('academic_years')->find($year);
+            abort_unless($v['date'] >= $schoolYear->start_date && $v['date'] <= $schoolYear->end_date,
+                422, 'Choisissez une date de l’année scolaire active.');
+            abort_unless(DB::table('enrollments')->where('academic_year_id', $year)->where('student_id', $v['studentId'])
+                ->where('status', 'confirmed')->exists(), 422, 'L’élève doit être inscrit pour cette année.');
+            $charge = $this->charge($v['studentId'], $year, 'supplement', substr($v['date'], 0, 7), 0, $v['date']);
+            DB::table('school_charges')->where('id', $charge)->increment('amount', $v['amount'], ['updated_at' => now()]);
+            return $charge;
+        }
+
         if($action==='billing-enrollment'){
             $v=Validator::make($v,[
                 'order'=>['required','integer','min:1'], 'firstName'=>'required|string|max:100','lastName'=>'required|string|max:100',
@@ -94,10 +134,15 @@ class SchoolBilling
             return $sid;
         }
         if($action==='billing-receipt'){
-            $v=Validator::make($v,['chargeId'=>'required|integer','amount'=>'required|integer|min:1|max:10000000','date'=>'nullable|date_format:Y-m-d|before_or_equal:today','reference'=>'nullable|string|max:191','label'=>'required|string|max:100','method'=>'nullable|string|max:40','requestKey'=>'required|uuid'])->validate();
+            $v=Validator::make($v,['chargeId'=>'required|integer','amount'=>'required|integer|min:1|max:10000000','date'=>'nullable|date_format:Y-m-d|before_or_equal:today','reference'=>'nullable|string|max:191','label'=>'required|string|max:100','method'=>'nullable|string|max:40','requestKey'=>'required|uuid','expectedBalance'=>'sometimes|integer'])->validate();
             $charge=$this->currentCharge($v['chargeId'],$year);
             if($id){$old=DB::table('school_receipts')->find($id)??abort(404);$this->currentCharge($old->charge_id,$year);abort_unless($old->charge_id===$charge->id,422,'Une correction ne peut pas déplacer un paiement vers un autre compte.');}
             elseif($old=DB::table('school_receipts')->where('request_key',$v['requestKey'])->first())return $old->id;
+            if (!$id && isset($v['expectedBalance'])) {
+                $paid = (int) DB::table('school_receipts')->where('charge_id', $charge->id)->sum('amount');
+                abort_unless(($charge->amount - $charge->waiver - $paid) === (int) $v['expectedBalance'],
+                    409, 'Le solde de cette échéance a changé. Rouvrez le formulaire avant de saisir le règlement.');
+            }
             $row=['charge_id'=>$charge->id,'amount'=>$v['amount'],'paid_at'=>$v['date']??null,'reference'=>$v['reference']??null,'label'=>$v['label'],'method'=>$v['method']??null,'updated_at'=>now()];
             if ($id) {
                 abort_if(DB::table('school_receipt_deletion_requests')->where('receipt_id', $id)->where('status', 'pending')->exists(),
@@ -118,7 +163,7 @@ class SchoolBilling
             if(!$v['active']){
                 $old=DB::table('school_service_memberships')->where(['student_id'=>$v['studentId'],'academic_year_id'=>$year,'kind'=>$v['kind']])->first()??abort(404);
                 $values=['active'=>false,'updated_at'=>now()];
-                if($old->abandoned && !empty($v['zone'])){
+                if($old->abandoned && !$old->stop_month && !empty($v['zone'])){
                     $fee=self::transportFee($v['zone'],$v['trip'],$v['monthlyFee']??null);
                     $values+=['zone'=>$v['zone'],'trip'=>$v['trip'],'monthly_fee'=>$fee];
                     $october=substr(DB::table('academic_years')->where('id',$year)->value('start_date'),0,4).'-10';
